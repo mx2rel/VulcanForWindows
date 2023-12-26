@@ -26,11 +26,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image Source="/Assets/StoreLogo.png" Height="16" Width="16" Grid.Column="1" VerticalAlignment="Center"/>
-            <TextBlock Style="{StaticResource AppTitle}" Grid.Column="2">WinUI 3 Gallery</TextBlock>
+            <TextBlock Style="{StaticResource AppTitle}" Grid.Column="2">Vulcan dla Windows</TextBlock>
         </Grid>
         <NavigationView x:Name="nvSample" Grid.Row="2" PaneDisplayMode="Top" SelectionChanged="NavigationChangedPage">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Play" Content="Menu Item1" Tag="GradesPage" />
+                <NavigationViewItem Content="Oceny" Tag="GradesPage" >
+                    <NavigationViewItem.Icon>
+                        <ImageIcon Source="/Assets/GradesIcon.png"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Icon="Save" Content="Menu Item2" Tag="BlankPage1" />
                 <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
                 <NavigationViewItem Icon="Download" Content="Menu Item4" Tag="SamplePage4" />-->
