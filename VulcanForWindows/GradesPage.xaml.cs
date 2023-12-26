@@ -98,7 +98,7 @@ namespace VulcanForWindows
                 Values = chartData.data.Select(r=>CountAverage(r.Value)).ToArray(),
                 Fill = null,
                 XToolTipLabelFormatter =
-        (chartPoint) => $"{chartData.data.Keys.ElementAt(chartPoint.Index).ToString("MMMM/yy").Replace(".", " ")}: {chartPoint.PrimaryValue}" +
+        (chartPoint) => $"{chartData.data.Keys.ElementAt(chartPoint.Index).ToString("MMMM/yy").Replace(".", " ")}: {chartPoint.PrimaryValue.ToString("0.00")}" +
         $"{Environment.NewLine} ({chartData.data.ToArray()[chartPoint.Index].Value.Length} {OcenToQuantity(chartData.data.ToArray()[chartPoint.Index].Value.Length)})"
             }
 
@@ -152,7 +152,7 @@ namespace VulcanForWindows
             }
             if (weightSum == 0) return 0;
 
-            return (double)Math.Round(sum / weightSum, 2);
+            return (double)Math.Round(sum / weightSum*100)/100;
         }
 
         ///<summary>Groups an array of Grade objects by month and year, returning a Dictionary with DateTime keys and Grade arrays as values.</summary>
