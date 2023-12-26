@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "VulcanForWindows (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "VulcanForWindows (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

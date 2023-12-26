@@ -1,0 +1,119 @@
+﻿<Window
+    x:Class="VulcanForWindows.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:Vulcanova.Features.Grades"
+    mc:Ignorable="d"
+    >
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop/>
+    </Window.SystemBackdrop>
+
+    <ListView HorizontalAlignment="Stretch" SelectionMode="None">
+
+        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+
+        <Grid>
+            <Grid.Resources>
+
+                <DataTemplate x:Key="GradeTemplate" x:DataType="local1:Grade">
+                    <ListView SelectionMode="None" Padding="0,0,0,5">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Height="42">
+
+                            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Left" Height="35" CornerRadius="3">
+                                <TextBlock TextAlignment="Center" Width="35"  VerticalAlignment="Center" Text="{x:Bind ContentRaw}"/>
+                            </Border>
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+
+                                <Grid.ColumnDefinitions>
+                                    <!-- Define three columns with different widths -->
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <!-- Define three columns with different widths -->
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="15"/>
+                                </Grid.RowDefinitions>
+
+
+                                <TextBlock Text="{x:Bind Comment}"/>
+                                <TextBlock Grid.Row="1">
+                                    <Run Text="{x:Bind Column.Weight}"/>
+                                    <Run Text="|"/>
+                                    <Run Text="{x:Bind DateCreated}"/>
+                                    <Run Text="|"/>
+                                    <Run Text="{x:Bind CreatorName}"/>
+                                    <Run Text="|"/>
+                                    <Run Text="{x:Bind Column.Name}"/>
+                                    </TextBlock>
+
+                            </Grid>
+                        </StackPanel>
+
+                    </ListView>
+
+                </DataTemplate>
+
+
+                <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
+                    <Expander Width="Auto" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
+                        <Expander.Header>
+                            <ListView SelectionMode="None"
+>
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+
+                                <TextBlock Text="{x:Bind subName}" HorizontalTextAlignment="Center"></TextBlock>
+
+                                <GridView SelectionMode="None" ItemsSource="{x:Bind grades}" 
+          ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+          ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                    <GridView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <ItemsWrapGrid Orientation="Horizontal" ItemWidth="35" ItemHeight="35" />
+                                        </ItemsPanelTemplate>
+                                    </GridView.ItemsPanel>
+
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate x:DataType="local1:Grade">
+                                            <!--<Grid Width="35" Height="35" >-->
+                                            <TextBlock Text="{x:Bind ContentRaw}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
+                                            <!--</Grid>-->
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+
+                                </GridView>
+
+                            </ListView>
+                        </Expander.Header>
+                        <Expander.Content>
+                            <ListView ItemTemplate="{StaticResource GradeTemplate}"
+                  ItemsSource="{x:Bind grades}" HorizontalAlignment="Stretch" 
+          HorizontalContentAlignment="Stretch" Margin="0,5,0,5" MaxHeight="300"/>
+                        </Expander.Content>
+                    </Expander>
+                </DataTemplate>
+
+                <DataTemplate x:Key="HeaderSingleGradeViewTemplate" x:DataType="local1:Grade">
+                    <Border BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px">
+                        <TextBlock Text="{x:Bind ContentRaw}" FontSize="18" Foreground="Black" TextAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </DataTemplate>
+
+            </Grid.Resources>
+
+            <ListView x:Name="TopLevel"
+                  ItemTemplate="{StaticResource SubjectTemplate}"
+                  ItemsSource="{x:Bind grades}" HorizontalAlignment="Left" SelectionMode="None">
+
+            </ListView>
+        </Grid>
+    </ListView>
+</Window>
