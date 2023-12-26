@@ -10,6 +10,18 @@
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
+
+            <Style
+                x:Name="AppTitle"
+                TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Margin" Value="16,0,0,0" />
+                <Setter Property="FontFamily" Value="Segoe UI"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Normal"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
