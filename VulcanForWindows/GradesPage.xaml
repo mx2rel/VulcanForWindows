@@ -9,7 +9,7 @@
     xmlns:classes="using:VulcanForWindows.Classes" 
     xmlns:main="using:VulcanForWindows" 
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+   >
 
     <Page.Resources>
         <DataTemplate x:Key="GradeInfoFlyout" x:DataType="classes:Grade">
@@ -61,7 +61,7 @@
             <Grid>
                 <Grid.Resources>
                     <DataTemplate x:Key="GradeTemplate" x:DataType="classes:Grade">
-                        <ListView SelectionMode="None" Padding="0,0,0,5" Tapped="Grade_ShowInfo">
+                        <ListView SelectionMode="None" Padding="0,0,0,5" PointerEntered="ListView_PointerEntered" PointerExited="ListView_PointerExited">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="Padding" Value="8,0,0,0"/>

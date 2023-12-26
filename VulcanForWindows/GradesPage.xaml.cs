@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using VulcanForWindows.Classes;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -32,6 +33,10 @@ namespace VulcanForWindows
             this.InitializeComponent();
             grades = SubjectGrades.GetSubjectsGrades();
             cd = ChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
+
+            timer = new DispatcherTimer();
+            timer.Tick += Timer_Tick;
+            timer.Interval = TimeSpan.FromSeconds(0.7);
         }
         public SubjectGrades[] grades { get; set; }
 
@@ -41,7 +46,8 @@ namespace VulcanForWindows
             myButton.Content = "Clicked";
         }
 
-        private void Grade_ShowInfo(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+        Flyout flyout;
+        private void Grade_ShowInfo(object sender)
         {
             var g = (sender as ListView).DataContext as Grade;
             var content = (Resources["GradeInfoFlyout"] as DataTemplate);
@@ -51,7 +57,9 @@ namespace VulcanForWindows
                 Content = g
             };
 
-            var flyout = new Flyout();
+            flyout = new Flyout();
+            flyout.OverlayInputPassThroughElement = sender as DependencyObject;
+            //PointerMoved += PointerMovedF;
             flyout.Content = contentControl;
             flyout.ShowAt(sender as FrameworkElement);
         }
@@ -61,6 +69,29 @@ namespace VulcanForWindows
             var og = table.Visibility;
             table.Visibility = chart.Visibility;
             chart.Visibility = og;
+        }
+
+        object over;
+        private DispatcherTimer timer;
+
+        private void Timer_Tick(object sender, object e)
+        {
+            timer.Stop();
+            // Function to be executed after 1 second
+            // Example: DoSomethingAfterHover();
+            Grade_ShowInfo(over);
+        }
+
+        private void ListView_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            over = sender;
+            timer.Start();
+        }
+
+        private void ListView_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            timer.Stop();
+            flyout.Hide();
         }
     }
 }
