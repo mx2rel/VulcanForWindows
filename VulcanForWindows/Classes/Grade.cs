@@ -1,6 +1,6 @@
 using System;
 
-namespace Vulcanova.Features.Grades;
+namespace VulcanForWindows.Classes;
 
 public class Grade
 {

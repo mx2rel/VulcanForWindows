@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Vulcanova.Features.Grades;
+using VulcanForWindows.Classes;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
