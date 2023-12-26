@@ -50,7 +50,7 @@ namespace VulcanForWindows.Classes
                     PupilId = _random.Next(1, 100), // Modify the range as needed
                     Content = $"Content_{i + 1}",
                     Comment = $"Comment_{i + 1}",
-                    DateCreated = DateTime.Now.AddDays(-_random.Next(1, 100)), // Random date in the past
+                    DateCreated = DateTime.Now.AddDays(-_random.Next(1, 420)), // Random date in the past
                     DateModify = DateTime.Now,
                     Value = g, // Modify the range as needed
                     Column = columns[_random.Next(columns.Count)], // Assign a random column
