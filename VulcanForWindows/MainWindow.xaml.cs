@@ -20,5 +20,24 @@ namespace VulcanForWindows
             rootFrame.Navigate(typeof(GradesPage));
         }
 
+        private void NavigationChangedPage(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            //if (args.IsSettingsSelected)
+            //{
+            //    contentFrame.Navigate(typeof(SampleSettingsPage));
+            //}
+            //else
+            //{
+            var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
+            if (selectedItem != null)
+            {
+                string selectedItemTag = ((string)selectedItem.Tag);
+                //sender.Header = "Sample Page " + selectedItemTag.Substring(selectedItemTag.Length - 1);
+                string pageName = selectedItemTag;
+                Type pageType = Type.GetType("VulcanForWindows." +pageName);
+                rootFrame.Navigate(pageType);
+            }
+            //}
+        }
     }
 }

@@ -28,7 +28,20 @@
             <Image Source="/Assets/StoreLogo.png" Height="16" Width="16" Grid.Column="1" VerticalAlignment="Center"/>
             <TextBlock Style="{StaticResource AppTitle}" Grid.Column="2">WinUI 3 Gallery</TextBlock>
         </Grid>
+        <NavigationView x:Name="nvSample" Grid.Row="2" PaneDisplayMode="Top" SelectionChanged="NavigationChangedPage">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Play" Content="Menu Item1" Tag="GradesPage" />
+                <NavigationViewItem Icon="Save" Content="Menu Item2" Tag="BlankPage1" />
+                <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
+                <NavigationViewItem Icon="Download" Content="Menu Item4" Tag="SamplePage4" />-->
+            </NavigationView.MenuItems>
+            <!--<NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
+                <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
+                <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
+            </NavigationView.FooterMenuItems>-->
 
-        <Frame x:Name="rootFrame" Grid.Row="2"/>
+            <Frame x:Name="rootFrame"/>
+        </NavigationView>
     </Grid>
 </Window>
