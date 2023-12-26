@@ -56,15 +56,36 @@ namespace VulcanForWindows
             flyout.ShowAt(sender as FrameworkElement);
         }
 
+        private void ChangeChartAndTable(object sender, RoutedEventArgs e)
+        {
+            var og = table.Visibility;
+            table.Visibility = chart.Visibility;
+            chart.Visibility = og;
+        }
     }
-
+    public class TableRow
+    {
+        public string name { get; set; }
+        public string value { get; set; }
+    }
     public class ChartData
     {
 
         public ISeries[] Series { get; set; }
 
         public List<Axis> XAxes { get; set; }
-        Dictionary<DateTime, Grade[]> data;
+        public Dictionary<DateTime, Grade[]> data { get; private set; }
+        public TableRow[] tableData
+        {
+            get
+            {
+                return data.Select(r => new TableRow
+                {
+                    name = r.Key.ToString("MMMM/yyyy").Replace(".", " "),
+                    value = CountAverage(r.Value).ToString("0.00") + $" ({r.Value.Length} {OcenToQuantity(r.Value.Length)})"
+                }).ToArray();
+            }
+        }
         public static ChartData Generate(Grade[] grades)
         {
             var chartData = new ChartData();
@@ -131,7 +152,7 @@ namespace VulcanForWindows
             }
             if (weightSum == 0) return 0;
 
-            return (double)Math.Round(sum / weightSum,2);
+            return (double)Math.Round(sum / weightSum, 2);
         }
 
         ///<summary>Groups an array of Grade objects by month and year, returning a Dictionary with DateTime keys and Grade arrays as values.</summary>

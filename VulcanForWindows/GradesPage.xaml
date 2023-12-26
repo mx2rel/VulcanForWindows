@@ -176,12 +176,33 @@
         <!--<oxy:PlotView x:Name="Chart" Model="{x:Bind Model}" Grid.Column="1" MaxHeight="300" VerticalAlignment="Top">
             
         </oxy:PlotView>-->
-        <Grid Grid.Column="1" Height="400" VerticalAlignment="Top" DataContext="{x:Bind cd}">
+        <Grid Grid.Column="1" VerticalAlignment="Top" DataContext="{x:Bind cd}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <lvc:CartesianChart 
-        Series="{Binding Series}" XAxes="{Binding XAxes}">
+            <Button Click="ChangeChartAndTable">Zmień</Button>
+
+            <lvc:CartesianChart x:Name="chart"
+        Series="{Binding Series}" XAxes="{Binding XAxes}" Grid.Row="1" Height="400">
             </lvc:CartesianChart>
-            
+
+            <ItemsRepeater ItemsSource="{x:Bind cd.tableData}" x:Name="table" Visibility="Collapsed" Grid.Row="1">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="local2:TableRow">
+                        <StackPanel Orientation="Horizontal">
+                            <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
+                                <TextBlock Text="{x:Bind name}" Margin="5" Width="100"/>
+                            </Border>
+                            <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
+                                <TextBlock Text="{x:Bind value}" Margin="5" Width="100"/>
+                            </Border>
+                            <!-- Add more TextBlocks or controls for additional columns -->
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
         </Grid>
 
     </Grid>
