@@ -1,4 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using System;
+using Vulcanova.Features.Grades;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -11,16 +14,11 @@ namespace VulcanForWindows
     public sealed partial class MainWindow : Window
     {
 
-        public SubjectGrades[] grades { get; set; }
         public MainWindow()
         {
             this.InitializeComponent();
-            grades = SubjectGrades.GetSubjectsGrades();
+            rootFrame.Navigate(typeof(GradesPage));
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            myButton.Content = "Clicked";
-        }
     }
 }

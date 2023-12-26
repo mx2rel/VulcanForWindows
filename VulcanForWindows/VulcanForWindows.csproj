@@ -12,6 +12,9 @@
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
     <WindowsSdkPackageVersion>10.0.19041.29</WindowsSdkPackageVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="GradesPage.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -34,5 +37,10 @@
        package has not yet been restored -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="GradesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
