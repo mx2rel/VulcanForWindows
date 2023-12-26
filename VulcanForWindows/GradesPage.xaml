@@ -4,14 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:VulcanForWindows.Classes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:VulcanForWindows.Classes" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d"
-    xmlns:local2="using:VulcanForWindows" 
+    xmlns:classes="using:VulcanForWindows.Classes" 
+    xmlns:main="using:VulcanForWindows" 
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <DataTemplate x:Key="GradeInfoFlyout" x:DataType="local1:Grade">
+        <DataTemplate x:Key="GradeInfoFlyout" x:DataType="classes:Grade">
             <!-- Define the content of your Flyout here -->
             <StackPanel Width="200">
                 <ListView HorizontalContentAlignment="Center" Padding="0,0,0,15" SelectionMode="None">
@@ -59,7 +60,7 @@
 
             <Grid>
                 <Grid.Resources>
-                    <DataTemplate x:Key="GradeTemplate" x:DataType="local1:Grade">
+                    <DataTemplate x:Key="GradeTemplate" x:DataType="classes:Grade">
                         <ListView SelectionMode="None" Padding="0,0,0,5" Tapped="Grade_ShowInfo">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -127,7 +128,7 @@
                                         </GridView.ItemsPanel>
 
                                         <GridView.ItemTemplate>
-                                            <DataTemplate x:DataType="local1:Grade">
+                                            <DataTemplate x:DataType="classes:Grade">
                                                 <!--<Grid Width="35" Height="35" >-->
                                                 <TextBlock Text="{x:Bind ContentRaw}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
                                                 <!--</Grid>-->
@@ -153,7 +154,7 @@
                         </Expander>
                     </DataTemplate>
 
-                    <DataTemplate x:Key="HeaderSingleGradeViewTemplate" x:DataType="local1:Grade">
+                    <DataTemplate x:Key="HeaderSingleGradeViewTemplate" x:DataType="classes:Grade">
                         <Border BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px">
                             <TextBlock Text="{x:Bind ContentRaw}" FontSize="18" Foreground="Black" TextAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -190,7 +191,7 @@
 
             <ItemsRepeater ItemsSource="{x:Bind cd.tableData}" x:Name="table" Visibility="Collapsed" Grid.Row="1">
                 <ItemsRepeater.ItemTemplate>
-                    <DataTemplate x:DataType="local2:TableRow">
+                    <DataTemplate x:DataType="classes:TableRow">
                         <StackPanel Orientation="Horizontal">
                             <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
                                 <TextBlock Text="{x:Bind name}" Margin="5" Width="100"/>
