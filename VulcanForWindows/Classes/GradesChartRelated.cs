@@ -49,6 +49,7 @@ namespace VulcanForWindows.Classes
             {
                 Values = chartData.data.Select(r=>r.Value.CountAverage()).ToArray(),
                 Fill = null,
+                DataPadding= new LiveChartsCore.Drawing.LvcPoint(0,0),
                 XToolTipLabelFormatter =
         (chartPoint) => $"{chartData.data.Keys.ElementAt(chartPoint.Index).ToString("MMMM/yy").Replace(".", " ")}: {chartPoint.PrimaryValue.ToString("0.00")}" +
         $"{Environment.NewLine} ({chartData.data.ToArray()[chartPoint.Index].Value.Length} {OcenToQuantity(chartData.data.ToArray()[chartPoint.Index].Value.Length)})"
@@ -61,6 +62,7 @@ namespace VulcanForWindows.Classes
                 new Axis
                 {
                     Labels = chartData.data.Select(r=>r.Key.ToString("MMM/yy").Replace(".", " '")).ToArray()
+
                 }
             };
 
@@ -162,10 +164,10 @@ namespace VulcanForWindows.Classes
                 LocationUnit = LiveChartsCore.Measure.MeasureUnit.ChartValues,
                 SizeUnit = LiveChartsCore.Measure.MeasureUnit.ChartValues,
                 Height = 0.02,
-                Fill = new SolidColorPaint(new SKColor(239, 83, 80, 220)) { ZIndex = 10 },
-                Stroke = new SolidColorPaint(new SKColor(239, 83, 80)) { ZIndex = 10, StrokeThickness = 1.5f },
+                Fill = new SolidColorPaint(new SKColor(146, 146, 247)) { ZIndex = 10 },
+                Stroke = new SolidColorPaint(new SKColor(146, 146, 247)) { ZIndex = 10, StrokeThickness = 1.5f },
                 Label = $"Średnia: {grades.CountAverage()}",
-                LabelPaint = new SolidColorPaint(new SKColor(239, 83, 80)) { ZIndex = 11 },
+                LabelPaint = new SolidColorPaint(new SKColor(146, 146, 247)) { ZIndex = 11 },
                 LabelSize = 12
             };
 

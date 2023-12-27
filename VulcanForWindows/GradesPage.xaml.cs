@@ -68,7 +68,7 @@ namespace VulcanForWindows
         private void Subject_ShowInfo(object sender)
         {
             //var resD = new ResourceDictionary { Source = new Uri("ms-appx:///ResourceDictionary1.xaml") };
-            var g = (sender as Expander).DataContext as SubjectGrades;
+            var g = (sender as Grid).DataContext as SubjectGrades;
 
             var content = (/*resD*/Resources["SubjectGradesInfoFlyout"] as DataTemplate);
             ContentControl contentControl = new ContentControl
@@ -79,6 +79,7 @@ namespace VulcanForWindows
 
             subjectFlyout = new Flyout();
             subjectFlyout.OverlayInputPassThroughElement = sender as DependencyObject;
+            subjectFlyout.Placement = FlyoutPlacementMode.Right;
             //PointerMoved += PointerMovedF;
             subjectFlyout.Content = contentControl;
             subjectFlyout.ShowAt(sender as FrameworkElement);

@@ -124,9 +124,9 @@
 
 
                     <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
-                        <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000" PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
+                        <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
                             <Expander.Header>
-                                <Grid>
+                                <Grid PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="80"/>
                                         <ColumnDefinition Width="*"/>
