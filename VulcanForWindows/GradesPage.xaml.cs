@@ -91,7 +91,8 @@ namespace VulcanForWindows
         private void ListView_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             timer.Stop();
-            flyout.Hide();
+            if (flyout != null)
+                flyout.Hide();
         }
     }
 }

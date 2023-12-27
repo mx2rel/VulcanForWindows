@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,20 @@ namespace VulcanForWindows.Classes
         }
         public string subName { get; set; }
         public Grade[] grades { get; set; }
+        public Grade[] recentGrades => grades.OrderByDescending(r=>r.DateCreated).ToList().Take(10).ToArray();
+        public string finalGrade { get; set; }
+        public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
+        public Visibility desiredVisibility => hasFinalGrade ? Visibility.Visible : Visibility.Collapsed;
+
+        public double average
+        {
+            get
+            {
+                return grades.CountAverage();
+            }
+        }
+
+        public string averageDisplay => average.ToString("0.00");
 
         public static SubjectGrades[] GetSubjectsGrades()
         {

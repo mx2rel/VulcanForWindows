@@ -27,7 +27,7 @@ namespace VulcanForWindows.Classes
                 return data.Select(r => new TableRow
                 {
                     name = r.Key.ToString("MMMM/yyyy").Replace(".", " "),
-                    value = CountAverage(r.Value).ToString("0.00") + $" ({r.Value.Length} {OcenToQuantity(r.Value.Length)})"
+                    value = r.Value.CountAverage().ToString("0.00") + $" ({r.Value.Length} {OcenToQuantity(r.Value.Length)})"
                 }).ToArray();
             }
         }
@@ -40,7 +40,7 @@ namespace VulcanForWindows.Classes
             {
                 new LineSeries<double>
             {
-                Values = chartData.data.Select(r=>CountAverage(r.Value)).ToArray(),
+                Values = chartData.data.Select(r=>r.Value.CountAverage()).ToArray(),
                 Fill = null,
                 XToolTipLabelFormatter =
         (chartPoint) => $"{chartData.data.Keys.ElementAt(chartPoint.Index).ToString("MMMM/yy").Replace(".", " ")}: {chartPoint.PrimaryValue.ToString("0.00")}" +
@@ -80,24 +80,6 @@ namespace VulcanForWindows.Classes
             {
                 return formaLiczba;
             }
-        }
-
-        public static double CountAverage(Grade[] grades)
-        {
-            decimal sum = 0;
-            decimal weightSum = 0;
-
-            foreach (var grade in grades)
-            {
-                if (grade.Value != null)
-                {
-                    sum += grade.Value.GetValueOrDefault() * grade.Column.Weight;
-                    weightSum += grade.Column.Weight;
-                }
-            }
-            if (weightSum == 0) return 0;
-
-            return (double)Math.Round(sum / weightSum * 100) / 100;
         }
 
         ///<summary>Groups an array of Grade objects by month and year, returning a Dictionary with DateTime keys and Grade arrays as values.</summary>

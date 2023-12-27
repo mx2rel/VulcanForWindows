@@ -109,18 +109,27 @@
                     <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
                         <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
                             <Expander.Header>
-                                <ListView SelectionMode="None">
-                                    <ListView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ListView.ItemsPanel>
-
-                                    <TextBlock Text="{x:Bind subName}" HorizontalTextAlignment="Center"></TextBlock>
-
-                                    <GridView SelectionMode="None" ItemsSource="{x:Bind grades}" 
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="80"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="24"/>
+                                            <RowDefinition Height="18"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{x:Bind subName}" HorizontalTextAlignment="Left" VerticalAlignment="Center" FontWeight="Medium"/>
+                                        <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
+                                        <Run Text="Średnia:"/>
+                                        <Run Text="{x:Bind averageDisplay}"/>
+                                        </TextBlock>
+                                    </Grid>
+                                    <GridView SelectionMode="None" ItemsSource="{x:Bind recentGrades}" 
           ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-          ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+          ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlignment="Center">
                                         <GridView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <ItemsWrapGrid Orientation="Horizontal" ItemWidth="35" ItemHeight="35" />
@@ -136,8 +145,15 @@
                                         </GridView.ItemTemplate>
 
                                     </GridView>
+                                    
+                                    <Border 
+                                        Visibility="{x:Bind desiredVisibility}"
+                                        BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px" Grid.Column="2" HorizontalAlignment="Right">
+                                        <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    </Border>
+                                    
 
-                                </ListView>
+                                </Grid>
                             </Expander.Header>
                             <Expander.Content>
                                 <ListView ItemTemplate="{StaticResource GradeTemplate}"
