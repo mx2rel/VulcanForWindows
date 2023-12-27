@@ -25,6 +25,7 @@ namespace VulcanForWindows.Classes
         public string finalGrade { get; set; }
         public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
         public Visibility desiredVisibility => hasFinalGrade ? Visibility.Visible : Visibility.Collapsed;
+        public GradesCountChartData gradesCountChart => GradesCountChartData.Generate(grades);
 
         public double average
         {

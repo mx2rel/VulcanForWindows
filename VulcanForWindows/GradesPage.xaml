@@ -47,6 +47,23 @@
                 </TextBlock>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="SubjectGradesInfoFlyout" x:Name="SubjectGradesInfoFlyout" x:DataType="classes:SubjectGrades">
+            <!-- Define the content of your Flyout here -->
+            <StackPanel Width="400">
+                <ListView HorizontalContentAlignment="Center" Padding="0,0,0,15" SelectionMode="None">
+                    <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="60" Width="60" CornerRadius="3">
+                        <Image Source="Assets/GradesIcon.png"/>
+                    </Border>
+                </ListView>
+                <TextBlock Text="{Binding subName}" FontWeight="SemiBold" FontSize="20"/>
+                <!--TODO:SUBJECT TEACHER-->
+                <Grid VerticalAlignment="Top" DataContext="{Binding gradesCountChart}">
+                    <lvc:CartesianChart x:Name="chart" 
+        Series="{Binding Series}" YAxes="{Binding YAxes}" VisualElements="{Binding VisualElements}" Height="300">
+                    </lvc:CartesianChart>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
     <Grid Grid.Row="2">
 
@@ -107,7 +124,7 @@
 
 
                     <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
-                        <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
+                        <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000" PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
                             <Expander.Header>
                                 <Grid>
                                     <Grid.ColumnDefinitions>

@@ -27,12 +27,12 @@ namespace VulcanForWindows
     /// </summary>
     public sealed partial class GradesPage : Page
     {
-        public ChartData cd { get; set; }
+        public MonthChartData cd { get; set; }
         public GradesPage()
         {
             this.InitializeComponent();
             grades = SubjectGrades.GetSubjectsGrades();
-            cd = ChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
+            cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
 
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
@@ -46,7 +46,8 @@ namespace VulcanForWindows
             myButton.Content = "Clicked";
         }
 
-        Flyout flyout;
+        Flyout gradeFlyout;
+        Flyout subjectFlyout;
         private void Grade_ShowInfo(object sender)
         {
             var g = (sender as ListView).DataContext as Grade;
@@ -57,11 +58,30 @@ namespace VulcanForWindows
                 Content = g
             };
 
-            flyout = new Flyout();
-            flyout.OverlayInputPassThroughElement = sender as DependencyObject;
+            gradeFlyout = new Flyout();
+            gradeFlyout.OverlayInputPassThroughElement = sender as DependencyObject;
             //PointerMoved += PointerMovedF;
-            flyout.Content = contentControl;
-            flyout.ShowAt(sender as FrameworkElement);
+            gradeFlyout.Content = contentControl;
+            gradeFlyout.ShowAt(sender as FrameworkElement);
+        }
+
+        private void Subject_ShowInfo(object sender)
+        {
+            //var resD = new ResourceDictionary { Source = new Uri("ms-appx:///ResourceDictionary1.xaml") };
+            var g = (sender as Expander).DataContext as SubjectGrades;
+
+            var content = (/*resD*/Resources["SubjectGradesInfoFlyout"] as DataTemplate);
+            ContentControl contentControl = new ContentControl
+            {
+                ContentTemplate = content,
+                Content = g
+            };
+
+            subjectFlyout = new Flyout();
+            subjectFlyout.OverlayInputPassThroughElement = sender as DependencyObject;
+            //PointerMoved += PointerMovedF;
+            subjectFlyout.Content = contentControl;
+            subjectFlyout.ShowAt(sender as FrameworkElement);
         }
 
         private void ChangeChartAndTable(object sender, RoutedEventArgs e)
@@ -71,7 +91,8 @@ namespace VulcanForWindows
             chart.Visibility = og;
         }
 
-        object over;
+        object gradeOver;
+        object subjectOver;
         private DispatcherTimer timer;
 
         private void Timer_Tick(object sender, object e)
@@ -79,20 +100,42 @@ namespace VulcanForWindows
             timer.Stop();
             // Function to be executed after 1 second
             // Example: DoSomethingAfterHover();
-            Grade_ShowInfo(over);
+            if(gradeOver != null)
+            Grade_ShowInfo(gradeOver);
+            if (subjectOver != null)
+                Subject_ShowInfo(subjectOver);
         }
 
         private void ListView_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            over = sender;
+            gradeOver = sender;
             timer.Start();
         }
 
         private void ListView_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             timer.Stop();
-            if (flyout != null)
-                flyout.Hide();
+            if (gradeFlyout != null)
+            {
+                gradeFlyout.Hide();
+                gradeOver = null;
+            }
+        }
+
+        private void Expander_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            subjectOver = sender;
+            timer.Start();
+        }
+
+        private void Expander_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            timer.Stop();
+            if (subjectFlyout != null)
+            {
+                subjectFlyout.Hide();
+                subjectOver = null;
+            }
         }
     }
 }
