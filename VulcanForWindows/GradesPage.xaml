@@ -7,12 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d"
     xmlns:classes="using:VulcanForWindows.Classes" 
+    xmlns:grade="using:Vulcanova.Features.Grades" 
     xmlns:main="using:VulcanForWindows" 
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
    >
 
     <Page.Resources>
-        <DataTemplate x:Key="GradeInfoFlyout" x:DataType="classes:Grade">
+        <DataTemplate x:Key="GradeInfoFlyout" x:DataType="grade:Grade">
             <!-- Define the content of your Flyout here -->
             <StackPanel Width="200">
                 <ListView HorizontalContentAlignment="Center" Padding="0,0,0,15" SelectionMode="None">
@@ -20,10 +21,10 @@
                         <TextBlock TextAlignment="Center" Width="35"  VerticalAlignment="Center" Text="{x:Bind ContentRaw}" FontSize="32" FontWeight="Bold"/>
                     </Border>
                 </ListView>
-                <TextBlock>
-                    <Run Text="Komentarz:"/>
-                    <Run Text="{x:Bind Comment}"/>
+                <TextBlock FontWeight="Bold" FontSize="16" TextWrapping="WrapWholeWords">
+                    <Run Text="{x:Bind Column.Name}"/>
                 </TextBlock>
+                <Rectangle Height="10"/>
                 <TextBlock>
                     <Run Text="Wpisano:"/>
                     <Run Text="{x:Bind DateCreated}"/>
@@ -38,8 +39,8 @@
                     <Run Text="{x:Bind DateModify}"/>
                 </TextBlock>
                 <TextBlock>
-                    <Run Text="Kolumna:"/>
-                    <Run Text="{x:Bind Column.Name}"/>
+                    <Run Text="Komentarz:"/>
+                    <Run Text="{x:Bind Comment}"/>
                 </TextBlock>
                 <TextBlock Visibility="{x:Bind IsModified}">
                     <Run Text="Waga:"/>
@@ -65,180 +66,176 @@
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    <Grid Grid.Row="2">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition MaxWidth="1000"/>
-        </Grid.ColumnDefinitions>
-        <ListView HorizontalAlignment="Stretch" SelectionMode="None" >
+    <Grid>
+        <ProgressBar x:Name="LoadingBar" 
+            HorizontalAlignment="Stretch" VerticalAlignment="Top" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
 
-            <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
+        <Grid>
 
-            <Grid>
-                <Grid.Resources>
-                    <DataTemplate x:Key="GradeTemplate" x:DataType="classes:Grade">
-                        <ListView SelectionMode="None" Padding="0,0,0,5" PointerEntered="ListView_PointerEntered" PointerExited="ListView_PointerExited">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Padding" Value="8,0,0,0"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Height="42">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition MaxWidth="1000"/>
+            </Grid.ColumnDefinitions>
+            <ListView HorizontalAlignment="Stretch" SelectionMode="None" >
 
-                                <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Left" Height="35" CornerRadius="3">
-                                    <TextBlock TextAlignment="Center" Width="35"  VerticalAlignment="Center" Text="{x:Bind ContentRaw}"/>
-                                </Border>
-                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
 
-                                    <Grid.ColumnDefinitions>
-                                        <!-- Define three columns with different widths -->
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.Resources>
+                        <DataTemplate x:Key="GradeTemplate" x:DataType="grade:Grade">
+                            <ListView SelectionMode="None" Padding="0,0,0,5" PointerEntered="ListView_PointerEntered" PointerExited="ListView_PointerExited">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Padding" Value="8,0,0,0"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Height="42">
 
-                                    <Grid.RowDefinitions>
-                                        <!-- Define three columns with different widths -->
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="15"/>
-                                    </Grid.RowDefinitions>
+                                    <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Left" Height="35" CornerRadius="3">
+                                        <TextBlock TextAlignment="Center" Width="35" FontWeight="Medium" FontSize="14" VerticalAlignment="Center" Text="{x:Bind ContentRaw}"/>
+                                    </Border>
+                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
 
+                                        <Grid.ColumnDefinitions>
+                                            <!-- Define three columns with different widths -->
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{x:Bind Comment}"/>
-                                    <TextBlock Grid.Row="1">
-                                    <Run Text="{x:Bind Column.Weight}"/>
-                                    <Run Text="|"/>
-                                    <Run Text="{x:Bind DateCreated}"/>
-                                    <Run Text="|"/>
-                                    <Run Text="{x:Bind CreatorName}"/>
-                                    <Run Text="|"/>
-                                    <Run Text="{x:Bind Column.Name}"/>
-                                    </TextBlock>
-
-                                </Grid>
-                            </StackPanel>
-
-                        </ListView>
-
-                    </DataTemplate>
-
-
-                    <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
-                        <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
-                            <Expander.Header>
-                                <Grid PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="80"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="80"/>
-                                        <ColumnDefinition Width="80"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid VerticalAlignment="Center">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="24"/>
-                                            <RowDefinition Height="18"/>
+                                            <!-- Define three columns with different widths -->
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="15"/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Text="{x:Bind subName}" HorizontalTextAlignment="Left" VerticalAlignment="Center" FontWeight="Medium"/>
-                                        <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
+
+
+                                        <TextBlock Text="{x:Bind Column.Name}" FontWeight="Medium"/>
+                                        <TextBlock Grid.Row="1" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
+                                    <Run Text="{x:Bind Column.Weight}"/>
+                                    <Run Text=" | "/>
+                                    <Run Text="{x:Bind DateCreated}"/>
+                                    <Run Text=" | "/>
+                                    <Run Text="{x:Bind CreatorName}"/>
+                                        </TextBlock>
+
+                                    </Grid>
+                                </StackPanel>
+
+                            </ListView>
+
+                        </DataTemplate>
+
+
+                        <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
+                            <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
+                                <Expander.Header>
+                                    <Grid PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="80"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid VerticalAlignment="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="24"/>
+                                                <RowDefinition Height="18"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="{x:Bind subject.Name}" HorizontalTextAlignment="Left" VerticalAlignment="Center" FontWeight="Medium"/>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
                                         <Run Text="Średnia:"/>
                                         <Run Text="{x:Bind averageDisplay}"/>
-                                        </TextBlock>
-                                    </Grid>
-                                    <GridView SelectionMode="None" ItemsSource="{x:Bind recentGrades}" 
+                                            </TextBlock>
+                                        </Grid>
+                                        <GridView SelectionMode="None" ItemsSource="{x:Bind recentGrades}" 
           ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
           ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlignment="Center">
-                                        <GridView.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <ItemsWrapGrid Orientation="Horizontal" ItemWidth="35" ItemHeight="35" />
-                                            </ItemsPanelTemplate>
-                                        </GridView.ItemsPanel>
+                                            <GridView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <ItemsWrapGrid Orientation="Horizontal" ItemWidth="35" ItemHeight="35" />
+                                                </ItemsPanelTemplate>
+                                            </GridView.ItemsPanel>
 
-                                        <GridView.ItemTemplate>
-                                            <DataTemplate x:DataType="classes:Grade">
-                                                <!--<Grid Width="35" Height="35" >-->
-                                                <TextBlock Text="{x:Bind ContentRaw}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
-                                                <!--</Grid>-->
-                                            </DataTemplate>
-                                        </GridView.ItemTemplate>
+                                            <GridView.ItemTemplate>
+                                                <DataTemplate x:DataType="grade:Grade">
+                                                    <!--<Grid Width="35" Height="35" >-->
+                                                    <TextBlock Text="{x:Bind Content}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
+                                                    <!--</Grid>-->
+                                                </DataTemplate>
+                                            </GridView.ItemTemplate>
 
-                                    </GridView>
-                                    
-                                    <Border 
+                                        </GridView>
+
+                                        <Border 
                                         Visibility="{x:Bind desiredVisibility}"
                                         BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px" Grid.Column="2" HorizontalAlignment="Right">
-                                        <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
-                                    </Border>
-                                    
+                                            <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                        </Border>
 
-                                </Grid>
-                            </Expander.Header>
-                            <Expander.Content>
-                                <ListView ItemTemplate="{StaticResource GradeTemplate}"
+
+                                    </Grid>
+                                </Expander.Header>
+                                <Expander.Content>
+                                    <ListView ItemTemplate="{StaticResource GradeTemplate}"
                   ItemsSource="{x:Bind grades}" HorizontalAlignment="Stretch" 
           HorizontalContentAlignment="Stretch" Margin="0,5,0,5" MaxHeight="300">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="Padding" Value="0"/>
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                </ListView>
-                            </Expander.Content>
-                        </Expander>
-                    </DataTemplate>
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Padding" Value="0"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                    </ListView>
+                                </Expander.Content>
+                            </Expander>
+                        </DataTemplate>
 
-                    <DataTemplate x:Key="HeaderSingleGradeViewTemplate" x:DataType="classes:Grade">
-                        <Border BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px">
-                            <TextBlock Text="{x:Bind ContentRaw}" FontSize="18" Foreground="Black" TextAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </DataTemplate>
+                        <DataTemplate x:Key="HeaderSingleGradeViewTemplate" x:DataType="grade:Grade">
+                            <Border BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px">
+                                <TextBlock Text="{x:Bind ContentRaw}" FontSize="18" Foreground="Black" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </DataTemplate>
 
-                </Grid.Resources>
+                    </Grid.Resources>
 
-                <ListView x:Name="TopLevel"
+                    <ListView x:Name="TopLevel"
                   ItemTemplate="{StaticResource SubjectTemplate}"
                   ItemsSource="{x:Bind grades}" HorizontalAlignment="Left" SelectionMode="None">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="0"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
-            </Grid>
-        </ListView>
-        <!--<oxy:PlotView x:Name="Chart" Model="{x:Bind Model}" Grid.Column="1" MaxHeight="300" VerticalAlignment="Top">
-            
-        </oxy:PlotView>-->
-        <Grid Grid.Column="1" VerticalAlignment="Top" DataContext="{x:Bind cd}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </ListView>
 
-            <Button Click="ChangeChartAndTable">Zmień</Button>
+            <Grid x:Name="chartAndTableGrid" DataContext="{x:Bind cd}" Grid.Column="1">
+                <Button Click="ChangeChartAndTable" VerticalAlignment="Top">Zmień</Button>
 
-            <lvc:CartesianChart x:Name="chart"
+                <lvc:CartesianChart x:Name="chart"
         Series="{Binding Series}" XAxes="{Binding XAxes}" Grid.Row="1" Height="400">
-            </lvc:CartesianChart>
+                </lvc:CartesianChart>
 
-            <ItemsRepeater ItemsSource="{x:Bind cd.tableData}" x:Name="table" Visibility="Collapsed" Grid.Row="1">
-                <ItemsRepeater.ItemTemplate>
-                    <DataTemplate x:DataType="classes:TableRow">
-                        <StackPanel Orientation="Horizontal">
-                            <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
-                                <TextBlock Text="{x:Bind name}" Margin="5" Width="100"/>
-                            </Border>
-                            <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
-                                <TextBlock Text="{x:Bind value}" Margin="5" Width="100"/>
-                            </Border>
-                            <!-- Add more TextBlocks or controls for additional columns -->
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
+                <ItemsRepeater ItemsSource="{x:Bind cd.tableData}" x:Name="table" Visibility="Collapsed" Grid.Row="1">
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="classes:TableRow">
+                            <StackPanel Orientation="Horizontal">
+                                <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
+                                    <TextBlock Text="{x:Bind name}" Margin="5" Width="100"/>
+                                </Border>
+                                <Border BorderThickness="2" BorderBrush="#FFFFFFFF">
+                                    <TextBlock Text="{x:Bind value}" Margin="5" Width="100"/>
+                                </Border>
+                                <!-- Add more TextBlocks or controls for additional columns -->
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </Grid>
         </Grid>
-
     </Grid>
-
 </Page>

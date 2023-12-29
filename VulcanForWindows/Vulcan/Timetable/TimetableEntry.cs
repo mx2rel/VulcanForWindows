@@ -1,4 +1,5 @@
 using System;
+using Vulcanova.Features.Shared;
 
 namespace VulcanTest.Vulcan.Timetable;
 
@@ -11,7 +12,7 @@ public class TimetableEntry
     public string RoomName { get; set; }
     public string TeacherName { get; set; }
     public DateTime Date { get; set; }
-    public string subName { get; set; }
+    public Subject Subject { get; set; }
     public string Event { get; set; }
     public bool Visible { get; set; }
     public int PeriodId { get; set; }

@@ -11,6 +11,7 @@ using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
+using Vulcanova.Features.Grades;
 
 namespace VulcanForWindows.Classes
 {
@@ -21,6 +22,13 @@ namespace VulcanForWindows.Classes
     }
     public class MonthChartData
     {
+
+        public MonthChartData()
+        {
+            data = new Dictionary<DateTime, Grade[]>();
+            Series = new ISeries[0];
+            XAxes = new List<Axis>();
+        }
 
         public ISeries[] Series { get; set; }
 
@@ -40,6 +48,7 @@ namespace VulcanForWindows.Classes
 
         public static MonthChartData Generate(Grade[] grades)
         {
+            if (grades.Length == 0) return new MonthChartData();
             var chartData = new MonthChartData();
             chartData.data = GetData(grades);
 

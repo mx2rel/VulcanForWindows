@@ -1,4 +1,5 @@
 using System;
+using Vulcanova.Uonet.Api.Schedule;
 
 namespace Vulcanova.Features.Timetable;
 
@@ -17,7 +18,7 @@ public class TimetableListEntry
 
     public class ChangeDetails
     {
-        public string ChangeType { get; set; }
+        public ChangeType ChangeType { get; set; }
         public RescheduleKind? RescheduleKind { get; set; }
         public string ChangeNote { get; set; }
     }

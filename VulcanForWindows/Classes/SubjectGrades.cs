@@ -4,24 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Vulcan.Grades;
+using Vulcanova.Features.Grades;
+using Vulcanova.Features.Shared;
 
 namespace VulcanForWindows.Classes
 {
     public class SubjectGrades
     {
-        public SubjectGrades(string n, Grade[] g)
+        public SubjectGrades() { }
+        public SubjectGrades(Subject subject, GradesResponseEnvelope env)
         {
-            subName = n;
-            grades = g;
+            this.subject = subject;
+            this.env = env;
         }
-        public SubjectGrades(IGrouping<string, Grade[]> v)
+
+        public Subject subject { get; set; }
+        public GradesResponseEnvelope env;
+        public Grade[] grades
         {
-            subName = v.Key;
-            grades = v.SelectMany(group => group).ToArray();
+            get => env.Grades.Where(r => r.Column.Subject.Id == subject.Id).ToArray();
         }
-        public string subName { get; set; }
-        public Grade[] grades { get; set; }
-        public Grade[] recentGrades => grades.OrderByDescending(r=>r.DateCreated).ToList().Take(10).ToArray();
+        public Grade[] recentGrades => grades.OrderByDescending(r => r.DateCreated).ToList().Take(10).ToArray();
         public string finalGrade { get; set; }
         public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
         public Visibility desiredVisibility => hasFinalGrade ? Visibility.Visible : Visibility.Collapsed;
@@ -37,12 +41,9 @@ namespace VulcanForWindows.Classes
 
         public string averageDisplay => average.ToString("0.00");
 
-        public static SubjectGrades[] GetSubjectsGrades()
+        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env)
         {
-            var r = RandomGenerator.GenerateRandomDataset()
-                .GroupBy(r => r.Column.subjectName)
-                .Select(g => new SubjectGrades(g.Key, g.ToArray()))
-                .ToArray();
+            var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env)).ToArray();
 
             return r;
         }

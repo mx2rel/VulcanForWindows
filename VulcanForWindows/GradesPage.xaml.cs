@@ -9,13 +9,20 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using VulcanForWindows.Classes;
+using Vulcanova.Features.Auth;
+using Vulcanova.Features.Grades;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
+using VulcanTest.Vulcan;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using VulcanForWindows.Vulcan.Grades;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,19 +38,42 @@ namespace VulcanForWindows
         public GradesPage()
         {
             this.InitializeComponent();
-            grades = SubjectGrades.GetSubjectsGrades();
-            cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
 
+
+            grades = new ObservableCollection<SubjectGrades>();
+            AssignGrades();
+            cd = new MonthChartData();
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromSeconds(0.7);
         }
-        public SubjectGrades[] grades { get; set; }
+        GradesResponseEnvelope env;
+        async void AssignGrades()
+        {
+            var acc = new AccountRepository().GetActiveAccountAsync();
+            env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id, false, false);
+            env.GradesUpdated += HandleGradesUpdated;
+            //TopLevel.UpdateLayout();
+        }
+
+        void HandleGradesUpdated(object sender, IEnumerable<Grade> updatedGrades)
+        {
+            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope));
+            LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
+
+            cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
+            chartAndTableGrid.DataContext = cd;
+            chartAndTableGrid.UpdateLayout();
+        }
+        public bool isLoading => ((grades.ToArray().Length > 0) ? env.isLoading : true);
+        public ObservableCollection<SubjectGrades> grades { get; set; }
 
 
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
             myButton.Content = "Clicked";
+            LoadingBar.Visibility = Visibility.Collapsed;
+
         }
 
         Flyout gradeFlyout;
@@ -101,8 +131,8 @@ namespace VulcanForWindows
             timer.Stop();
             // Function to be executed after 1 second
             // Example: DoSomethingAfterHover();
-            if(gradeOver != null)
-            Grade_ShowInfo(gradeOver);
+            if (gradeOver != null)
+                Grade_ShowInfo(gradeOver);
             if (subjectOver != null)
                 Subject_ShowInfo(subjectOver);
         }

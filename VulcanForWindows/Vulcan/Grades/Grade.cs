@@ -1,6 +1,6 @@
 using System;
 
-namespace VulcanForWindows.Classes;
+namespace Vulcanova.Features.Grades;
 
 public class Grade
 {
@@ -17,4 +17,3 @@ public class Grade
     public decimal? Value { get; set; }
     public Column Column { get; set; }
 }
-
