@@ -105,7 +105,7 @@ namespace VulcanForWindows.Classes
         ///<returns>A Dictionary<DateTime, Grade[]> containing grouped data</returns>
         public static Dictionary<DateTime, Grade[]> GetData(Grade[] grades)
         {
-            Dictionary<DateTime, Grade[]> grouped = grades.GroupBy(r => new DateTime(r.DateCreated.Value.Year, r.DateCreated.Value.Month, 1))
+            Dictionary<DateTime, Grade[]> grouped = grades.Where(r => r.DateCreated.HasValue).GroupBy(r => new DateTime(r.DateCreated.Value.Year, r.DateCreated.Value.Month, 1))
                 .Select(r => new KeyValuePair<DateTime, Grade[]>(r.Key, r.ToArray())).ToArray().ToDictionary(pair => pair.Key, pair => pair.Value);
 
             DateTime newest = grouped.Keys.ElementAt(0);

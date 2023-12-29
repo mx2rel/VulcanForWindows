@@ -41,18 +41,49 @@ namespace VulcanForWindows
 
 
             grades = new ObservableCollection<SubjectGrades>();
+            selectedPeriod = new AccountRepository().GetActiveAccountAsync().CurrentPeriod;
+            PeriodSelector.SelectedIndex = avaiblePeriods.Length-1;
+            PeriodSelector.UpdateLayout();
             AssignGrades();
             cd = new MonthChartData();
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromSeconds(0.7);
         }
-        GradesResponseEnvelope env;
+        IDictionary<int, GradesResponseEnvelope> envelopes = new Dictionary<int, GradesResponseEnvelope>();
+        public Vulcanova.Features.Shared.Period selectedPeriod;
+        public int selectedPeriodId => selectedPeriod.Id;
+        public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccountAsync().Periods/*.Select(r => r.Id)*/.ToArray();
+        public string[] displayPeriods => avaiblePeriods.Select(r => $"Klasa {r.Level}, Semestr {r.Number}").ToArray();
+        private void ChangedPeriod(object sender, SelectionChangedEventArgs e)
+        {
+            selectedPeriod = avaiblePeriods[(sender as ComboBox).SelectedIndex] as Vulcanova.Features.Shared.Period;
+            AssignGrades();
+        }
+
+        GradesResponseEnvelope env
+        {
+            get => envelopes[selectedPeriodId];
+            set => envelopes[selectedPeriodId] = value;
+        }
         async void AssignGrades()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
-            env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id, false, false);
-            env.GradesUpdated += HandleGradesUpdated;
+            if (!envelopes.ContainsKey(selectedPeriodId))
+            {
+                env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, false, false);
+                env.GradesUpdated += HandleGradesUpdated;
+            }
+            else
+            {
+                grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(env));
+                LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
+
+                cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
+                chartAndTableGrid.DataContext = cd;
+                chartAndTableGrid.UpdateLayout();
+                //Debug.Write(JsonConvert.SerializeObject(cd));
+            }
             //TopLevel.UpdateLayout();
         }
 
@@ -64,17 +95,18 @@ namespace VulcanForWindows
             cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
+            Debug.Write(JsonConvert.SerializeObject(cd));
         }
         public bool isLoading => ((grades.ToArray().Length > 0) ? env.isLoading : true);
         public ObservableCollection<SubjectGrades> grades { get; set; }
 
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            myButton.Content = "Clicked";
-            LoadingBar.Visibility = Visibility.Collapsed;
+        //private void myButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    myButton.Content = "Clicked";
+        //    LoadingBar.Visibility = Visibility.Collapsed;
 
-        }
+        //}
 
         Flyout gradeFlyout;
         Flyout subjectFlyout;
@@ -168,5 +200,6 @@ namespace VulcanForWindows
                 subjectOver = null;
             }
         }
+
     }
 }

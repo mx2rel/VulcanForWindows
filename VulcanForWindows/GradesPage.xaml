@@ -68,10 +68,21 @@
     </Page.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="51"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <ProgressBar x:Name="LoadingBar" 
             HorizontalAlignment="Stretch" VerticalAlignment="Top" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
+        <ComboBox
+            x:Name="PeriodSelector" 
+            ItemsSource="{x:Bind displayPeriods}"
+            Width="200" 
+            SelectionChanged="ChangedPeriod" 
+            Grid.Row="0"
+            Margin="10"/>
 
-        <Grid>
+        <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -79,8 +90,8 @@
             </Grid.ColumnDefinitions>
             <ListView HorizontalAlignment="Stretch" SelectionMode="None" >
 
-                <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
 
+                <!--<Button x:Name="myButton" Click="myButton_Click">Click Me</Button>-->
                 <Grid>
                     <Grid.Resources>
                         <DataTemplate x:Key="GradeTemplate" x:DataType="grade:Grade">
