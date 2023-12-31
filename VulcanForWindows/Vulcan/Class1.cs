@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -97,7 +98,7 @@ namespace VulcanTest.Vulcan
         {
             collection.Clear();
 
-            foreach (var item in newItems)
+            foreach (var item in newItems.Where(r => r != null))
             {
                 collection.Add(item);
             }

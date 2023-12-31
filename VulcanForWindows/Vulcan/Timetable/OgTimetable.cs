@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using LiteDB.Async;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Vulcan.Timetable;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Uonet.Api.Schedule;
@@ -18,35 +20,27 @@ namespace VulcanTest.Vulcan.Timetable
     {
         public override TimeSpan OfflineDataLifespan => TimeSpan.FromMinutes(10);
 
-        public IObservable<IEnumerable<TimetableEntry>> GetPeriodEntriesByMonth(Account account, DateTime monthAndYear,
-       bool forceSync = false)
+        public async Task<TimetableResponseEnvelope> GetPeriodEntriesByMonth(Account account, DateTime monthAndYear,
+       bool forceSync = false, bool waitForSync = false)
         {
-            return Observable.Create<IEnumerable<TimetableEntry>>(async observer =>
+
+            var resourceKey = GetTimetableResourceKey(account, monthAndYear);
+
+            var v = new TimetableResponseEnvelope(this, account, monthAndYear, resourceKey);
+
+
+            v.Entries = new System.Collections.ObjectModel.ObservableCollection<TimetableEntry>(await TimetableRepository.GetEntriesForPupilAsync(account.Id, account.Pupil.Id,
+                monthAndYear));
+
+            if (ShouldSync(resourceKey) || forceSync)
             {
+                if (waitForSync)
+                    await v.SyncAsync();
+                else
+                    v.SyncAsync();
+            }
 
-                var resourceKey = GetTimetableResourceKey(account, monthAndYear);
-
-                var items = await TimetableRepository.GetEntriesForPupilAsync(account.Id, account.Pupil.Id,
-                    monthAndYear);
-
-                observer.OnNext(items);
-
-                if (ShouldSync(resourceKey) || forceSync)
-                {
-                    var onlineEntries = await FetchEntriesForMonthAndYear(account, monthAndYear);
-
-                    await TimetableRepository.UpdatePupilEntriesAsync(onlineEntries, monthAndYear);
-
-                    SetJustSynced(resourceKey);
-
-                    items = await TimetableRepository.GetEntriesForPupilAsync(account.Id, account.Pupil.Id,
-                        monthAndYear);
-
-                    observer.OnNext(items);
-                }
-
-                observer.OnCompleted();
-            });
+            return v;
         }
 
         public async Task<TimetableEntry[]> FetchEntriesForRange(Account account, DateTime from, DateTime to)
@@ -56,7 +50,7 @@ namespace VulcanTest.Vulcan.Timetable
             var client = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
             var response = await client.GetAsync(GetScheduleEntriesByPupilQuery.ApiEndpoint, query);
-
+            Debug.Write("\na\n" + JsonConvert.SerializeObject(response.Envelope) + "\n");
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<TimetableMapperProfile>(); // Replace with your actual mapping profile class

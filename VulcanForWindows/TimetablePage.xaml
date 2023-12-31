@@ -6,29 +6,56 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:t="using:VulcanTest.Vulcan.Timetable"
     xmlns:Scheduler="using:DevExpress.WinUI.Scheduler">
 
-    <Grid>
-        <Grid.DataContext>
-            <local:SchedulerViewModel/>
-        </Grid.DataContext>
+    <Grid x:Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Click="Button_Click"/>
 
-        <Scheduler:SchedulerControl>
-            <Scheduler:Calendar AppointmentsSource="{x:Bind appointments}">
-                <Scheduler:Calendar.AppointmentMappings>
-                    <Scheduler:AppointmentMappings
-                Id="Id"
-                AllDay="AllDay"
-                Start="Start"
-                End="End"
-                LabelId="LabelId"
-                Subject="Subject"
-                Description="Description"
-                Location="Location"
-                RecurrenceRule="RecurrenceInfo">
-                    </Scheduler:AppointmentMappings>
-                </Scheduler:Calendar.AppointmentMappings>
-            </Scheduler:Calendar>
-        </Scheduler:SchedulerControl>
+        <ItemsRepeater ItemsSource="{x:Bind display}" Grid.Row="1" x:Name="lv" HorizontalAlignment="Stretch">
+            <ItemsRepeater.Layout>
+                <UniformGridLayout Orientation="Horizontal" ItemsJustification="SpaceAround" ItemsStretch="Fill" MinColumnSpacing="0"/>
+            </ItemsRepeater.Layout>
+            <!--<ItemsView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ItemsView.ItemContainerStyle>-->
+
+            <ItemsRepeater.ItemTemplate>
+                <DataTemplate x:DataType="local:Day">
+                    <ItemContainer HorizontalAlignment="Stretch">
+                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,10"/>
+                            <ListView ItemsSource="{x:Bind e}" VerticalContentAlignment="Stretch" 
+                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch" Height="500" SelectionMode="None">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="t:TimetableEntry">
+                                        <StackPanel Margin="0,0,0,8">
+                                            <TextBlock Text="{x:Bind subName}" FontWeight="Bold"/>
+                                            <Grid>
+                                                <TextBlock 
+                                            Text="{x:Bind displayTime}" 
+                                            FontWeight="SemiLight" 
+                                            FontSize="12" HorizontalAlignment="Left"/>
+                                                <TextBlock 
+                                            Text="{x:Bind RoomName}" 
+                                            FontWeight="SemiLight" 
+                                            FontSize="12" HorizontalAlignment="Right" Grid.Column="1"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </ItemContainer>
+                </DataTemplate>
+            </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
     </Grid>
 </Page>

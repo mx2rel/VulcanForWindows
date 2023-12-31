@@ -13,21 +13,15 @@
     <WindowsSdkPackageVersion>10.0.19041.29</WindowsSdkPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="TimetablePage.xaml.cs" />
     <Compile Remove="Vulcan\Attendance\LessonsService.cs" />
     <Compile Remove="Vulcan\Attendance\Report\AttendanceReportService.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
     <Compile Remove="Vulcan\Grades\Final\FinalGrades.cs" />
     <Compile Remove="Vulcan\Timetable\Changes\TimetableChanges.cs" />
-    <Compile Remove="Vulcan\Timetable\OgTimetable.cs" />
-    <Compile Remove="Vulcan\Timetable\Timetable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="GradesPage.xaml" />
     <None Remove="TimetablePage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Remove="TimetablePage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,6 +52,11 @@
        package has not yet been restored -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="TimetablePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="GradesPage.xaml">

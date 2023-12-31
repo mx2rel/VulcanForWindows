@@ -46,16 +46,17 @@ public class TimetableMapperProfile : Profile
 
         // Example: Assuming DateTimeInfo has a DateTime property
         if (dateTimeInfo == null) return null;
-        return dateTimeInfo.Time;
+        return dateTimeInfo.Date;
     }
     private Vulcanova.Features.Shared.Subject ConvertSub(Subject sub)
     {
         var s = new Vulcanova.Features.Shared.Subject();
-        if (sub != null) { 
-        s.Name = sub.Name;
-        s.Position = sub.Position;
-        s.Kod = sub.Kod;
-        s.Id = sub.Id;
+        if (sub != null)
+        {
+            s.Name = sub.Name;
+            s.Position = sub.Position;
+            s.Kod = sub.Kod;
+            s.Id = sub.Id;
             s.Key = sub.Key;
         }
         return s;

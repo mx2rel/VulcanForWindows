@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Timetable;
 using Vulcanova.Features.Timetable.Changes;
+using VulcanTest.Vulcan.Timetable.Changes;
 
 namespace VulcanTest.Vulcan.Timetable
 {
@@ -15,9 +16,10 @@ namespace VulcanTest.Vulcan.Timetable
         public static async Task<IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>>> FetchEntriesForRange(Account account, DateTime from, DateTime to)
         {
             var og = (await new OgTimetable().FetchEntriesForRange(account, from, to));
-            var c = (await new TimetableChanges().FetchEntriesForRange(account, from, to));
+            IEnumerable<TimetableChangeEntry> c = /*(await new TimetableChanges().FetchEntriesForRange(account, from, to));*/
+                new TimetableChangeEntry[0];
 
-            IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>> l = (TimetableBuilder.BuildTimetable(og, c));
+            IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>> l = (TimetableBuilder.BuildTimetable(og, c as ICollection<TimetableChangeEntry>));
             return l;
         }
 
