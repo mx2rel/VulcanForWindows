@@ -16,4 +16,5 @@ public class Grade
     public bool IsModified => DateCreated != DateModify;
     public decimal? Value { get; set; }
     public Column Column { get; set; }
+    public string BgColor => (Column.Name == "Hipotetyczna ocena") ? "#7a420a" : "Green";
 }

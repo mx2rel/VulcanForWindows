@@ -42,7 +42,7 @@ namespace VulcanForWindows
 
             grades = new ObservableCollection<SubjectGrades>();
             selectedPeriod = new AccountRepository().GetActiveAccountAsync().CurrentPeriod;
-            PeriodSelector.SelectedIndex = avaiblePeriods.Length-1;
+            PeriodSelector.SelectedIndex = avaiblePeriods.Length - 1;
             PeriodSelector.UpdateLayout();
             AssignGrades();
             cd = new MonthChartData();
@@ -201,5 +201,136 @@ namespace VulcanForWindows
             }
         }
 
+        private async void DisplayHipotheticGrade(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            var v = (Resources["HipotheticGradeCheckContent"] as DataTemplate).LoadContent() as StackPanel;
+            v.DataContext = (sender as Button).DataContext;
+            dialog.Content = v;
+            dialog.CloseButtonText = "Cancel";
+
+            var result = await dialog.ShowAsync();
+
+        }
+        SubjectGrades eSg;
+        Expander eSgu;
+        private async void AddHipotheticGrade(object sender, RoutedEventArgs e)
+        {
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            var v = (Resources["HipotheticGradeAddContent"] as DataTemplate).LoadContent() as StackPanel;
+            v.DataContext = (sender as Button).DataContext;
+            eSg = ((sender as Button).DataContext as SubjectGrades);
+            eSgu = FindParentOfType<Expander>(sender as DependencyObject);
+            dialog.Content = v;
+            dialog.CloseButtonText = "Anuluj";
+            dialog.PrimaryButtonText = "Dodaj";
+            dialog.PrimaryButtonClick += AddHip;
+            var result = await dialog.ShowAsync();
+
+        }
+        private async void RemoveHipotheticGrades(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as SubjectGrades).removeAddedGrades();
+        }
+
+        public T FindParentOfType<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(child);
+
+            while (parent != null)
+            {
+                if (parent is T typedParent)
+                {
+                    return typedParent;
+                }
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+
+            return null;
+        }
+
+        public List<T> FindEvenDeepChildrenOfType<T>(DependencyObject parent) where T : DependencyObject
+        {
+            var resultList = new List<T>();
+
+            if (parent == null) return resultList;
+
+            var count = VisualTreeHelper.GetChildrenCount(parent);
+
+            for (var i = 0; i < count; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                // Check if the current child is of the specified type and is even
+                if (child is T typedChild && i % 2 == 0)
+                {
+                    resultList.Add(typedChild);
+                }
+
+                // Recursively search for even deep children
+                resultList.AddRange(FindEvenDeepChildrenOfType<T>(child));
+            }
+
+            return resultList;
+        }
+
+        private void AddHip(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            Debug.WriteLine("f" + (sender.Content as StackPanel == null));
+            Debug.WriteLine("p" + (((sender.Content as StackPanel).DataContext as SubjectGrades) == null));
+
+            IEnumerable<NumberBox> numberBoxes = (sender.Content as StackPanel).Children.OfType<NumberBox>();
+            int grade = 0;
+            int weight = 0;
+            foreach (var v in numberBoxes)
+                if (v.Tag != null)
+                    if (v.Tag.ToString() == "grade")
+                        grade = (int)Math.Round(v.Value);
+                    else
+                        if (v.Tag.ToString() == "weight")
+                        weight = (int)Math.Round(v.Value);
+
+            eSg.AddGrade(new Grade
+            {
+                Content = grade.ToString(),
+                ContentRaw = grade.ToString(),
+                Column = new Column
+                {
+                    Name = "Hipotetyczna ocena",
+                    Weight = weight
+                }
+            });
+
+            Debug.WriteLine(JsonConvert.SerializeObject((eSgu.DataContext as SubjectGrades).grades));
+            eSgu.DataContext = eSg;
+            eSgu.UpdateLayout();
+            //FindEvenDeepChildrenOfType<TextBlock>(eSgu.Header as ).Where(r => r.Name == "average").ToArray()[0].UpdateLayout();
+            //FindObjectsByName()
+            //grades.ReplaceAll(grades.ToArray());
+            //var s = eSgu.DataContext;
+            //eSgu.DataContext = null;
+            //eSgu.DataContext = s;
+            eSgu.GetBindingExpression(FrameworkElement.DataContextProperty)?.UpdateSource();
+            TopLevel.UpdateLayout();
+            Debug.WriteLine(JsonConvert.SerializeObject(grades.Select(r=>r.grades)));
+            var lv = ((eSgu.Content as StackPanel).Children[0] as ListView);
+            lv.ScrollIntoView(lv.Items.Last());
+        }
+
+
+        private void ChangedWeight(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            if (sender.Parent != null)
+                foreach (var v in (sender.Parent as StackPanel).Children)
+                {
+                    if ((v as FrameworkElement).Tag != null)
+                        if (v is TextBlock t)
+                        {
+                            t.Text = $"{t.Tag}: {(sender.DataContext as SubjectGrades).CountAverage(int.Parse(t.Tag.ToString()), (decimal)sender.Value)}";
+                        }
+                }
+        }
     }
 }

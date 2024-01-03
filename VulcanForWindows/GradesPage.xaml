@@ -65,6 +65,48 @@
                 </Grid>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="HipotheticGradeCheckContent" x:DataType="local:SubjectGrades">
+            <StackPanel Spacing="10">
+                <TextBlock FontWeight="SemiBold" FontSize="18">Hipotetyczna ocena</TextBlock>
+
+                <NumberBox
+    Header="Waga:"
+    Value="1"
+    SpinButtonPlacementMode="Compact"
+    SmallChange="1"
+    LargeChange="2" ValueChanged="ChangedWeight" Margin="0,0,0,10" Minimum="1"/>
+
+                <TextBlock Tag="6"></TextBlock>
+                <TextBlock Tag="5"></TextBlock>
+                <TextBlock Tag="4"></TextBlock>
+                <TextBlock Tag="3"></TextBlock>
+                <TextBlock Tag="2"></TextBlock>
+                <TextBlock Tag="1"></TextBlock>
+                
+            </StackPanel>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="HipotheticGradeAddContent">
+            <StackPanel Spacing="10">
+                <TextBlock FontWeight="SemiBold" FontSize="18">Nowa hipotetyczna ocena</TextBlock>
+
+                <NumberBox Tag="grade" x:Name="grade"
+    Header="Ocena:"
+    Value="1"
+    SpinButtonPlacementMode="Compact"
+    SmallChange="1"
+    LargeChange="2" Margin="0,0,0,10" Maximum="6" Minimum="1"/>
+
+                <NumberBox Tag="weight" x:Name="weight"
+    Header="Waga:"
+    Value="1"
+    SpinButtonPlacementMode="Compact"
+    SmallChange="1"
+    LargeChange="2" Margin="0,0,0,10"/>
+
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid>
@@ -104,7 +146,7 @@
                                 </ListView.ItemContainerStyle>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="10" Height="42">
 
-                                    <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Left" Height="35" CornerRadius="3">
+                                    <Border Background="{x:Bind BgColor}" VerticalAlignment="Stretch" HorizontalAlignment="Left" Height="35" CornerRadius="3">
                                         <TextBlock TextAlignment="Center" Width="35" FontWeight="Medium" FontSize="14" VerticalAlignment="Center" Text="{x:Bind ContentRaw}"/>
                                     </Border>
                                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
@@ -154,9 +196,10 @@
                                                 <RowDefinition Height="18"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="{x:Bind subject.Name}" HorizontalTextAlignment="Left" VerticalAlignment="Center" FontWeight="Medium"/>
-                                            <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
-                                        <Run Text="Średnia:"/>
-                                        <Run Text="{x:Bind averageDisplay}"/>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" 
+                                                       Foreground="{x:Bind AverageColor, Mode=OneWay}">
+                                        <Run Text="{x:Bind AverageText, Mode=OneWay}"/>
+                                        <Run Text="{x:Bind averageDisplay, Mode=OneWay}" x:Name="average"/>
                                             </TextBlock>
                                         </Grid>
                                         <GridView SelectionMode="None" ItemsSource="{x:Bind recentGrades}" 
@@ -177,10 +220,10 @@
                                             </GridView.ItemTemplate>
 
                                         </GridView>
-
                                         <Border 
                                         Visibility="{x:Bind desiredVisibility}"
                                         BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px" Grid.Column="2" HorizontalAlignment="Right">
+                                            
                                             <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
                                         </Border>
 
@@ -188,16 +231,23 @@
                                     </Grid>
                                 </Expander.Header>
                                 <Expander.Content>
-                                    <ListView ItemTemplate="{StaticResource GradeTemplate}"
+                                    <StackPanel>
+                                        <ListView ItemTemplate="{StaticResource GradeTemplate}"
                   ItemsSource="{x:Bind grades}" HorizontalAlignment="Stretch" 
           HorizontalContentAlignment="Stretch" Margin="0,5,0,5" MaxHeight="300">
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="ListViewItem">
-                                                <Setter Property="Padding" Value="0"/>
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-                                    </ListView>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                        </ListView>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3" Spacing="3">
+                                        <Button HorizontalAlignment="Stretch" Click="DisplayHipotheticGrade">Sprawdź hipotetyczną ocenę</Button>
+                                        <Button HorizontalAlignment="Stretch" Click="AddHipotheticGrade">Dodaj hipotetyczną ocenę</Button>
+                                            <Button HorizontalAlignment="Stretch" Click="RemoveHipotheticGrades" Visibility="{x:Bind removeButtonVisibility, Mode=OneWay}">Usuń hipotetyczne oceny</Button>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </Expander.Content>
                             </Expander>
                         </DataTemplate>
