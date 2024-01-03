@@ -226,11 +226,13 @@ namespace VulcanForWindows
             dialog.Content = v;
             dialog.CloseButtonText = "Anuluj";
             dialog.PrimaryButtonText = "Dodaj";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+
             dialog.PrimaryButtonClick += AddHip;
             var result = await dialog.ShowAsync();
 
         }
-        private async void RemoveHipotheticGrades(object sender, RoutedEventArgs e)
+        private void RemoveHipotheticGrades(object sender, RoutedEventArgs e)
         {
             ((sender as Button).DataContext as SubjectGrades).removeAddedGrades();
         }
@@ -331,6 +333,17 @@ namespace VulcanForWindows
                             t.Text = $"{t.Tag}: {(sender.DataContext as SubjectGrades).CountAverage(int.Parse(t.Tag.ToString()), (decimal)sender.Value)}";
                         }
                 }
+        }
+
+        private async void ViewGradeDetails(object sender, TappedRoutedEventArgs e)
+        {
+                ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as StackPanel;
+            v.DataContext = (sender as ListView).DataContext;
+            dialog.Content = v;
+            dialog.CloseButtonText = "Ok";
+            var result = await dialog.ShowAsync();
         }
     }
 }
