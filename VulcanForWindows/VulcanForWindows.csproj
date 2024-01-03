@@ -17,9 +17,9 @@
     <Compile Remove="Vulcan\Attendance\Report\AttendanceReportService.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
     <Compile Remove="Vulcan\Grades\Final\FinalGrades.cs" />
-    <Compile Remove="Vulcan\Timetable\Changes\TimetableChanges.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="BlankPage1.xaml" />
     <None Remove="GradesPage.xaml" />
     <None Remove="TimetablePage.xaml" />
   </ItemGroup>
@@ -52,6 +52,11 @@
        package has not yet been restored -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="BlankPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="TimetablePage.xaml">

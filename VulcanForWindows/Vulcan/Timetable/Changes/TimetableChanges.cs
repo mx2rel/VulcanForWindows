@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
@@ -18,37 +17,6 @@ namespace Vulcanova.Features.Timetable.Changes;
 
 public class TimetableChanges : UonetResourceProvider
 {
-    public IObservable<IEnumerable<TimetableChangeEntry>> GetChangesEntriesByMonth(Account account,
-       DateTime monthAndYear,
-       bool forceSync = false)
-    {
-        return Observable.Create<IEnumerable<TimetableChangeEntry>>(async observer =>
-        {
-            var resourceKey = GetTimetableResourceKey(account, monthAndYear);
-
-            var items = await TimetableChangesRepository.GetEntriesForPupilAsync(account.Id, account.Pupil.Id,
-                monthAndYear);
-
-            observer.OnNext(items);
-
-            if (ShouldSync(resourceKey) || forceSync)
-            {
-                var onlineEntries = await FetchEntriesForMonthAndYear(account, monthAndYear);
-
-                await TimetableChangesRepository.UpsertEntriesAsync(onlineEntries, monthAndYear);
-
-                SetJustSynced(resourceKey);
-
-                items = await TimetableChangesRepository.GetEntriesForPupilAsync(account.Id, account.Pupil.Id,
-                    monthAndYear);
-
-                observer.OnNext(items);
-            }
-
-            observer.OnCompleted();
-        });
-    }
-
     public async Task<TimetableChangeEntry[]> FetchEntriesForRange(Account account, DateTime from, DateTime to)
     {
         var query = new GetScheduleChangesEntriesByPupilQuery(account.Pupil.Id, from, to, DateTime.MinValue);

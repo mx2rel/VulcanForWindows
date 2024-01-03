@@ -33,8 +33,8 @@ public class TimetableMapperProfile : Profile
             .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
             .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.Event != null ? src.Event.ToString() : null))
             .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
-            .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.TeacherPrimary.Name)) // Assuming 'Name' property in Teacher
-            .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room)) // Assuming 'Name' property in Room
+            .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.TeacherPrimary.DisplayName)) // Assuming 'Name' property in Teacher
+            .ForMember(dest => dest.RoomName, opt => opt.MapFrom(src => src.Room.Code)) // Assuming 'Name' property in Room
             .ForMember(dest => dest.Change, opt => opt.MapFrom(src => src.Change));
 
     }

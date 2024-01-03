@@ -36,6 +36,7 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem Icon="Save" Content="Plan Lekcji" Tag="TimetablePage" />
+                <NavigationViewItem Icon="Save" Content="test" Tag="BlankPage1" />
                 <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
                 <NavigationViewItem Icon="Download" Content="Menu Item4" Tag="SamplePage4" />-->
             </NavigationView.MenuItems>

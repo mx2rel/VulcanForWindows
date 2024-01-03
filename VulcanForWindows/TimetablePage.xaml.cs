@@ -20,6 +20,8 @@ using VulcanForWindows.Vulcan.Timetable;
 using Vulcanova.Features.Auth;
 using VulcanTest.Vulcan;
 using System.Diagnostics;
+using Vulcanova.Features.Timetable;
+using System.Globalization;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -34,10 +36,11 @@ namespace VulcanForWindows
 
         public TimetableResponseEnvelope env;
         TimetableDayGrouper tdg;
+        IDictionary<DateTime, TimetableDayGrouper> tdgD = new Dictionary<DateTime, TimetableDayGrouper>();
 
         public Day[] display
         {
-            get => (tdg.GetWeek(week));
+            get => (tdg == null) ? new Day[0] : (tdg.GetWeek(week));
         }
 
         public DateTime week;
@@ -45,77 +48,165 @@ namespace VulcanForWindows
         public TimetablePage()
         {
             this.InitializeComponent();
-            week = new DateTime(2023, 12, 10);
+            week = GetStartOfTheWeek(DateTime.Now);
 
-            AssignTimetable();
+            ChangeWeek();
             //appointments = new ObservableCollection<TimetableEntry>(TimetableEntry.Generate(RandomGenerator.GenerateRandomTimetable()));
 
         }
 
-        public async void AssignTimetable()
+        public DateTime GetStartOfTheWeek(DateTime t) => TimetableDayGrouper.GetStartOfWeek(t);
+
+        public bool isLoading;
+
+        public async void ChangeWeek()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
 
-            env = await new OgTimetable().GetPeriodEntriesByMonth(acc, DateTime.Today, false, false);
-            env.EntriesUpdated += HandleEntriesUpdated;
-            tdg = new TimetableDayGrouper(env.Entries);
+            //env = await new OgTimetable().GetPeriodEntriesByMonth(acc, DateTime.Today, false, false);
+            //env.EntriesUpdated += HandleEntriesUpdated;
+            //tdg = new TimetableDayGrouper(env.Entries);
+            if (!tdgD.ContainsKey(GetStartOfTheWeek(week)))
+            {
+                isLoading = true;
+                UpdateLoadingBarVisibility();
+                tdgD.Add(GetStartOfTheWeek(week), new TimetableDayGrouper((await Timetable.FetchEntriesForRange(acc, week.AddDays(-7), week.AddDays(7))).SelectMany(r => r.Value)));
+                isLoading = false;
+            }
+            tdg = tdgD[GetStartOfTheWeek(week)];
+
+            Debug.Write("\nTDG loaded");
+            Update();
+
+            if (!tdgD.ContainsKey(GetStartOfTheWeek(week.AddDays(7))))
+            {
+                isLoading = true;
+                var v = new TimetableDayGrouper((await Timetable.FetchEntriesForRange(acc, week.AddDays(7), week.AddDays(14))).SelectMany(r => r.Value));
+                if (!tdgD.ContainsKey(GetStartOfTheWeek(week.AddDays(7))))
+                    tdgD.Add(GetStartOfTheWeek(week.AddDays(7)), v);
+                isLoading = false;
+            }
+            if (!tdgD.ContainsKey(GetStartOfTheWeek(week.AddDays(-7))))
+            {
+                isLoading = true;
+                var v = new TimetableDayGrouper((await Timetable.FetchEntriesForRange(acc, week.AddDays(-14), week.AddDays(7))).SelectMany(r => r.Value));
+                if (!tdgD.ContainsKey(GetStartOfTheWeek(week.AddDays(-14))))
+                    tdgD.Add(GetStartOfTheWeek(week.AddDays(-14)), v);
+                isLoading = false;
+            }
+
+            UpdateLoadingBarVisibility();
 
         }
-        void HandleEntriesUpdated(object sender, IEnumerable<TimetableEntry> updatedGrades)
+
+        void UpdateLoadingBarVisibility()
         {
-            tdg = new TimetableDayGrouper(env.Entries);
-            lv.ItemsSource = display;
-            lv.UpdateLayout();
+            LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        //void HandleEntriesUpdated(object sender, IEnumerable<TimetableEntry> updatedGrades)
+        //{
+        //    tdg = new TimetableDayGrouper(env.Entries);
+        //    lv.ItemsSource = display;
+        //    lv.UpdateLayout();
+        //}
+
+        private void Update()
         {
-            (sender as Button).Content = tdg.entries.Length;
-            lv.ItemsSource = display;
-            lv.UpdateLayout();
+            sel.Text = GetStartOfTheWeek(week).ToString("dd/MM") + " - " + GetStartOfTheWeek(week).AddDays(6).ToString("dd/MM");
+            //lv.ItemsSource = display;
+            //lv.UpdateLayout();
+
+            gr.Children.Clear();
+
+            for (int i = 0; i < display.Length; i++)
+            {
+                var sp = (this.Resources["DayTemp"] as DataTemplate).LoadContent() as StackPanel;
+
+                gr.Children.Add(sp);
+
+                sp.DataContext = display[i];
+                Grid.SetColumn(sp, i);
+            }
+            if (display.Length == 0)
+            {
+                var r = new TextBlock();
+                r.Text = "Brak wpisów na ten okres.";
+                r.TextAlignment = TextAlignment.Center;
+                r.HorizontalAlignment = HorizontalAlignment.Center;
+                r.VerticalAlignment = VerticalAlignment.Center;
+                gr.Children.Add(r);
+            }
+        }
+
+        private void Next(object sender, RoutedEventArgs e)
+        {
+            week = week.AddDays(7);
+            ChangeWeek();
+        }
+        private void Prev(object sender, RoutedEventArgs e)
+        {
+            week = week.AddDays(-7);
+            ChangeWeek();
+        }
+
+        private void ViewDetails(object sender, TappedRoutedEventArgs e)
+        {
+            //TODO: WYŚWIETL SZCZEGÓŁY LEKCJI
         }
     }
 
     public class TimetableDayGrouper
     {
-        public TimetableDayGrouper(IEnumerable<TimetableEntry> e)
+        public TimetableDayGrouper(IEnumerable<TimetableListEntry> e)
         {
-            var v = new Dictionary<DateTime, List<TimetableEntry>>();
-            foreach (var entry in e.Where(r => r.Visible))
+            var v = new Dictionary<DateTime, List<TimetableListEntry>>();
+            foreach (var entry in e)
             {
                 if (!v.ContainsKey(entry.Date))
-                    v.Add(entry.Date, new List<TimetableEntry>());
+                    v.Add(entry.Date, new List<TimetableListEntry>());
 
                 v[entry.Date].Add(entry);
             }
             Debug.Write(JsonConvert.SerializeObject(v) + "\n\n\np\n" + JsonConvert.SerializeObject(e));
-            entries = v.Select(r => new KeyValuePair<DateTime, TimetableEntry[]>(r.Key, r.Value.ToArray().OrderBy(d => d.start).ToArray())).OrderBy(r => r.Key).ToArray();
+            entries = v.Select(r => new KeyValuePair<DateTime, TimetableListEntry[]>(r.Key, r.Value.ToArray().OrderBy(d => d.Start.Value).ToArray())).OrderBy(r => r.Key).ToArray();
         }
 
-        public KeyValuePair<DateTime, TimetableEntry[]>[] entries { get; set; }
+        public KeyValuePair<DateTime, TimetableListEntry[]>[] entries { get; set; }
 
         public Day[] GetWeek(DateTime date)
         {
             date.AddDays(1);
-            DateTime startOfWeek = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            DateTime startOfWeek = GetStartOfWeek(date);
             DateTime endOfWeek = startOfWeek.AddDays(4); // Friday is 4 days after Monday
 
             return entries.Where(r => r.Key.Date >= startOfWeek.Date && r.Key.Date <= endOfWeek.Date).Select(r => new Day(r)).ToArray();
+        }
+
+        public static DateTime GetStartOfWeek(DateTime date)
+        {
+            var d = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            d = d.AddHours(-d.Hour);
+            d = d.AddMinutes(-d.Minute);
+            d = d.AddSeconds(-d.Second);
+            return d;
         }
     }
 
     public class Day
     {
 
-        public Day(KeyValuePair<DateTime, TimetableEntry[]> e)
+        public Day(KeyValuePair<DateTime, TimetableListEntry[]> e)
         {
             entries = e;
         }
 
-        public KeyValuePair<DateTime, TimetableEntry[]> entries { get; set; }
+        public KeyValuePair<DateTime, TimetableListEntry[]> entries { get; set; }
 
-        public TimetableEntry[] e => entries.Value;
+        public TimetableListEntry[] e => entries.Value;
 
-        public string day => entries.Key.ToString();
+        public int dayOfWeek => (int)entries.Key.DayOfWeek;
+
+        public string day => new CultureInfo("en-US", false).TextInfo.ToTitleCase(entries.Key.ToString("dddd, dd/MM"));
     }
 }

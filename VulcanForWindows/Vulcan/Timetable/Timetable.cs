@@ -16,8 +16,7 @@ namespace VulcanTest.Vulcan.Timetable
         public static async Task<IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>>> FetchEntriesForRange(Account account, DateTime from, DateTime to)
         {
             var og = (await new OgTimetable().FetchEntriesForRange(account, from, to));
-            IEnumerable<TimetableChangeEntry> c = /*(await new TimetableChanges().FetchEntriesForRange(account, from, to));*/
-                new TimetableChangeEntry[0];
+            IEnumerable<TimetableChangeEntry> c = (await new TimetableChanges().FetchEntriesForRange(account, from, to));
 
             IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>> l = (TimetableBuilder.BuildTimetable(og, c as ICollection<TimetableChangeEntry>));
             return l;
