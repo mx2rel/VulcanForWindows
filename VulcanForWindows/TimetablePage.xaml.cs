@@ -154,6 +154,24 @@ namespace VulcanForWindows
         {
             //TODO: WYŚWIETL SZCZEGÓŁY LEKCJI
         }
+
+        private void CurrentWeek(object sender, RoutedEventArgs e)
+        {
+            week = GetStartOfTheWeek(DateTime.Now);
+            ChangeWeek();
+        }
+
+        private async void ShowLessonDetails(object sender, ItemClickEventArgs e)
+        {
+
+            ContentDialog dialog = new ContentDialog();
+            dialog.XamlRoot = this.XamlRoot;
+            var v = (Resources["LessonFullInfo"] as DataTemplate).LoadContent() as StackPanel;
+            v.DataContext = e.ClickedItem as TimetableListEntry;
+            dialog.Content = v;
+            dialog.CloseButtonText = "Zamknij";
+            var result = await dialog.ShowAsync();
+        }
     }
 
     public class TimetableDayGrouper
@@ -187,7 +205,7 @@ namespace VulcanForWindows
         {
             var d = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
             d = d.AddHours(-d.Hour);
-            d = d.AddMinutes(-d.Minute);
+            d = d.AddMinutes(-(d.Minute - 1));
             d = d.AddSeconds(-d.Second);
             return d;
         }

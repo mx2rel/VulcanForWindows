@@ -24,7 +24,7 @@ namespace Vulcanova.Features.Timetable
             public string ChangeNote { get; set; }
         }
 
-
+        public bool IsCancelled => (Change == null) ? false : (Change.ChangeType != ChangeType.Substitution);
         public string textColor => (Change == null) ? White : (Change.ChangeType == ChangeType.Substitution ? White : Red);
         public string textDecor => (Change == null) ? "None" : (Change.ChangeType == ChangeType.Substitution ? "None" : "Strikethrough");
 

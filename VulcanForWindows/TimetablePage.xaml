@@ -17,10 +17,10 @@
                 <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,10" TextAlignment="Center"/>
                 <ListView ItemsSource="{x:Bind e}" VerticalContentAlignment="Stretch" 
                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                                      HorizontalContentAlignment="Stretch" Height="500">
+                                      HorizontalContentAlignment="Stretch" Height="500" ItemClick="ShowLessonDetails" IsItemClickEnabled="True" SelectionMode="None">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="tc:TimetableListEntry">
-                            <Grid Tapped="ViewDetails">
+                            <Grid>
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="{x:Bind textColor}"/>
@@ -59,6 +59,16 @@
             </StackPanel>
             <!--</ItemContainer>-->
         </DataTemplate>
+        <DataTemplate x:Key="LessonFullInfo" x:DataType="tc:TimetableListEntry">
+            <!-- Define the content of your Flyout here -->
+            <StackPanel Width="300" Spacing="3">
+                <TextBlock Text="{x:Bind subName}" FontWeight="Bold" FontSize="22" Foreground="{x:Bind SubNameColor}" 
+                           TextDecorations="{x:Bind textDecor}" TextWrapping="WrapWholeWords"/>
+                <local:UserControl1 Value="{x:Bind TeacherName}" Title="Nauczyciel:"/>
+                <local:UserControl1 Value="{x:Bind RoomName}" Title="Sala:"/>
+                <local:UserControl1 Value="{x:Bind Event}" Title="Wydarzenie:"/>
+            </StackPanel>
+        </DataTemplate>
     </Page.Resources>
     <Grid x:Name="grid">
         <Grid.RowDefinitions>
@@ -67,10 +77,11 @@
         </Grid.RowDefinitions>
         <ProgressBar x:Name="LoadingBar" 
             HorizontalAlignment="Stretch" VerticalAlignment="Top" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Spacing="3">
             <Button Click="Prev" Content="&lt;"/>
             <TextBlock x:Name="sel" TextAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0" FontWeight="SemiBold" FontSize="16"/>
             <Button Click="Next" Content=">"/>
+            <Button Click="CurrentWeek">Obecny tydzień</Button>
         </StackPanel>
 
         <Grid DataContext="{x:Bind display}" Grid.Row="1" x:Name="gr">
