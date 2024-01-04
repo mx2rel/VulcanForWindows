@@ -12,10 +12,10 @@ using VulcanTest.Vulcan.Timetable;
 
 namespace VulcanForWindows.Vulcan.Timetable
 {
-    public class TimetableResponseEnvelope
+    public class TimetableResponseEnvelope : IResponseEnvelope<TimetableEntry>
     {
         public bool isLoading;
-        public event EventHandler<IEnumerable<TimetableEntry>> EntriesUpdated;
+        public event EventHandler<IEnumerable<TimetableEntry>> Updated;
 
         private ObservableCollection<TimetableEntry> entries;
         public ObservableCollection<TimetableEntry> Entries
@@ -24,7 +24,7 @@ namespace VulcanForWindows.Vulcan.Timetable
             set
             {
                 entries = value;
-                EntriesUpdated?.Invoke(this, entries);
+                Updated?.Invoke(this, entries);
             }
         }
         OgTimetable g; Account account; DateTime monthAndYear; string resourceKey;
@@ -50,7 +50,7 @@ namespace VulcanForWindows.Vulcan.Timetable
 
             Entries.ReplaceAll<TimetableEntry>(onlineEntries);
 
-            EntriesUpdated?.Invoke(this, entries);
+            Updated?.Invoke(this, entries);
 
         }
     }

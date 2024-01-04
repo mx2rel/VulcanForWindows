@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vulcanova.Features.Grades;
+using Vulcanova.Features.Grades.Final;
 
 namespace VulcanForWindows.Classes
 {
     public static class GradeExtensions
     {
-        public static double CountAverage(this Grade[] grades)
+        public static double CalculateAverage(this Grade[] grades)
         {
             decimal sum = 0;
             decimal weightSum = 0;
@@ -22,6 +23,27 @@ namespace VulcanForWindows.Classes
                         sum += g * grade.Column.Weight;
                         weightSum += grade.Column.Weight;
                     }
+            }
+
+            if (weightSum == 0)
+                return 0;
+
+            return (double)Math.Round(sum / weightSum * 100) / 100;
+        }
+
+
+        public static double CalculateAverage(this FinalGradesEntry[] grades)
+        {
+            decimal sum = 0;
+            decimal weightSum = 0;
+
+            foreach (var grade in grades.Where(r => r.FinalGrade != null || r.PredictedGrade != null))
+            {
+                if (decimal.TryParse(grade.FinalGrade ?? grade.PredictedGrade, out var r))
+                {
+                    sum += r;
+                    weightSum++;
+                }
             }
 
             if (weightSum == 0)
@@ -56,7 +78,9 @@ namespace VulcanForWindows.Classes
 
         public static bool GetValue(string s, out decimal o)
         {
+            o = 0;
             var l = s.ToArray();
+            if (l.Length == 0) return false;
             if (int.TryParse(l[0] + "", out var full))
             {
                 double second = (l.Length == 1) ? 0 : ((l[1] == '+') ? 0.5 : -0.25);
@@ -64,8 +88,6 @@ namespace VulcanForWindows.Classes
                 o = (decimal)full + (decimal)second;
                 return true;
             }
-            else
-                o = 0;
             return false;
         }
     }

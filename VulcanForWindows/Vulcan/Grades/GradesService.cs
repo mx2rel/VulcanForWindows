@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
 using Newtonsoft.Json;
+using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
@@ -42,13 +43,13 @@ public class GradesService : UonetResourceProvider
         return v;
     }
 
-    public async Task<IDictionary<int, Grade[]>> FetchGradesFromAllPeriodsAsync(Account account)
+    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromAllPeriodsAsync(Account account)
     {
-        IDictionary<int, Grade[]> d = new Dictionary<int, Grade[]>();
+        IDictionary<Period, Grade[]> d = new Dictionary<Period, Grade[]>();
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
         foreach (var period in account.Periods)
         {
-            d.Add(period.Id, await FetchPeriodGradesAsync(account, period.Id));
+            d.Add(period, await FetchPeriodGradesAsync(account, period.Id));
         }
 
         return d;

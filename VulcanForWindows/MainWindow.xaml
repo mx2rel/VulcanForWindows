@@ -34,6 +34,11 @@
                     <NavigationViewItem.Icon>
                         <ImageIcon Source="/Assets/GradesIcon.png"/>
                     </NavigationViewItem.Icon>
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="Szczegóły" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
+                        <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
+                    </NavigationViewItem.MenuItems>
+
                 </NavigationViewItem>
                 <NavigationViewItem Icon="Save" Content="Plan Lekcji" Tag="TimetablePage" />
                 <NavigationViewItem Icon="Save" Content="test" Tag="BlankPage1" />

@@ -72,7 +72,7 @@ namespace VulcanForWindows.Classes
         {
             get
             {
-                return grades.ToArray().CountAverage();
+                return grades.ToArray().CalculateAverage();
             }
         }
 

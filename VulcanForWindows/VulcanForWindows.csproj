@@ -16,13 +16,14 @@
     <Compile Remove="Vulcan\Attendance\LessonsService.cs" />
     <Compile Remove="Vulcan\Attendance\Report\AttendanceReportService.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
-    <Compile Remove="Vulcan\Grades\Final\FinalGrades.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="BlankPage1.xaml" />
     <None Remove="GradesPage.xaml" />
+    <None Remove="GradesSummaryPage.xaml" />
     <None Remove="TimetablePage.xaml" />
     <None Remove="UserControl1.xaml" />
+    <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +56,11 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="GradesSummaryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="UserControl1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -71,6 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="GradesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\SummaryAverageGradeDisplayer.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -72,7 +72,7 @@ namespace VulcanForWindows
             if (!envelopes.ContainsKey(selectedPeriodId))
             {
                 env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, false, false);
-                env.GradesUpdated += HandleGradesUpdated;
+                env.Updated += HandleGradesUpdated;
             }
             else
             {

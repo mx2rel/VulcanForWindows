@@ -41,7 +41,7 @@ namespace VulcanForWindows.Classes
                 return data.Select(r => new TableRow
                 {
                     name = r.Key.ToString("MMMM/yyyy").Replace(".", " "),
-                    value = r.Value.CountAverage().ToString("0.00") + $" ({r.Value.Length} {OcenToQuantity(r.Value.Length)})"
+                    value = r.Value.CalculateAverage().ToString("0.00") + $" ({r.Value.Length} {OcenToQuantity(r.Value.Length)})"
                 }).ToArray();
             }
         }
@@ -56,7 +56,7 @@ namespace VulcanForWindows.Classes
             {
                 new LineSeries<double>
             {
-                Values = chartData.data.Select(r=>r.Value.CountAverage()).ToArray(),
+                Values = chartData.data.Select(r=>r.Value.CalculateAverage()).ToArray(),
                 Fill = null,
                 DataPadding= new LiveChartsCore.Drawing.LvcPoint(0,0),
                 XToolTipLabelFormatter =
@@ -168,14 +168,14 @@ namespace VulcanForWindows.Classes
             var rectangleVisual = new GeometryVisual<RectangleGeometry>
             {
                 X = 0,
-                Y = grades.CountAverage() - 1,
+                Y = grades.CalculateAverage() - 1,
                 Width = 100,
                 LocationUnit = LiveChartsCore.Measure.MeasureUnit.ChartValues,
                 SizeUnit = LiveChartsCore.Measure.MeasureUnit.ChartValues,
                 Height = 0.02,
                 Fill = new SolidColorPaint(new SKColor(146, 146, 247)) { ZIndex = 10 },
                 Stroke = new SolidColorPaint(new SKColor(146, 146, 247)) { ZIndex = 10, StrokeThickness = 1.5f },
-                Label = $"Średnia: {grades.CountAverage()}",
+                Label = $"Średnia: {grades.CalculateAverage()}",
                 LabelPaint = new SolidColorPaint(new SKColor(146, 146, 247)) { ZIndex = 11 },
                 LabelSize = 12
             };

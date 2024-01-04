@@ -228,7 +228,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="80"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="10"/>
                                             <ColumnDefinition Width="80"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid VerticalAlignment="Center">

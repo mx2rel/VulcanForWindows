@@ -10,10 +10,10 @@ using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Vulcan.Grades
 {
-    public class GradesResponseEnvelope
+    public class GradesResponseEnvelope : IResponseEnvelope<Grade>
     {
         public bool isLoading;
-        public event EventHandler<IEnumerable<Grade>> GradesUpdated;
+        public event EventHandler<IEnumerable<Grade>> Updated;
 
         private ObservableCollection<Grade> grades;
         public ObservableCollection<Grade> Grades
@@ -22,7 +22,7 @@ namespace VulcanForWindows.Vulcan.Grades
             set
             {
                 grades = value;
-                GradesUpdated?.Invoke(this, grades);
+                Updated?.Invoke(this, grades);
             }
         }
         GradesService g; Account account; int periodId; string normalGradesResourceKey; string behaviourGradesResourceKey;
@@ -50,7 +50,7 @@ namespace VulcanForWindows.Vulcan.Grades
                 periodId));
             isLoading = false;
 
-            GradesUpdated?.Invoke(this, grades);
+            Updated?.Invoke(this, grades);
 
         }
     }

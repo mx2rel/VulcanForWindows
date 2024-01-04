@@ -33,8 +33,10 @@ namespace VulcanForWindows
                 string selectedItemTag = ((string)selectedItem.Tag);
                 //sender.Header = "Sample Page " + selectedItemTag.Substring(selectedItemTag.Length - 1);
                 string pageName = selectedItemTag;
-                Type pageType = Type.GetType("VulcanForWindows." +pageName);
-                rootFrame.Navigate(pageType);
+                Type pageType = Type.GetType("VulcanForWindows." + pageName);
+
+                if (rootFrame.CurrentSourcePageType != pageType)
+                    rootFrame.Navigate(pageType);
             }
             //}
         }
