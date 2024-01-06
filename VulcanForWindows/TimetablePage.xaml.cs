@@ -38,9 +38,9 @@ namespace VulcanForWindows
         TimetableDayGrouper tdg;
         IDictionary<DateTime, TimetableDayGrouper> tdgD = new Dictionary<DateTime, TimetableDayGrouper>();
 
-        public Day[] display
+        public TimetableDay[] display
         {
-            get => (tdg == null) ? new Day[0] : (tdg.GetWeek(week));
+            get => (tdg == null) ? new TimetableDay[0] : (tdg.GetWeek(week));
         }
 
         public DateTime week;
@@ -192,13 +192,13 @@ namespace VulcanForWindows
 
         public KeyValuePair<DateTime, TimetableListEntry[]>[] entries { get; set; }
 
-        public Day[] GetWeek(DateTime date)
+        public TimetableDay[] GetWeek(DateTime date)
         {
             date.AddDays(1);
             DateTime startOfWeek = GetStartOfWeek(date);
             DateTime endOfWeek = startOfWeek.AddDays(4); // Friday is 4 days after Monday
 
-            return entries.Where(r => r.Key.Date >= startOfWeek.Date && r.Key.Date <= endOfWeek.Date).Select(r => new Day(r)).ToArray();
+            return entries.Where(r => r.Key.Date >= startOfWeek.Date && r.Key.Date <= endOfWeek.Date).Select(r => new TimetableDay(r)).ToArray();
         }
 
         public static DateTime GetStartOfWeek(DateTime date)
@@ -211,10 +211,10 @@ namespace VulcanForWindows
         }
     }
 
-    public class Day
+    public class TimetableDay
     {
 
-        public Day(KeyValuePair<DateTime, TimetableListEntry[]> e)
+        public TimetableDay(KeyValuePair<DateTime, TimetableListEntry[]> e)
         {
             entries = e;
         }

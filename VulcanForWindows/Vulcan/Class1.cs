@@ -96,7 +96,8 @@ namespace VulcanTest.Vulcan
     {
         public static void ReplaceAll<T>(this ObservableCollection<T> collection, IEnumerable<T> newItems)
         {
-            collection.Clear();
+            if (collection.Count > 0)
+                collection.Clear();
 
             foreach (var item in newItems.Where(r => r != null))
             {

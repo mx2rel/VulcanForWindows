@@ -5,9 +5,65 @@
     xmlns:local="using:VulcanForWindows"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:attendance="using:Vulcanova.Features.Attendance"
+    >
+
+    <Page.Resources>
+        <DataTemplate x:DataType="local:AttendanceDay" x:Key="AttendanceDayDisplay">
+            <StackPanel>
+                <TextBlock Text="{x:Bind date}"/>
+                <ListView ItemsSource="{x:Bind lessons}" SelectionMode="None" VerticalContentAlignment="Stretch" 
+                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="attendance:Lesson">
+                            <StackPanel Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
+                                        HorizontalAlignment="Stretch"
+                                        CornerRadius="6" Margin="3" Padding="3">
+                                <TextBlock Text="{x:Bind Subject.Name}"/>
+                                <TextBlock Text="{x:Bind Date}"/>
+                                <TextBlock Text="{x:Bind PresenceType.Name}"/>
+                                <TextBlock Text="{x:Bind PresenceType.Absence}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal">
+            <Button Click="Prev" Content="&lt;"/>
+            <TextBlock x:Name="sel" TextAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0" FontWeight="SemiBold" FontSize="16"/>
+            <Button Click="Next" Content=">"/>
+            <Button Click="CurrentWeek">Obecny tydzień</Button>
+        </StackPanel>
+        <ScrollView Grid.Row="1">
+        <Grid DataContext="{x:Bind entries}" x:Name="gr" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+        </Grid>
+        </ScrollView>
     </Grid>
 </Page>

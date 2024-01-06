@@ -11,7 +11,7 @@
     xmlns:Scheduler="using:DevExpress.WinUI.Scheduler">
 
     <Page.Resources>
-        <DataTemplate x:DataType="local:Day" x:Key="DayTemp">
+        <DataTemplate x:DataType="local:TimetableDay" x:Key="DayTemp">
             <!--<ItemContainer HorizontalContentAlignment="Stretch">-->
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="220">
                 <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,10" TextAlignment="Center"/>
