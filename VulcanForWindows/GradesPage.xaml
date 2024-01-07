@@ -121,7 +121,7 @@
                 <TextBlock Tag="3"></TextBlock>
                 <TextBlock Tag="2"></TextBlock>
                 <TextBlock Tag="1"></TextBlock>
-                
+
             </StackPanel>
         </DataTemplate>
 
@@ -169,14 +169,14 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition MaxWidth="1000"/>
             </Grid.ColumnDefinitions>
-            <ListView HorizontalAlignment="Stretch" SelectionMode="None" >
+            <ListView HorizontalAlignment="Stretch" SelectionMode="None">
 
 
                 <!--<Button x:Name="myButton" Click="myButton_Click">Click Me</Button>-->
                 <Grid>
                     <Grid.Resources>
                         <DataTemplate x:Key="GradeTemplate" x:DataType="grade:Grade">
-                            <ListView SelectionMode="None" Padding="0,0,0,5" 
+                            <ListView SelectionMode="None" 
                                       PointerEntered="ListView_PointerEntered" PointerExited="ListView_PointerExited"
                                       Tapped="ViewGradeDetails">
                                 <ListView.ItemContainerStyle>
@@ -223,13 +223,15 @@
 
                         <DataTemplate x:Key="SubjectTemplate" x:DataType="local:SubjectGrades">
                             <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="0" MaxWidth="1000">
+
                                 <Expander.Header>
+
                                     <Grid PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="80"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="10"/>
-                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="35"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid VerticalAlignment="Center">
                                             <Grid.RowDefinitions>
@@ -263,9 +265,11 @@
                                         </GridView>
                                         <Border 
                                         Visibility="{x:Bind desiredVisibility}"
-                                        BorderThickness="2" BorderBrush="#FF006400" Background="#FF008000" Width="35px" Height="35px" Grid.Column="2" HorizontalAlignment="Right">
-                                            
-                                            <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                        Background="{StaticResource LayerFillColorAlt}" 
+                                            Width="35" Height="35px" Grid.Column="3" 
+                                            HorizontalAlignment="Right" CornerRadius="3">
+
+                                            <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
                                         </Border>
 
 
@@ -275,7 +279,7 @@
                                     <StackPanel>
                                         <ListView ItemTemplate="{StaticResource GradeTemplate}"
                   ItemsSource="{x:Bind grades}" HorizontalAlignment="Stretch" 
-          HorizontalContentAlignment="Stretch" Margin="0,5,0,5" MaxHeight="300">
+          HorizontalContentAlignment="Stretch" Margin="0,5,0,3" MaxHeight="300">
                                             <ListView.ItemContainerStyle>
                                                 <Style TargetType="ListViewItem">
                                                     <Setter Property="Padding" Value="0"/>
@@ -283,9 +287,9 @@
                                                 </Style>
                                             </ListView.ItemContainerStyle>
                                         </ListView>
-                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,3" Spacing="3">
-                                        <Button HorizontalAlignment="Stretch" Click="DisplayHipotheticGrade">Sprawdź hipotetyczną ocenę</Button>
-                                        <Button HorizontalAlignment="Stretch" Click="AddHipotheticGrade">Dodaj hipotetyczną ocenę</Button>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4" Spacing="3" Padding="8,0,0,0">
+                                            <Button HorizontalAlignment="Stretch" Click="DisplayHipotheticGrade">Sprawdź hipotetyczną ocenę</Button>
+                                            <Button HorizontalAlignment="Stretch" Click="AddHipotheticGrade">Dodaj hipotetyczną ocenę</Button>
                                             <Button HorizontalAlignment="Stretch" Click="RemoveHipotheticGrades" Visibility="{x:Bind removeButtonVisibility, Mode=OneWay}">Usuń hipotetyczne oceny</Button>
                                         </StackPanel>
                                     </StackPanel>
@@ -303,7 +307,7 @@
 
                     <ListView x:Name="TopLevel"
                   ItemTemplate="{StaticResource SubjectTemplate}"
-                  ItemsSource="{x:Bind grades}" HorizontalAlignment="Left" SelectionMode="None">
+                  ItemsSource="{x:Bind grades}" HorizontalAlignment="Stretch" SelectionMode="None" Padding="0,0,0,5">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Padding" Value="0"/>

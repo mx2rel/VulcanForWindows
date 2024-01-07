@@ -14,4 +14,6 @@ public class FinalGradesEntry
     public string FinalGrade { get; set; }
     public string Entry3 { get; set; }
     public DateTime DateModify { get; set; }
+
+    public string FastDisplayGrade => FinalGrade ?? PredictedGrade;
 }

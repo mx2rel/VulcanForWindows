@@ -23,6 +23,8 @@ using VulcanTest.Vulcan;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using VulcanForWindows.Vulcan.Grades;
+using Vulcanova.Features.Grades.Final;
+using VulcanForWindows.Vulcan.Grades.Final;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -51,6 +53,7 @@ namespace VulcanForWindows
             timer.Interval = TimeSpan.FromSeconds(0.7);
         }
         IDictionary<int, GradesResponseEnvelope> envelopes = new Dictionary<int, GradesResponseEnvelope>();
+        IDictionary<int, FinalGradesResponseEnvelope> fEnvelopes = new Dictionary<int, FinalGradesResponseEnvelope>();
         public Vulcanova.Features.Shared.Period selectedPeriod;
         public int selectedPeriodId => selectedPeriod.Id;
         public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccountAsync().Periods/*.Select(r => r.Id)*/.ToArray();
@@ -69,6 +72,10 @@ namespace VulcanForWindows
         async void AssignGrades()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
+
+            if (!fEnvelopes.ContainsKey(selectedPeriodId))
+                fEnvelopes[selectedPeriodId] = await new FinalGrades().GetPeriodGrades(acc, selectedPeriodId,false,true);
+
             if (!envelopes.ContainsKey(selectedPeriodId))
             {
                 env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, false, false);
@@ -76,7 +83,7 @@ namespace VulcanForWindows
             }
             else
             {
-                grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(env));
+                grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(env, fEnvelopes[selectedPeriodId]));
                 LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
 
                 cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
@@ -89,7 +96,7 @@ namespace VulcanForWindows
 
         void HandleGradesUpdated(object sender, IEnumerable<Grade> updatedGrades)
         {
-            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope));
+            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, fEnvelopes[selectedPeriodId]));
             LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
 
             cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());

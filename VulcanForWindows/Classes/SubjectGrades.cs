@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VulcanForWindows.Vulcan.Grades;
+using VulcanForWindows.Vulcan.Grades.Final;
 using Vulcanova.Features.Grades;
+using Vulcanova.Features.Grades.Final;
 using Vulcanova.Features.Shared;
 
 namespace VulcanForWindows.Classes
@@ -16,12 +18,15 @@ namespace VulcanForWindows.Classes
     public class SubjectGrades : INotifyPropertyChanged
     {
         public SubjectGrades() { }
-        public SubjectGrades(Subject subject, GradesResponseEnvelope env)
+        public SubjectGrades(Subject subject, GradesResponseEnvelope env, string fGrade= "")
         {
             this.subject = subject;
             this.env = env;
             grades = new ObservableCollection<Grade>(env.Grades.Where(r => r.Column.Subject.Id == subject.Id));
+            finalGrade = fGrade;
         }
+
+        public FinalGradesResponseEnvelope finalEnvelope;
 
         public Subject subject { get; set; }
         public GradesResponseEnvelope env;
@@ -78,9 +83,9 @@ namespace VulcanForWindows.Classes
 
         public string averageDisplay => average.ToString("0.00");
 
-        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env)
+        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env, FinalGradesResponseEnvelope fenv)
         {
-            var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env)).ToArray();
+            var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env, fenv.Grades.Where(g=>g.Subject.Id == r.Id).ToArray()[0].FastDisplayGrade)).ToArray();
 
             return r;
         }
