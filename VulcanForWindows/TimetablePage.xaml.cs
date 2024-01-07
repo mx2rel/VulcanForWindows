@@ -55,7 +55,7 @@ namespace VulcanForWindows
 
         }
 
-        public DateTime GetStartOfTheWeek(DateTime t) => TimetableDayGrouper.GetStartOfWeek(t);
+        public DateTime GetStartOfTheWeek(DateTime t) => TimetableDayGrouper.GetStartOfWeek(t, false);
 
         public bool isLoading;
 
@@ -195,15 +195,15 @@ namespace VulcanForWindows
         public TimetableDay[] GetWeek(DateTime date)
         {
             date.AddDays(1);
-            DateTime startOfWeek = GetStartOfWeek(date);
+            DateTime startOfWeek = GetStartOfWeek(date, false);
             DateTime endOfWeek = startOfWeek.AddDays(4); // Friday is 4 days after Monday
 
             return entries.Where(r => r.Key.Date >= startOfWeek.Date && r.Key.Date <= endOfWeek.Date).Select(r => new TimetableDay(r)).ToArray();
         }
 
-        public static DateTime GetStartOfWeek(DateTime date)
+        public static DateTime GetStartOfWeek(DateTime date, bool weekBack = false)
         {
-            var d = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+            var d = date.AddDays(-(int)date.DayOfWeek + 1 );
             d = d.AddHours(-d.Hour);
             d = d.AddMinutes(-(d.Minute - 1));
             d = d.AddSeconds(-d.Second);

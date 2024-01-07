@@ -48,7 +48,7 @@ namespace VulcanForWindows
             GetEnvelope();
         }
 
-        public DateTime GetStartOfTheWeek(DateTime t) => TimetableDayGrouper.GetStartOfWeek(t);
+        public DateTime GetStartOfTheWeek(DateTime t) => TimetableDayGrouper.GetStartOfWeek(t, true);
 
         public async void GetEnvelope()
         {
@@ -117,6 +117,8 @@ namespace VulcanForWindows
     {
         public DateTime date;
         public Lesson[] lessons;
+
+        public string displayDate => date.ToString("dd.MM, dddd");
 
         public AttendanceDay(DateTime d, Lesson[] l)
         {
