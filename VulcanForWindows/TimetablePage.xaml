@@ -13,14 +13,21 @@
     <Page.Resources>
         <DataTemplate x:DataType="local:TimetableDay" x:Key="DayTemp">
             <!--<ItemContainer HorizontalContentAlignment="Stretch">-->
-            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="220">
-                <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,10" TextAlignment="Center"/>
+            <StackPanel>
+                <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
                 <ListView ItemsSource="{x:Bind e}" VerticalContentAlignment="Stretch" 
                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                                       HorizontalContentAlignment="Stretch" Height="500" ItemClick="ShowLessonDetails" IsItemClickEnabled="True" SelectionMode="None">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="tc:TimetableListEntry">
-                            <Grid>
+                            <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}" CornerRadius="6"  Margin="3" Padding="3">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="{x:Bind textColor}"/>
@@ -31,13 +38,13 @@
                                     <ColumnDefinition Width="32"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Padding="0,0,5,0" VerticalAlignment="Center">
+                                <StackPanel MaxWidth="26" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock 
                                             Text="{x:Bind displayTime}" 
                                             FontWeight="SemiLight" 
                                             FontSize="12" HorizontalAlignment="Center" TextAlignment="Justify"/>
                                 </StackPanel>
-                                <StackPanel Margin="0,0,0,8" Grid.Column="1" VerticalAlignment="Center">
+                                <StackPanel Margin="4" Grid.Column="1" VerticalAlignment="Center">
                                     <TextBlock Text="{x:Bind subName}" FontWeight="Bold" Foreground="{x:Bind SubNameColor}" 
                                                TextTrimming="CharacterEllipsis"/>
                                     <Grid>

@@ -7,13 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:attendance="using:Vulcanova.Features.Attendance"
-    xmlns:common="using:CommunityToolkit.WinUI.UI.Converters"
     >
 
     <Page.Resources>
         <DataTemplate x:DataType="local:AttendanceDay" x:Key="AttendanceDayDisplay">
             <StackPanel>
-                <TextBlock Text="{x:Bind displayDate}" FontWeight="SemiBold" Padding="5" FontSize="22"/>
+                <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
                 <ListView ItemsSource="{x:Bind lessons}" SelectionMode="None" VerticalContentAlignment="Stretch" 
                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                                       HorizontalContentAlignment="Stretch">
@@ -38,7 +37,7 @@
                                             <TextBlock Text="{x:Bind PresenceType.Name}"/>
                                         </StackPanel>
                                 </StackPanel>
-                                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Padding="10,0,10,3" TextAlignment="Right" Visibility="{x:Bind CanBeJustified}" Text="!" FontSize="24"/>
+                                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Padding="10,0,10,3" TextAlignment="Right" Visibility="{x:Bind CanBeJustified}" Foreground="IndianRed" FontWeight="Medium" Text="!" FontSize="24"/>
 
                             </Grid>
                         </DataTemplate>
@@ -53,6 +52,8 @@
             <RowDefinition Height="45"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <ProgressBar x:Name="LoadingBar" Visibility="Visible"
+            HorizontalAlignment="Stretch" VerticalAlignment="Top" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
 
         <StackPanel Orientation="Horizontal">
             <Button Click="Prev" Content="&lt;"/>

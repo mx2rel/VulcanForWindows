@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using VulcanTest.Vulcan;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using System.Globalization;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -53,6 +54,7 @@ namespace VulcanForWindows
         public async void GetEnvelope()
         {
             env = await new LessonsService().GetLessonsByMonth(new AccountRepository().GetActiveAccountAsync(), DateTime.Now);
+            LoadingBar.Visibility = Visibility.Collapsed;
             env.Updated += Env_Updated;
             Spawn();
         }
@@ -81,7 +83,7 @@ namespace VulcanForWindows
 
         void ChangeWeek()
         {
-            filteredEntries = entries.Where(r => r.date >= week && r.date <= week.AddDays(5)).ToArray();
+            filteredEntries = entries.Where(r => r.date.Date >= week.Date && r.date.Date <= week.AddDays(4).Date).ToArray();
         }
 
         private void Spawn()
@@ -118,7 +120,7 @@ namespace VulcanForWindows
         public DateTime date;
         public Lesson[] lessons;
 
-        public string displayDate => date.ToString("dd.MM, dddd");
+        public string day => new CultureInfo("en-US", false).TextInfo.ToTitleCase(date.ToString("dddd, dd/MM"));
 
         public AttendanceDay(DateTime d, Lesson[] l)
         {

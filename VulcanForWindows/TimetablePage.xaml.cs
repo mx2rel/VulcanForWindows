@@ -205,7 +205,7 @@ namespace VulcanForWindows
         {
             var d = date.AddDays(-(int)date.DayOfWeek + 1 );
             d = d.AddHours(-d.Hour);
-            d = d.AddMinutes(-(d.Minute - 1));
+            d = d.AddMinutes(-d.Minute);
             d = d.AddSeconds(-d.Second);
             return d;
         }
