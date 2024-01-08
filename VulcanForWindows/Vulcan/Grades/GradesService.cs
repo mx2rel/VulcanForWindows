@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -31,6 +32,8 @@ public class GradesService : UonetResourceProvider
 
         v.Grades = new ObservableCollection<Grade>(await GradesRepository.GetGradesForPupilAsync(account.Id, account.Pupil.Id,
             periodId));
+
+        Debug.Write(JsonConvert.SerializeObject(v.Grades));
 
         if (ShouldSync(normalGradesResourceKey) || ShouldSync(behaviourGradesResourceKey) || forceSync)
         {
@@ -112,12 +115,25 @@ public static class GradesRepository
 {
     private static LiteDatabaseAsync _db => LiteDbManager.database;
 
+    public static IDictionary<string, IEnumerable<Grade>> buffer = new Dictionary<string, IEnumerable<Grade>>();
+
     public static async Task<IEnumerable<Grade>> GetGradesForPupilAsync(int accountId, int pupilId, int periodId)
     {
-        return (await _db.GetCollection<Grade>()
+        string code = $"{accountId}.{pupilId}.{periodId}";
+
+        if (buffer.TryGetValue(code, out var d))
+        {
+            return d;
+        }
+
+        var v = (await _db.GetCollection<Grade>()
                 .FindAsync(g => g.PupilId == pupilId && g.AccountId == accountId && g.Column.PeriodId == periodId))
             .OrderBy(g => g.Column.Subject.Name)
             .ThenBy(g => g.DateCreated);
+
+        buffer[code] = v;
+
+        return v;
     }
 
     public static async Task UpdatePupilGradesAsync(IEnumerable<Grade> newGrades)

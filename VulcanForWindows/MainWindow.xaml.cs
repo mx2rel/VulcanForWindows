@@ -16,7 +16,7 @@ namespace VulcanForWindows
         public MainWindow()
         {
             this.InitializeComponent();
-            rootFrame.Navigate(typeof(GradesPage));
+            rootFrame.Navigate(typeof(MainPanelPage));
         }
 
         private void NavigationChangedPage(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

@@ -30,6 +30,8 @@
         </Grid>
         <NavigationView x:Name="nvSample" Grid.Row="2" PaneDisplayMode="Top" SelectionChanged="NavigationChangedPage">
             <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Home" Tag="MainPanelPage" />
+
                 <NavigationViewItem Content="Oceny" Tag="GradesPage" >
                     <NavigationViewItem.Icon>
                         <ImageIcon Source="/Assets/GradesIcon.png"/>
@@ -52,7 +54,7 @@
                 <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
             </NavigationView.FooterMenuItems>-->
 
-            <Frame x:Name="rootFrame"/>
+            <Frame x:Name="rootFrame" />
         </NavigationView>
     </Grid>
 </Window>

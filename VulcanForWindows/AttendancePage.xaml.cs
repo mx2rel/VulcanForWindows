@@ -42,9 +42,7 @@ namespace VulcanForWindows
         {
             filteredEntries = new AttendanceDay[0];
             week = GetStartOfTheWeek(DateTime.Now);
-            Debug.WriteLine(week);
             entries = new AttendanceDay[0];
-            Debug.WriteLine(JsonConvert.SerializeObject(entries));
             this.InitializeComponent();
             GetEnvelope();
         }

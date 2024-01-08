@@ -23,10 +23,7 @@ public class FinalGrades : UonetResourceProvider
     {
         var resourceKey = GetGradesSummaryResourceKey(account, periodId);
         var v = new FinalGradesResponseEnvelope(this, account, periodId, resourceKey);
-
-        var items = await FinalGradesRepository.GetFinalGradesForPupilAsync(account.Id, account.Pupil.Id,
-            periodId);
-
+        
         v.Grades = new ObservableCollection<FinalGradesEntry>(await FinalGradesRepository.GetFinalGradesForPupilAsync(account.Id, account.Pupil.Id,
             periodId));
 
@@ -71,7 +68,7 @@ public class FinalGrades : UonetResourceProvider
         return domainGrades;
     }
 
-    public async Task<IDictionary<Period,FinalGradesEntry[]>> FetchGradesFromAllPeriodsAsync(Account account)
+    public async Task<IDictionary<Period, FinalGradesEntry[]>> FetchGradesFromAllPeriodsAsync(Account account)
     {
         IDictionary<Period, FinalGradesEntry[]> d = new Dictionary<Period, FinalGradesEntry[]>();
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
@@ -92,13 +89,23 @@ public class FinalGrades : UonetResourceProvider
 public static class FinalGradesRepository
 {
     private static LiteDatabaseAsync _db => LiteDbManager.database;
+    public static IDictionary<string, IEnumerable<FinalGradesEntry>> buffer = new Dictionary<string, IEnumerable<FinalGradesEntry>>();
 
 
     public static async Task<IEnumerable<FinalGradesEntry>> GetFinalGradesForPupilAsync(int accountId, int pupilId, int periodId)
     {
-        return (await _db.GetCollection<FinalGradesEntry>()
+        string code = $"{accountId}.{pupilId}.{periodId}";
+
+        if (buffer.TryGetValue(code, out var d))
+        {
+            return d;
+        }
+        var v = (await _db.GetCollection<FinalGradesEntry>()
                 .FindAsync(g => g.PupilId == pupilId && g.AccountId == accountId && g.PeriodId == periodId))
             .OrderBy(g => g.Subject.Name);
+        buffer[code] = v;
+
+        return v;
     }
 
     public static async Task UpdatePupilFinalGradesAsync(IEnumerable<FinalGradesEntry> newGrades)

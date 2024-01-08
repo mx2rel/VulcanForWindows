@@ -102,7 +102,6 @@ namespace VulcanForWindows
             cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
-            Debug.Write(JsonConvert.SerializeObject(cd));
         }
         public bool isLoading => ((grades.ToArray().Length > 0) ? env.isLoading : true);
         public ObservableCollection<SubjectGrades> grades { get; set; }
@@ -287,9 +286,6 @@ namespace VulcanForWindows
 
         private void AddHip(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            Debug.WriteLine("f" + (sender.Content as StackPanel == null));
-            Debug.WriteLine("p" + (((sender.Content as StackPanel).DataContext as SubjectGrades) == null));
-
             IEnumerable<NumberBox> numberBoxes = (sender.Content as StackPanel).Children.OfType<NumberBox>();
             int grade = 0;
             int weight = 0;
@@ -311,8 +307,6 @@ namespace VulcanForWindows
                     Weight = weight
                 }
             });
-
-            Debug.WriteLine(JsonConvert.SerializeObject((eSgu.DataContext as SubjectGrades).grades));
             eSgu.DataContext = eSg;
             eSgu.UpdateLayout();
             //FindEvenDeepChildrenOfType<TextBlock>(eSgu.Header as ).Where(r => r.Name == "average").ToArray()[0].UpdateLayout();
@@ -323,7 +317,6 @@ namespace VulcanForWindows
             //eSgu.DataContext = s;
             eSgu.GetBindingExpression(FrameworkElement.DataContextProperty)?.UpdateSource();
             TopLevel.UpdateLayout();
-            Debug.WriteLine(JsonConvert.SerializeObject(grades.Select(r=>r.grades)));
             var lv = ((eSgu.Content as StackPanel).Children[0] as ListView);
             lv.ScrollIntoView(lv.Items.Last());
         }
