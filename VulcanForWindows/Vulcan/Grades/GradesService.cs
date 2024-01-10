@@ -126,7 +126,7 @@ public static class GradesRepository
             return d;
         }
 
-        var v = (await _db.GetCollection<Grade>()
+        var v = (await LiteDbManager.database.GetCollection<Grade>()
                 .FindAsync(g => g.PupilId == pupilId && g.AccountId == accountId && g.Column.PeriodId == periodId))
             .OrderBy(g => g.Column.Subject.Name)
             .ThenBy(g => g.DateCreated);
@@ -138,6 +138,6 @@ public static class GradesRepository
 
     public static async Task UpdatePupilGradesAsync(IEnumerable<Grade> newGrades)
     {
-        await _db.GetCollection<Grade>().UpsertAsync(newGrades);
+        await LiteDbManager.database.GetCollection<Grade>().UpsertAsync(newGrades);
     }
 }

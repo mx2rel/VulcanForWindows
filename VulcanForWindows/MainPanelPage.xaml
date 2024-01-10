@@ -5,6 +5,8 @@
     xmlns:local="using:VulcanForWindows"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:g="using:VulcanForWindows.Classes"
+    xmlns:grade="using:Vulcanova.Features.Grades" 
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -22,19 +24,54 @@
         <Style TargetType="TextBlock" x:Key="HeaderText">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style TargetType="Image" x:Key="HeaderImage">
             <Setter Property="Height" Value="22"/>
             <Setter Property="Width" Value="22"/>
         </Style>
     </Page.Resources>
-    
+
     <GridView SelectionMode="None">
-        <Grid Style="{StaticResource Panel}">
+        <Grid Style="{StaticResource Panel}" x:Name="GradesPanel">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="42"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <StackPanel Style="{StaticResource TitleStack}">
                 <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                <TextBlock Style="{StaticResource HeaderText}">Header</TextBlock>
+                <TextBlock Style="{StaticResource HeaderText}">Oceny</TextBlock>
             </StackPanel>
+            <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="g:SubjectGrades">
+                        <StackPanel Orientation="Horizontal" Height="32">
+                            <TextBlock Text="{x:Bind subject.Name}" VerticalAlignment="Center"/>
+                            <ItemsRepeater ItemsSource="{x:Bind grades}">
+                                <ItemsRepeater.Layout>
+                                    <StackLayout Orientation="Horizontal"/>
+                                </ItemsRepeater.Layout>
+                                <ItemsRepeater.ItemTemplate>
+                                    <DataTemplate x:DataType="grade:Grade">
+                                        <!--<Grid Width="35" Height="35" >-->
+                                        <Border Height="32" Width="32" Padding="8" 
+                                                Background="{StaticResource LayerOnMicaBaseAltFillColorDefault}" 
+                                                VerticalAlignment="Center"
+                                                Margin="5,0,0,0" CornerRadius="4">
+                                            <TextBlock 
+                                            Text="{x:Bind Content}"
+                                            TextAlignment="Center" VerticalAlignment="Center"
+                                            />
+                                            <!--</Grid>-->
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsRepeater.ItemTemplate>
+                            </ItemsRepeater>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </GridView>
 </Page>

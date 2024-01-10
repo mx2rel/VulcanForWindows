@@ -7,9 +7,15 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VulcanForWindows.Classes;
+using VulcanForWindows.Vulcan.Grades;
+using Vulcanova.Features.Auth;
+using Vulcanova.Features.Grades;
+using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -23,9 +29,33 @@ namespace VulcanForWindows
     /// </summary>
     public sealed partial class MainPanelPage : Page
     {
+        public GradesResponseEnvelope env;
+
+        public ObservableCollection<SubjectGrades> sg;
+
         public MainPanelPage()
         {
+            sg = new ObservableCollection<SubjectGrades>();
             this.InitializeComponent();
+            Fetch();
+        }
+
+        public async void Fetch()
+        {
+            var acc = new AccountRepository().GetActiveAccountAsync();
+            env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);
+            env.Updated += Env_Updated;
+        }
+
+        private void Env_Updated(object sender, IEnumerable<Grade> e)
+        {
+            sg.ReplaceAll(SubjectGrades.CreateRecent(env));
+        }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            //(e.ClickedItem as SubjectGrades)
+            //TODO: LOAD SUBJECT
         }
     }
 }
