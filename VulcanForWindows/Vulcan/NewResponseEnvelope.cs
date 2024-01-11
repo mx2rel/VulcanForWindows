@@ -22,6 +22,13 @@ namespace VulcanForWindows.Vulcan
             set => isLoaded = !value;
         }
 
+        public void SendUpdate()
+        {
+            Updated?.Invoke(this, entries);
+            OnPropertyChanged(nameof(isLoaded));
+            OnPropertyChanged(nameof(isLoading));
+        }
+
         public event EventHandler<IEnumerable<T>> Updated;
 
         public ObservableCollection<T> entries;
@@ -51,6 +58,15 @@ namespace VulcanForWindows.Vulcan
             this.GetFunction = GetFunction;
             RepoUpdate += RepoUpdateFunc;
         }
+        public NewResponseEnvelope(IEnumerable<T> items)
+        {
+            entries = new ObservableCollection<T>(items);
+        }
+        
+        public NewResponseEnvelope()
+        {
+            entries = new ObservableCollection<T>();
+        }
 
         public async Task Sync()
         {
@@ -60,7 +76,6 @@ namespace VulcanForWindows.Vulcan
             OnPropertyChanged(nameof(isLoading));
 
             var onlineEntries = await GetFunction;
-            Debug.WriteLine(JsonConvert.SerializeObject(onlineEntries));
             entries.ReplaceAll((IEnumerable<T>)onlineEntries);
 
             RepoUpdate?.Invoke(this, onlineEntries);

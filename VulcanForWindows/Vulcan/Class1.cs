@@ -38,6 +38,8 @@ namespace VulcanTest.Vulcan
         public static T Get<T>(string key)
         {
             Dictionary<string, string> data = GetAllData();
+            //if (!data.ContainsKey(key))
+            //    Debug.Write($"\nCouldn't find key {key}\n{JsonConvert.SerializeObject(data)}\n");
             return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
         }
 
@@ -45,6 +47,9 @@ namespace VulcanTest.Vulcan
         public static bool TryGet<T>(string key, out T output)
         {
             Dictionary<string, string> data = GetAllData();
+
+            //if (!data.ContainsKey(key))
+            //    Debug.Write($"\nCouldn't find key {key}\n{JsonConvert.SerializeObject(data)}\n");
             try
             {
                 output = data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
@@ -54,6 +59,7 @@ namespace VulcanTest.Vulcan
                 output = default(T);
                 return false;
             }
+
             return data.ContainsKey(key);
         }
 
@@ -104,6 +110,14 @@ namespace VulcanTest.Vulcan
             {
                 collection.Add(item);
             }
+
+        }
+    }
+    public static class DateTimeHelper
+    {
+        public static DateTime StartOfTheMonth(this DateTime dt)
+        {
+            return dt.Date.AddDays(-(dt.Day-1));
 
         }
     }

@@ -8,9 +8,12 @@
     mc:Ignorable="d"
     xmlns:control="using:VulcanForWindows.UserControls"
     xmlns:attendance="using:Vulcanova.Features.Attendance"
+    xmlns:converters="using:Converters"
     >
 
     <Page.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
+
         <DataTemplate x:DataType="local:AttendanceDay" x:Key="AttendanceDayDisplay">
             <StackPanel>
                 <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
@@ -57,11 +60,11 @@
         <ProgressBar x:Name="LoadingBar" Visibility="Visible"
             HorizontalAlignment="Stretch" VerticalAlignment="Top" IsIndeterminate="True" ShowPaused="False" ShowError="False"/>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Spacing="3">
             <Button Click="Prev" Content="&lt;"/>
             <TextBlock x:Name="sel" TextAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0" FontWeight="SemiBold" FontSize="16"/>
             <Button Click="Next" Content=">"/>
-            <Button Click="CurrentWeek">Obecny tydzień</Button>
+            <Button Click="CurrentWeek" IsEnabled="{x:Bind IsCurrentWeekButtonActive, Mode=OneWay}">Obecny tydzień</Button>
         </StackPanel>
         <ScrollView Grid.Row="1">
             <Grid DataContext="{x:Bind entries}" x:Name="gr" Padding="3" >

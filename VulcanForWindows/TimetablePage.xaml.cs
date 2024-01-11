@@ -203,11 +203,8 @@ namespace VulcanForWindows
 
         public static DateTime GetStartOfWeek(DateTime date, bool weekBack = false)
         {
-            var d = date.AddDays(-(int)date.DayOfWeek + 1 );
-            d = d.AddHours(-d.Hour);
-            d = d.AddMinutes(-d.Minute);
-            d = d.AddSeconds(-d.Second);
-            return d;
+            var d = date.AddDays(-((int)date.DayOfWeek + -1) );
+            return d.Date;
         }
     }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,6 +22,43 @@ namespace Vulcanova.Features.Attendance;
 
 public class LessonsService : UonetResourceProvider
 {
+    public async Task GetLessonsForSchoolYear(Account acc, NewResponseEnvelope<Lesson> l)
+        => await GetLessonsForRange(acc, acc.GetSchoolYearDuration().Start, acc.GetSchoolYearDuration().End, l, true, true);
+    public async Task GetLessonsForRange(Account acc, DateTime from, DateTime to, NewResponseEnvelope<Lesson> l, bool startFromMostRecent = true, bool updateAsap = true, bool forceSync = false, bool waitForSync = false)
+    {
+        l.isLoading = true;
+        var total = new List<NewResponseEnvelope<Lesson>>();
+        var lessons = new List<Lesson>();
+        for (DateTime i = (startFromMostRecent ? to : from).StartOfTheMonth();
+     (startFromMostRecent ? (i.Date.StartOfTheMonth() >= from.Date.StartOfTheMonth()) : (i.Date.StartOfTheMonth() <= to.Date.StartOfTheMonth()));
+     i = i.AddMonths((startFromMostRecent ? (-1) : (1))))
+        {
+            var dt = i;
+            var resourceKey = GetTimetableResourceKey(acc, dt);
+
+            if (ShouldSync(resourceKey))
+                total.Add(await GetLessonsByMonth(acc, dt, false, true));
+            else
+            {
+                var c = await LessonsRepository.GetLessonsForAccountAsync(acc.Id, dt);
+                lessons = lessons.Concat(c).ToList();
+            }
+
+            Update();
+        }
+
+        var result = total.SelectMany(r => r.Entries).Concat(lessons);
+        l.entries.ReplaceAll(result);
+        l.isLoading = false;
+        l.SendUpdate();
+
+        void Update()
+        {
+            var result = total.SelectMany(r => r.Entries).Concat(lessons);
+            l.entries.ReplaceAll(result);
+        l.SendUpdate();
+        }
+    }
 
     public async Task<NewResponseEnvelope<Lesson>> GetLessonsByMonth(Account account, DateTime monthAndYear, bool forceSync = false, bool waitForSync = false)
     {
@@ -63,12 +101,14 @@ public class LessonsService : UonetResourceProvider
                 v.Sync();
         }
 
+        Preferences.Set<bool>(hasPerformedFullSyncKey, true);
+
         return v;
     }
 
     public static async Task<IEnumerable<Lesson>> FetchEntriesForMonthAndYear(Account account, DateTime from, DateTime to)
     {
-        var query = new GetLessonsByPupilQuery(account.Pupil.Id, from, to, DateTime.MinValue, -2147483648,2000);
+        var query = new GetLessonsByPupilQuery(account.Pupil.Id, from, to, DateTime.MinValue, -2147483648, 2000);
 
         var client = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
@@ -110,11 +150,29 @@ public static class LessonsRepository
 {
     private static LiteDatabaseAsync _db => LiteDbManager.database;
 
+    public static async Task<IEnumerable<Lesson>> GetLessonsForAccountAsync(int accountId)
+    {
+        var v = await _db.GetCollection<Lesson>()
+            .FindAsync(g =>
+                g.Id.AccountId == accountId);
+
+
+        return v;
+    }
     public static async Task<IEnumerable<Lesson>> GetLessonsForAccountAsync(int accountId, DateTime monthAndYear)
     {
-        return await _db.GetCollection<Lesson>()
+
+        //var s = DateTime.Now.Second + DateTime.Now.Millisecond * 0.01;
+
+        var v = await _db.GetCollection<Lesson>()
             .FindAsync(g =>
                 g.Id.AccountId == accountId && g.Date.Year == monthAndYear.Year && g.Date.Month == monthAndYear.Month);
+
+        //var t = DateTime.Now.Second + DateTime.Now.Millisecond * 0.01;
+
+        //Debug.Write($"\n{t - s}\n");
+
+        return v;
     }
 
     public static async Task<IEnumerable<Lesson>> GetLessonsBetweenAsync(int accountId, DateTime start, DateTime end)

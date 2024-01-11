@@ -33,7 +33,6 @@ public class GradesService : UonetResourceProvider
         v.Grades = new ObservableCollection<Grade>(await GradesRepository.GetGradesForPupilAsync(account.Id, account.Pupil.Id,
             periodId));
 
-        Debug.Write(JsonConvert.SerializeObject(v.Grades));
 
         if (ShouldSync(normalGradesResourceKey) || ShouldSync(behaviourGradesResourceKey) || forceSync)
         {

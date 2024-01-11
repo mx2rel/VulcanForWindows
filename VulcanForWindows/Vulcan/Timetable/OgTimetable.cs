@@ -50,7 +50,6 @@ namespace VulcanTest.Vulcan.Timetable
             var client = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
             var response = await client.GetAsync(GetScheduleEntriesByPupilQuery.ApiEndpoint, query);
-            Debug.Write("\na\n" + JsonConvert.SerializeObject(response.Envelope) + "\n");
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<TimetableMapperProfile>(); // Replace with your actual mapping profile class

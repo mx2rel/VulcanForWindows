@@ -43,10 +43,11 @@ namespace VulcanForWindows
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
         public int InProgressCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).Where(r => r.JustificationStatus != null)
-            .Where(r=>r.JustificationStatus == Vulcanova.Uonet.Api.Lessons.JustificationStatus.Requested).Count())) : -1;
+            .Where(r => r.JustificationStatus == Vulcanova.Uonet.Api.Lessons.JustificationStatus.Requested).Count())) : -1;
         public ObservableCollection<Lesson> lastNieusprawiedliwione;
         public MainPanelPage()
         {
+            att = new NewResponseEnvelope<Lesson>();
             lastNieusprawiedliwione = new ObservableCollection<Lesson>();
             sg = new ObservableCollection<SubjectGrades>();
             Fetch();
@@ -56,20 +57,22 @@ namespace VulcanForWindows
         public void Fetch()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
-            FetchGrades(acc);
             FetchAttendance(acc);
+            FetchGrades(acc);
         }
 
         private async Task FetchGrades(Account acc)
         {
             env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);
             env.Updated += Env_Updated;
+            Env_Updated(null, null);
         }
 
         private async Task FetchAttendance(Account acc)
         {
-            att = await new LessonsService().GetLessonsByMonth(acc, DateTime.Now);
             att.Updated += Att_Updated;
+            await new LessonsService().GetLessonsForRange(acc, DateTime.Now.AddDays(-14), DateTime.Now,att);
+            Att_Updated(null, null);
         }
 
         private void Att_Updated(object sender, IEnumerable<Lesson> e)

@@ -20,6 +20,7 @@ using VulcanTest.Vulcan;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.ComponentModel;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,7 +30,7 @@ namespace VulcanForWindows
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class AttendancePage : Page
+    public sealed partial class AttendancePage : Page, INotifyPropertyChanged
     {
 
         public NewResponseEnvelope<Lesson> env;
@@ -40,6 +41,7 @@ namespace VulcanForWindows
 
         public AttendancePage()
         {
+            env = new NewResponseEnvelope<Lesson>();
             filteredEntries = new AttendanceDay[0];
             week = GetStartOfTheWeek(DateTime.Now);
             entries = new AttendanceDay[0];
@@ -51,37 +53,61 @@ namespace VulcanForWindows
 
         public async void GetEnvelope()
         {
-            env = await new LessonsService().GetLessonsByMonth(new AccountRepository().GetActiveAccountAsync(), DateTime.Now);
-            LoadingBar.Visibility = Visibility.Collapsed;
             env.Updated += Env_Updated;
+
+            await new LessonsService().GetLessonsForSchoolYear(new AccountRepository().GetActiveAccountAsync(), env);
+            LoadingBar.Visibility = Visibility.Collapsed;
             Spawn();
         }
 
         private void Env_Updated(object sender, IEnumerable<Lesson> e)
         {
-            entries = (AttendanceDay.GetDays(env.entries.ToArray()));
-            Spawn();
+            var newV = AttendanceDay.GetDays(env.entries.ToArray());
+            var needsRespawn = JsonConvert.SerializeObject(ChangeWeek(false)) != JsonConvert.SerializeObject(GetFilteredEntries(newV));
+            entries = newV;
+            if (needsRespawn)
+                Spawn();
         }
+
+        public bool IsCurrentWeekSelected => GetStartOfTheWeek(week).Ticks == GetStartOfTheWeek(DateTime.Now).Ticks;
+        public bool IsCurrentWeekButtonActive => !IsCurrentWeekSelected;
 
         private void Next(object sender, RoutedEventArgs e)
         {
             week = week.AddDays(7);
             Spawn();
+
+            OnPropertyChanged(nameof(IsCurrentWeekSelected));
+            OnPropertyChanged(nameof(IsCurrentWeekButtonActive));
         }
         private void Prev(object sender, RoutedEventArgs e)
         {
             week = week.AddDays(-7);
             Spawn();
+
+            OnPropertyChanged(nameof(IsCurrentWeekSelected));
+            OnPropertyChanged(nameof(IsCurrentWeekButtonActive));
         }
         private void CurrentWeek(object sender, RoutedEventArgs e)
         {
+            if (IsCurrentWeekSelected) return;
             week = GetStartOfTheWeek(DateTime.Now);
             Spawn();
+
+            OnPropertyChanged(nameof(IsCurrentWeekSelected));
+            OnPropertyChanged(nameof(IsCurrentWeekButtonActive));
         }
 
-        void ChangeWeek()
+        AttendanceDay[] ChangeWeek(bool set = true)
         {
-            filteredEntries = entries.Where(r => r.date.Date >= week.Date && r.date.Date <= week.AddDays(4).Date).ToArray();
+            var v = entries.Where(r => r.date.Date >= week.Date && r.date.Date <= week.AddDays(4).Date).ToArray();
+            if (set) filteredEntries = v;
+            return v;
+        }
+        AttendanceDay[] GetFilteredEntries(AttendanceDay[] d)
+        {
+            var v = d.Where(r => r.date.Date >= week.Date && r.date.Date <= week.AddDays(4).Date).ToArray();
+            return v;
         }
 
         private void Spawn()
@@ -110,6 +136,13 @@ namespace VulcanForWindows
                 r.VerticalAlignment = VerticalAlignment.Center;
                 gr.Children.Add(r);
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
