@@ -29,22 +29,7 @@
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="attendance:Lesson">
-                            <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
-                                        HorizontalAlignment="Stretch"
-                                        CornerRadius="6" Margin="3" Padding="5"  VerticalAlignment="Stretch">
-
-                                <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{x:Bind No}" TextAlignment="Center" VerticalAlignment="Stretch" Padding="10,2,10,0" FontWeight="SemiBold" FontSize="24"/>
-
-                                        <StackPanel HorizontalAlignment="Stretch">
-                                            <TextBlock Text="{x:Bind Subject.Name}"/>
-                                            <TextBlock Text="{x:Bind PresenceType.Name}"/>
-                                        </StackPanel>
-                                </StackPanel>
-                                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Padding="10,0,10,3" TextAlignment="Right" Visibility="{x:Bind CanBeJustified}" Foreground="IndianRed" FontWeight="Medium" Text="!" FontSize="24"/>
-                                <control:JustificationRequestStatus Value="{x:Bind JustificationStatus}" Context="{x:Bind PresenceType}" 
-                                                                    HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-                            </Grid>
+                            <control:AttendanceLessonItem Value="{x:Bind}" DisplayDate="False"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
