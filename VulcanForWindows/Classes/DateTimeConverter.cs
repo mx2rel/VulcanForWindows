@@ -27,8 +27,28 @@ public class DateTimeConverter : IValueConverter
         {
             int daysAgo = (DateTime.Now - dateTime).Days;
             // Format the DateTime value as "Day, DD.MM"
-            string formattedString = $"{FirstLetterToUpper(dateTime.ToString("dddd"))}, {dateTime.ToString("dd.MM")} ({daysAgo} {((daysAgo == 1) ? "dzień" : "dni")} temu)";
-            return formattedString;
+
+
+            string formattedString = $"{FirstLetterToUpper(dateTime.ToString("dddd"))}, {dateTime.ToString("dd.MM")} ";
+
+            string v;
+            switch (daysAgo)
+            {
+                case 0:
+                    v = "(Dzisiaj)";
+                    break;
+                case 1:
+                    v = "(Wczoraj)";
+                    break;
+                case 2:
+                    v = "(Przedwczoraj)";
+                    break;
+                default:
+                    v = $"({daysAgo} {((daysAgo == 1) ? "dzień" : "dni")} temu)";
+                    break;
+            }
+
+            return formattedString + v;
         }
 
         // Return null if the value is not a DateTime
