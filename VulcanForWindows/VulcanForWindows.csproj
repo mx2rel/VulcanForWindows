@@ -23,6 +23,7 @@
     <None Remove="MainPanelPage.xaml" />
     <None Remove="TimetablePage.xaml" />
     <None Remove="UserControl1.xaml" />
+    <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
   </ItemGroup>
 
@@ -92,5 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\JustificationRequestStatus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

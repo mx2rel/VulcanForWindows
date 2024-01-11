@@ -8,11 +8,14 @@ using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using VulcanForWindows.Classes;
+using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;
+using Vulcanova.Features.Attendance;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Grades;
 using VulcanTest.Vulcan;
@@ -27,14 +30,22 @@ namespace VulcanForWindows
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPanelPage : Page
+    public sealed partial class MainPanelPage : Page, INotifyPropertyChanged
     {
         public GradesResponseEnvelope env;
 
         public ObservableCollection<SubjectGrades> sg;
+        public NewResponseEnvelope<Lesson> att;
 
+        public int UnjustifiedCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
+            (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
+        public int InProgressCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
+            (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).Where(r => r.JustificationStatus != null)
+            .Where(r=>r.JustificationStatus == Vulcanova.Uonet.Api.Lessons.JustificationStatus.Requested).Count())) : -1;
+        public ObservableCollection<Lesson> lastNieusprawiedliwione;
         public MainPanelPage()
         {
+            lastNieusprawiedliwione = new ObservableCollection<Lesson>();
             sg = new ObservableCollection<SubjectGrades>();
             this.InitializeComponent();
             Fetch();
@@ -45,6 +56,17 @@ namespace VulcanForWindows
             var acc = new AccountRepository().GetActiveAccountAsync();
             env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);
             env.Updated += Env_Updated;
+
+            att = await new LessonsService().GetLessonsByMonth(acc, DateTime.Now);
+            att.Updated += Att_Updated;
+        }
+
+        private void Att_Updated(object sender, IEnumerable<Lesson> e)
+        {
+            lastNieusprawiedliwione.ReplaceAll(att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).
+                GroupBy(r => r.CanBeJustified).Select(r => r.OrderByDescending(h => h.Date)).SelectMany(r => r).Where(r => r.Date >= TimetableDayGrouper.GetStartOfWeek(DateTime.Now.AddDays(-7), false)));
+            OnPropertyChanged(nameof(UnjustifiedCount));
+            OnPropertyChanged(nameof(InProgressCount));
         }
 
         private void Env_Updated(object sender, IEnumerable<Grade> e)
@@ -56,6 +78,13 @@ namespace VulcanForWindows
         {
             //(e.ClickedItem as SubjectGrades)
             //TODO: LOAD SUBJECT
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -7,14 +7,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:g="using:VulcanForWindows.Classes"
     xmlns:grade="using:Vulcanova.Features.Grades" 
+    xmlns:attendance="using:Vulcanova.Features.Attendance"
+    xmlns:converters="using:Converters"
+    xmlns:controls="using:VulcanForWindows.UserControls"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <converters:DateTimeConverter x:Key="DateTimeConverter" />
         <Style TargetType="Grid" x:Key="Panel">
             <Setter Property="Background" Value="{StaticResource LayerOnAccentAcrylicFillColorDefault}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
         <Style TargetType="StackPanel" x:Key="TitleStack">
             <Setter Property="Margin" Value="3"/>
@@ -32,8 +37,9 @@
         </Style>
     </Page.Resources>
 
-    <GridView SelectionMode="None">
-        <Grid Style="{StaticResource Panel}" x:Name="GradesPanel">
+    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" Margin="5">
+        <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9">
             <Grid.RowDefinitions>
                 <RowDefinition Height="42"/>
                 <RowDefinition Height="*"/>
@@ -73,5 +79,73 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
-    </GridView>
+
+        <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="42"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Style="{StaticResource TitleStack}">
+                <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                <TextBlock Style="{StaticResource HeaderText}">Obecność</TextBlock>
+            </StackPanel>
+            <TextBlock  Grid.Row="1" x:Name="absenceInfos">
+                <Run>Masz</Run>
+                <Run Text="{x:Bind UnjustifiedCount,Mode=OneWay}"/>
+                <Run>nieusprawiedliwione nieobecności (</Run>
+                <Run Text="{x:Bind InProgressCount,Mode=OneWay}"/>
+                <Run> prośby)</Run>
+            </TextBlock>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieusprawiedliwione obecności"/>
+                <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
+                          HorizontalContentAlignment="Stretch" Grid.Row="1">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Margin" Value="0,0,7,0"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="attendance:Lesson">
+                            <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
+                                        HorizontalAlignment="Stretch" 
+                                        CornerRadius="6" Margin="3" Padding="5"  VerticalAlignment="Stretch">
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{x:Bind No}" TextAlignment="Center" VerticalAlignment="Stretch" Padding="10,2,10,0" FontWeight="SemiBold" FontSize="24"/>
+
+                                    <StackPanel HorizontalAlignment="Stretch">
+                                        <TextBlock Text="{x:Bind Subject.Name}"/>
+                                        <TextBlock Text="{x:Bind PresenceType.Name}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Right" Spacing="4" >
+                                    <TextBlock  VerticalAlignment="Bottom"  TextAlignment="Right" Text="{x:Bind Date, Converter={StaticResource DateTimeConverter}}" FontSize="10"/>
+                                    <controls:JustificationRequestStatus Value="{x:Bind JustificationStatus}" Context="{x:Bind PresenceType}" DisplayForAccepted="True" 
+                                                                         HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+            <!--<ListView ItemsSource="{x:Bind sg}" Grid.Row="2" ItemClick="ListView_ItemClick">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="g:SubjectGrades">
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+        </Grid>
+    </VariableSizedWrapGrid>
 </Page>

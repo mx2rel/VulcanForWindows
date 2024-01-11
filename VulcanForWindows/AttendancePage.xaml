@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:control="using:VulcanForWindows.UserControls"
     xmlns:attendance="using:Vulcanova.Features.Attendance"
     >
 
@@ -38,7 +39,8 @@
                                         </StackPanel>
                                 </StackPanel>
                                 <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Padding="10,0,10,3" TextAlignment="Right" Visibility="{x:Bind CanBeJustified}" Foreground="IndianRed" FontWeight="Medium" Text="!" FontSize="24"/>
-
+                                <control:JustificationRequestStatus Value="{x:Bind JustificationStatus}" Context="{x:Bind PresenceType}" 
+                                                                    HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
