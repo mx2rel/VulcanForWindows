@@ -17,6 +17,9 @@
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Assets\JustifyGranted.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="BlankPage1.xaml" />
     <None Remove="GradesPage.xaml" />
     <None Remove="GradesSummaryPage.xaml" />

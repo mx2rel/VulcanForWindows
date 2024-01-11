@@ -13,7 +13,7 @@
             <StackPanel x:Name="Accepted" Orientation="Horizontal" VerticalAlignment="Stretch" Spacing="3"
                         Background="ForestGreen" CornerRadius="3" Padding="3,0,3,0" 
                         ToolTipService.ToolTip="Nauczyciel rozpatrzył pozytywnie prośbę o usprawiedliwienie">
-                <BitmapIcon UriSource="ms-appx:///Assets/JustifyRequested.png" VerticalAlignment="Stretch" MaxWidth="16" Foreground="White"/>
+                <BitmapIcon UriSource="ms-appx:///Assets/JustifyGranted.png" VerticalAlignment="Stretch" MaxWidth="16" Foreground="White"/>
                 <TextBlock Foreground="White" Text="Zaakceptowano" FontSize="12" FontWeight="SemiBold" Padding="2"/>
             </StackPanel>
 

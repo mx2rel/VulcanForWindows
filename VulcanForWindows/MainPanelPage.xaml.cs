@@ -12,11 +12,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Attendance;
 using Vulcanova.Features.Auth;
+using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Grades;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
@@ -32,10 +34,10 @@ namespace VulcanForWindows
     /// </summary>
     public sealed partial class MainPanelPage : Page, INotifyPropertyChanged
     {
-        public GradesResponseEnvelope env;
+        public GradesResponseEnvelope env { get; set; }
 
-        public ObservableCollection<SubjectGrades> sg;
-        public NewResponseEnvelope<Lesson> att;
+        public ObservableCollection<SubjectGrades> sg { get; set; }
+        public NewResponseEnvelope<Lesson> att { get; set; }
 
         public int UnjustifiedCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
@@ -47,16 +49,25 @@ namespace VulcanForWindows
         {
             lastNieusprawiedliwione = new ObservableCollection<Lesson>();
             sg = new ObservableCollection<SubjectGrades>();
-            this.InitializeComponent();
             Fetch();
+            this.InitializeComponent();
         }
 
-        public async void Fetch()
+        public void Fetch()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
+            FetchGrades(acc);
+            FetchAttendance(acc);
+        }
+
+        private async Task FetchGrades(Account acc)
+        {
             env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);
             env.Updated += Env_Updated;
+        }
 
+        private async Task FetchAttendance(Account acc)
+        {
             att = await new LessonsService().GetLessonsByMonth(acc, DateTime.Now);
             att.Updated += Att_Updated;
         }

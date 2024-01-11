@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,14 @@ using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Vulcan
 {
-    public class NewResponseEnvelope<T> : IResponseEnvelope<T>
+    public class NewResponseEnvelope<T> : IResponseEnvelope<T>, INotifyPropertyChanged
     {
-        public bool isLoading;
+        public bool isLoading { get; set; }
+        public bool isLoaded
+        {
+            get => !isLoading;
+            set => isLoaded = !value;
+        }
 
         public event EventHandler<IEnumerable<T>> Updated;
 
@@ -39,16 +45,19 @@ namespace VulcanForWindows.Vulcan
 
         public EventHandler<IEnumerable<T>> RepoUpdate;
 
-        public NewResponseEnvelope(Task<IEnumerable<T>> GetFunction,EventHandler<IEnumerable<T>> RepoUpdateFunc)
+        public NewResponseEnvelope(Task<IEnumerable<T>> GetFunction, EventHandler<IEnumerable<T>> RepoUpdateFunc)
         {
             entries = new ObservableCollection<T>();
             this.GetFunction = GetFunction;
             RepoUpdate += RepoUpdateFunc;
         }
-        
+
         public async Task Sync()
         {
             isLoading = true;
+
+            OnPropertyChanged(nameof(isLoaded));
+            OnPropertyChanged(nameof(isLoading));
 
             var onlineEntries = await GetFunction;
             Debug.WriteLine(JsonConvert.SerializeObject(onlineEntries));
@@ -58,7 +67,16 @@ namespace VulcanForWindows.Vulcan
 
             isLoading = false;
             Updated?.Invoke(this, entries);
+            OnPropertyChanged(nameof(isLoaded));
+            OnPropertyChanged(nameof(isLoading));
 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }
