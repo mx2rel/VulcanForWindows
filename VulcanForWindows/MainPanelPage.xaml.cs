@@ -111,8 +111,12 @@ namespace VulcanForWindows
 
         private void Att_Updated(object sender, IEnumerable<Lesson> e)
         {
-            lastNieusprawiedliwione.ReplaceAll(att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).
-                GroupBy(r => r.CanBeJustified).Select(r => r.OrderByDescending(h => h.Date)).SelectMany(r => r).Where(r => r.Date >= TimetableDayGrouper.GetStartOfWeek(DateTime.Now.AddDays(-7), false)));
+            lastNieusprawiedliwione.ReplaceAll(
+                att.Entries
+                .Where(r => r.Date >= TimetableDayGrouper.GetStartOfWeek(DateTime.Now.AddDays(-7), false))
+                .Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).
+                GroupBy(r => r.CanBeJustified).OrderBy(r => r.Key ? 0 : 1).Select(r => r.OrderByDescending(h => h.Date))
+                .SelectMany(r => r));
             OnPropertyChanged(nameof(UnjustifiedCount));
             OnPropertyChanged(nameof(InProgressCount));
         }
