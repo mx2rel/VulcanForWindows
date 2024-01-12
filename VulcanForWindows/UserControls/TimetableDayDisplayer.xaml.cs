@@ -37,7 +37,30 @@ namespace VulcanForWindows.UserControls
         }
         public bool DisplayDate
         {
-            get => (bool)GetValue(DisplayDateProperty);
+            get
+            {
+                try
+                {
+                    object displayDateValue = GetValue(DisplayDateProperty);
+
+                    // Check if the retrieved value is not null and is of type bool
+                    if (displayDateValue != null && displayDateValue is bool)
+                    {
+                        return (bool)displayDateValue;
+                    }
+                    else
+                    {
+                        // Handle the case where the retrieved value is null or not of type bool
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle other exceptions if needed
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                    return false;
+                }
+            }
             set => SetValue(DisplayDateProperty, value);
         }
 
@@ -45,7 +68,7 @@ namespace VulcanForWindows.UserControls
         {
             if (d is TimetableDayDisplayer s) s.OnPropertyChanged(nameof(Value));
         }
-        
+
         private static void DisplayDateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TimetableDayDisplayer s)
