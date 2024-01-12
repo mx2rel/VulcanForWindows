@@ -191,7 +191,17 @@ namespace VulcanForWindows
             DateTime startOfWeek = GetStartOfWeek(date, false);
             DateTime endOfWeek = startOfWeek.AddDays(4); // Friday is 4 days after Monday
 
-            return entries.Where(r => r.Key.Date >= startOfWeek.Date && r.Key.Date <= endOfWeek.Date).Select(r => new TimetableDay(r)).ToArray();
+            var v= entries.Where(r => r.Key.Date >= startOfWeek.Date && r.Key.Date <= endOfWeek.Date).Select(r => new TimetableDay(r)).ToList();
+
+            for(DateTime i = startOfWeek; i <= endOfWeek; i=i.AddDays(1))
+            {
+                if (v.Where(r => r.Date.Date == i).Count() == 0)
+                    v.Add(new TimetableDay(new KeyValuePair<DateTime, TimetableListEntry[]>(i, new TimetableListEntry[0])));
+            }
+
+            v = v.OrderBy(r => r.Date).ToList();
+
+            return v.ToArray();
         }
 
         public static DateTime GetStartOfWeek(DateTime date, bool weekBack = false)

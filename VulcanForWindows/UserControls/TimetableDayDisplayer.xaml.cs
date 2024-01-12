@@ -54,7 +54,7 @@ namespace VulcanForWindows.UserControls
                     else
                     {
                         // Handle the case where the retrieved value is null or not of type bool
-                        return false;
+                        return true;
                     }
                 }
                 catch (Exception ex)
