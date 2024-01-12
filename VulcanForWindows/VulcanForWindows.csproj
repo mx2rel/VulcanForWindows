@@ -13,7 +13,6 @@
     <WindowsSdkPackageVersion>10.0.19041.29</WindowsSdkPackageVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Vulcan\Attendance\Report\AttendanceReportService.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,10 +11,25 @@ using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Attendance.Report;
 
-public class AttendanceReportService
+public class AttendanceReportService : UonetResourceProvider
 {
 
-    public static async Task InvalidateReportsAsync(Account account)
+    private static string GetReportResourceKey(Account account)
+        => $"AttendanceReport_{account.Id}";
+
+    public override TimeSpan OfflineDataLifespan => TimeSpan.FromDays(1);
+
+    public static async Task UpdateIfNeeded(Account account) => await new AttendanceReportService().UpdateIfNeededPrivate(account);
+    public static async Task ForceUpdate(Account account) => await new AttendanceReportService().InvalidateReportsAsync(account);
+
+    async Task UpdateIfNeededPrivate(Account account)
+    {
+        var r = GetReportResourceKey(account);
+        if (ShouldSync(r))
+            await InvalidateReportsAsync(account);
+    }
+
+    async Task InvalidateReportsAsync(Account account)
     {
         int accountId = account.Id;
         var (yearStart, yearEnd) = account.GetSchoolYearDuration();
@@ -47,6 +62,8 @@ public class AttendanceReportService
         var reportsArray = reports.ToArray();
 
         await AttendanceReportRepository.UpdateAttendanceReportsAsync(accountId, reportsArray);
+        var r = GetReportResourceKey(account);
+        SetJustSynced(r);
     }
 }
 
