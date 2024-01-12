@@ -19,7 +19,7 @@ public class VisibilityConverter : IValueConverter
             swap = s;
         if (value is bool b)
         {
-            return (swap ? b : !b) ? Visibility.Visible : Visibility.Collapsed;
+            return (swap ? !b : b) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         // Return null if the value is not a DateTime
