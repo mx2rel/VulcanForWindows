@@ -8,73 +8,14 @@
     mc:Ignorable="d"
     xmlns:t="using:VulcanTest.Vulcan.Timetable"
     xmlns:tc="using:Vulcanova.Features.Timetable"
-    xmlns:Scheduler="using:DevExpress.WinUI.Scheduler">
+    xmlns:Scheduler="using:DevExpress.WinUI.Scheduler"
+    xmlns:controls="using:VulcanForWindows.UserControls">
 
     <Page.Resources>
         <DataTemplate x:DataType="local:TimetableDay" x:Key="DayTemp">
             <!--<ItemContainer HorizontalContentAlignment="Stretch">-->
-            <StackPanel>
-                <TextBlock Text="{x:Bind day}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
-                <ListView ItemsSource="{x:Bind e}" VerticalContentAlignment="Stretch" 
-                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                                      HorizontalContentAlignment="Stretch" Height="500" ItemClick="ShowLessonDetails" IsItemClickEnabled="True" SelectionMode="None">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Padding" Value="0"/>
-                            <Setter Property="Margin" Value="0"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="tc:TimetableListEntry">
-                            <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}" CornerRadius="6"  Margin="3" Padding="3">
-                                <Grid.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{x:Bind textColor}"/>
-                                        <Setter Property="TextDecorations" Value="{x:Bind textDecor}"/>
-                                    </Style>
-                                </Grid.Resources>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="32"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel MaxWidth="26" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock 
-                                            Text="{x:Bind displayTime}" 
-                                            FontWeight="SemiLight" 
-                                            FontSize="12" HorizontalAlignment="Center" TextAlignment="Justify"/>
-                                </StackPanel>
-                                <StackPanel Margin="4" Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Bind subName}" FontWeight="Bold" Foreground="{x:Bind SubNameColor}" 
-                                               TextTrimming="CharacterEllipsis"/>
-                                    <Grid>
-                                        <TextBlock 
-                                            Text="{x:Bind teacher}" 
-                                            FontWeight="SemiLight" 
-                                            FontSize="12" HorizontalAlignment="Left" Foreground="{x:Bind TeacherColor}"/>
-                                        <TextBlock 
-                                            Text="{x:Bind room}" 
-                                            FontWeight="SemiLight" 
-                                            FontSize="12" HorizontalAlignment="Right" Grid.Column="1" Foreground="{x:Bind RoomColor}"/>
-                                    </Grid>
-
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
+            <controls:TimetableDayDisplayer Value="{x:Bind}"/>
             <!--</ItemContainer>-->
-        </DataTemplate>
-        <DataTemplate x:Key="LessonFullInfo" x:DataType="tc:TimetableListEntry">
-            <!-- Define the content of your Flyout here -->
-            <StackPanel Width="300" Spacing="3">
-                <TextBlock Text="{x:Bind subName}" FontWeight="Bold" FontSize="22" Foreground="{x:Bind SubNameColor}" 
-                           TextDecorations="{x:Bind textDecor}" TextWrapping="WrapWholeWords"/>
-                <local:UserControl1 Value="{x:Bind TeacherName}" Title="Nauczyciel:"/>
-                <local:UserControl1 Value="{x:Bind RoomName}" Title="Sala:"/>
-                <local:UserControl1 Value="{x:Bind Event}" Title="Wydarzenie:"/>
-            </StackPanel>
         </DataTemplate>
     </Page.Resources>
     <Grid x:Name="grid">

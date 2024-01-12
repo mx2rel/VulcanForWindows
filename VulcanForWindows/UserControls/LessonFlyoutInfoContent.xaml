@@ -1,0 +1,18 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.LessonFlyoutInfoContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:local1="using:VulcanForWindows">
+
+    <StackPanel Width="300" Spacing="3">
+        <TextBlock Text="{x:Bind Value.subName,Mode=OneWay}" FontWeight="Bold" FontSize="22" Foreground="{x:Bind Value.SubNameColor,Mode=OneWay}" 
+                           TextDecorations="{x:Bind Value.textDecor,Mode=OneWay}" TextWrapping="WrapWholeWords"/>
+        <local1:UserControl1 Value="{x:Bind Value.TeacherName,Mode=OneWay}" Title="Nauczyciel:"/>
+        <local1:UserControl1 Value="{x:Bind Value.RoomName,Mode=OneWay}" Title="Sala:"/>
+        <local1:UserControl1 Value="{x:Bind Value.Event,Mode=OneWay}" Title="Wydarzenie:"/>
+    </StackPanel>
+</UserControl>

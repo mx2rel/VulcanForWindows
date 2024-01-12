@@ -121,11 +121,11 @@ namespace VulcanForWindows
 
             for (int i = 0; i < display.Length; i++)
             {
-                var sp = (this.Resources["DayTemp"] as DataTemplate).LoadContent() as StackPanel;
+                var sp = (this.Resources["DayTemp"] as DataTemplate).LoadContent() as UserControls.TimetableDayDisplayer;
 
                 gr.Children.Add(sp);
 
-                sp.DataContext = display[i];
+                sp.Value = display[i];
                 Grid.SetColumn(sp, i);
             }
             if (display.Length == 0)
@@ -159,18 +159,6 @@ namespace VulcanForWindows
         {
             week = GetStartOfTheWeek(DateTime.Now);
             ChangeWeek();
-        }
-
-        private async void ShowLessonDetails(object sender, ItemClickEventArgs e)
-        {
-
-            ContentDialog dialog = new ContentDialog();
-            dialog.XamlRoot = this.XamlRoot;
-            var v = (Resources["LessonFullInfo"] as DataTemplate).LoadContent() as StackPanel;
-            v.DataContext = e.ClickedItem as TimetableListEntry;
-            dialog.Content = v;
-            dialog.CloseButtonText = "Zamknij";
-            var result = await dialog.ShowAsync();
         }
     }
 

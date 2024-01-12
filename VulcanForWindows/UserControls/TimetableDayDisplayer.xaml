@@ -1,0 +1,43 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.TimetableDayDisplayer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:VulcanForWindows.UserControls"
+    xmlns:converters="using:Converters"
+    xmlns:tc="using:Vulcanova.Features.Timetable"
+    mc:Ignorable="d"
+    xmlns:local1="using:VulcanForWindows">
+    <UserControl.Resources>
+        <converters:DateTimeConverter x:Key="DateTimeConverter" />
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
+
+        <DataTemplate x:Key="LessonFullInfo" x:DataType="tc:TimetableListEntry">
+            <!-- Define the content of your Flyout here -->
+            <controls:LessonFlyoutInfoContent Value="{x:Bind}"/>
+        </DataTemplate>
+        
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBlock Text="{x:Bind Value.day, Mode=OneWay}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
+        <ListView ItemsSource="{x:Bind Value.e, Mode=OneWay}" VerticalContentAlignment="Stretch" 
+                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch" Height="500" ItemClick="ShowLessonDetails" IsItemClickEnabled="True" SelectionMode="None">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="tc:TimetableListEntry">
+                    <controls:TimetableItem Value="{x:Bind}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackPanel>
+</UserControl>

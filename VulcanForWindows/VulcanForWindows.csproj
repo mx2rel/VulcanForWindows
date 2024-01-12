@@ -28,7 +28,10 @@
     <None Remove="UserControl1.xaml" />
     <None Remove="UserControls\AttendanceLessonItem.xaml" />
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
+    <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
+    <None Remove="UserControls\TimetableDayDisplayer.xaml" />
+    <None Remove="UserControls\TimetableItem.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -88,6 +91,18 @@
   <ItemGroup>
     <Page Update="GradesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="UserControls\LessonFlyoutInfoContent.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\TimetableDayDisplayer.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\TimetableItem.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
