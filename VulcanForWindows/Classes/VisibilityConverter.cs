@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 
@@ -15,9 +14,12 @@ public class VisibilityConverter : IValueConverter
 
     public object Convert(object value, Type targetType, object parameter, string language)
     {
+        bool swap = false;
+        if (parameter is bool s)
+            swap = s;
         if (value is bool b)
         {
-            return b ? Visibility.Visible : Visibility.Collapsed;
+            return (swap ? b : !b) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         // Return null if the value is not a DateTime
