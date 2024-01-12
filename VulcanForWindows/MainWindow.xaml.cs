@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using Vulcanova.Features.Auth;
 using VulcanTest.Vulcan;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -17,6 +18,7 @@ namespace VulcanForWindows
         public MainWindow()
         {
             this.InitializeComponent();
+            new AccountSyncService().SyncAccountsIfRequiredAsync();
             rootFrame.Navigate(typeof(MainPanelPage));
         }
 

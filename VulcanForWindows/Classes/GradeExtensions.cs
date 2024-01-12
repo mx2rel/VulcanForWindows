@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,11 +40,13 @@ namespace VulcanForWindows.Classes
 
             foreach (var grade in grades.Where(r => r.FinalGrade != null || r.PredictedGrade != null))
             {
-                if (decimal.TryParse(grade.FinalGrade ?? grade.PredictedGrade, out var r))
+                if (decimal.TryParse(grade.FastDisplayGrade, out var r))
                 {
                     sum += r;
                     weightSum++;
                 }
+                else
+                    Debug.Write($"\nFailed to parse {grade.FastDisplayGrade}\n");
             }
 
             if (weightSum == 0)

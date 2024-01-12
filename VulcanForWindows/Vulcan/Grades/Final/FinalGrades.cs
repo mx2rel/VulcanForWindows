@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -74,7 +75,8 @@ public class FinalGrades : UonetResourceProvider
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
         foreach (var period in account.Periods)
         {
-            d.Add(period, await FetchPeriodGradesAsync(account, period.Id));
+            Debug.Write($"\nLoading {period.Id}\n");
+            d.Add(period, (await GetPeriodGrades(account, period.Id,false,true)).Grades.ToArray());
         }
 
         return d;

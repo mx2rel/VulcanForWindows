@@ -11,31 +11,19 @@ namespace Vulcanova.Features.Auth;
 
 public class AccountSyncService : UonetResourceProvider, IAccountSyncService
 {
-    private readonly AccountContext _accountContext;
-    private readonly IApiClientFactory _apiClientFactory;
-    private readonly AccountRepository _accountRepository;
 
     private const string ResourceKey = "AccountsSync";
-
-    public AccountSyncService(AccountContext accountContext,
-        IApiClientFactory apiClientFactory,
-        AccountRepository accountRepository)
-    {
-        _accountContext = accountContext;
-        _apiClientFactory = apiClientFactory;
-        _accountRepository = accountRepository;
-    }
 
     public async Task SyncAccountsIfRequiredAsync()
     {
         if (!ShouldSync(ResourceKey)) return;
 
-        var accountsGroupedByLoginId = (_accountRepository.GetAccountsAsync())
+        var accountsGroupedByLoginId = (new AccountRepository().GetAccountsAsync())
             .GroupBy(x => x.Login.Id);
 
         foreach (var accountsGroup in accountsGroupedByLoginId)
         {
-            var client = await _apiClientFactory.GetAuthenticatedAsync(accountsGroup.First());
+            var client = await new ApiClientFactory().GetAuthenticatedAsync(accountsGroup.First());
             
             var newAccounts = await client.GetAsync(
                 // when querying the unit API contrary to the instance API,
@@ -79,13 +67,13 @@ public class AccountSyncService : UonetResourceProvider, IAccountSyncService
 
                 acc.Capabilities = newAccount.Capabilities;
 
-                _accountRepository.UpdateAccountAsync(acc);
+                new AccountRepository().UpdateAccountAsync(acc);
 
                 // is it the active account?
-                if (_accountContext.Account.Id == acc.Id)
-                {
-                    _accountContext.Account = acc;
-                }
+                //if (_accountContext.Account.Id == acc.Id)
+                //{
+                //    _accountContext.Account = acc;
+                //}
             }
         }
         Console.Write("synced");

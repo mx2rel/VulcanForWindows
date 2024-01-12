@@ -76,6 +76,7 @@ namespace VulcanForWindows
         {
             allGrades = await new GradesService().FetchGradesFromAllPeriodsAsync(new AccountRepository().GetActiveAccountAsync());
             allFinalGrades = await new FinalGrades().FetchGradesFromAllPeriodsAsync(new AccountRepository().GetActiveAccountAsync());
+
             Loaded = true;
             LoadingBar.Visibility = Visibility.Collapsed;
 
