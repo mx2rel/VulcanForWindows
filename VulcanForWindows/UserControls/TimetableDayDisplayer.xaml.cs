@@ -35,6 +35,9 @@ namespace VulcanForWindows.UserControls
             get => (TimetableDay)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
+
+        public bool isEmpty => Value.entries.Value.Length == 0;
+
         public bool DisplayDate
         {
             get
@@ -58,7 +61,7 @@ namespace VulcanForWindows.UserControls
                 {
                     // Handle other exceptions if needed
                     Console.WriteLine($"An error occurred: {ex.Message}");
-                    return false;
+                    return true;
                 }
             }
             set => SetValue(DisplayDateProperty, value);

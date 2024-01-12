@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -43,8 +44,8 @@ namespace VulcanForWindows
 
         public IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>> lessons;
         public TimetableDay displayDay { get; set; }
-        public bool displayDayLoaded { get => displayDay != null; }
-        public bool displayDayLoading { get => displayDay == null; }
+        public bool displayDayLoaded { get; set; }
+        public bool displayDayLoading { get => !displayDayLoaded; }
 
         public int UnjustifiedCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
@@ -78,7 +79,13 @@ namespace VulcanForWindows
 
         private async Task FetchTimetable(Account acc)
         {
-            lessons = await Timetable.FetchEntriesForRange(acc, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
+            Debug.WriteLine("\nLoading\n");
+
+            var to = DateTime.Today.AddDays(1);
+            if ((int)DateTime.Today.DayOfWeek >= 5)
+                to =to.AddDays(2);
+
+            lessons = await Timetable.FetchEntriesForRange(acc, DateTime.Today.AddDays(-1), to);
             DateTime dayToDisplay;
 
             //day to display logic
@@ -95,8 +102,18 @@ namespace VulcanForWindows
                 dayToDisplay = DateTime.Today.AddDays(1);
             else dayToDisplay = DateTime.Today;
 
+            if ((dayToDisplay == DateTime.Today.AddDays(1) && (int)DateTime.Today.DayOfWeek == 5) || (int)DateTime.Today.DayOfWeek >= 6)
+                dayToDisplay = TimetableDayGrouper.GetStartOfWeek(DateTime.Today).AddDays(7);
+
+
+            TimetableListEntry[] e = (lessons.Keys.Contains(dayToDisplay)) ? (lessons[dayToDisplay].ToArray()) : (new TimetableListEntry[0]);
+
             displayDay = (new TimetableDay(
-                new KeyValuePair<DateTime, TimetableListEntry[]>(dayToDisplay, lessons[dayToDisplay].ToArray())));
+                new KeyValuePair<DateTime, TimetableListEntry[]>(dayToDisplay, e)));
+
+
+            displayDayLoaded = true;
+            Debug.WriteLine("\nLoaded\n");
             OnPropertyChanged(nameof(displayDay));
             OnPropertyChanged(nameof(displayDayLoaded));
             OnPropertyChanged(nameof(displayDayLoading));

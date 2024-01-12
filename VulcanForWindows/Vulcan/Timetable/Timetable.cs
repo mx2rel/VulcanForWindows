@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace VulcanTest.Vulcan.Timetable
             from = from.Date;
             to = to.Date;
             var og = (await new OgTimetable().FetchEntriesForRange(account, from, to));
+
             IEnumerable<TimetableChangeEntry> c = (await new TimetableChanges().FetchEntriesForRange(account, from, to));
 
             IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>> l = (TimetableBuilder.BuildTimetable(og, c as ICollection<TimetableChangeEntry>));

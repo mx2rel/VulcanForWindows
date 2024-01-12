@@ -142,7 +142,7 @@
                 <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
                 <TextBlock Style="{StaticResource HeaderText}">Plan lekcji</TextBlock>
                 <TextBlock FontWeight="SemiBold" FontSize="12" VerticalAlignment="Bottom" Margin="2" Text="{x:Bind displayDay.Date, Converter={StaticResource DateTimeConverter}, Mode=OneWay}"/>
-            </StackPanel>
+                </StackPanel>
             <Grid Visibility="{x:Bind displayDayLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
                 Grid.Row="1">
                 <controls:TimetableDayDisplayer Value="{x:Bind displayDay, Mode=OneWay}" DisplayDate="False"/>

@@ -43,5 +43,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <StackPanel 
+            VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Spacing="10"
+            Visibility="{x:Bind isEmpty, Converter={StaticResource VisibilityConverter}, ConverterParameter=true}">
+            <BitmapIcon UriSource="ms-appx:///Assets/JustifyDenied.png" Height="48" HorizontalAlignment="Stretch" Foreground="{StaticResource SystemChromeGrayColor}"/>
+            <TextBlock FontWeight="SemiBold" FontSize="20" Margin="10" Text="Brak lekcji w tym dniu" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="{StaticResource SystemChromeGrayColor}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

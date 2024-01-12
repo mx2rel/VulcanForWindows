@@ -43,39 +43,7 @@ public class DateTimeConverter : IValueConverter
         {
             if (string.IsNullOrEmpty(param))
             {
-                int daysAgo = (DateTime.Now - dateTime).Days;
-                // Format the DateTime value as "Day, DD.MM"
-
-
-                string formattedString = $"{FirstLetterToUpper(dateTime.ToString("dddd"))}, {dateTime.ToString("dd.MM")} ";
-
-                string v;
-                switch (daysAgo)
-                {
-                    case 0:
-                        v = "(Dzisiaj)";
-                        break;
-                    case 1:
-                        v = "(Wczoraj)";
-                        break;
-                    case 2:
-                        v = "(Przedwczoraj)";
-                        break;
-                    case -1:
-                        v = "(Jutro)";
-                        break;
-                    case -2:
-                        v = "(Pojutrze)";
-                        break;
-                    default:
-                        if (daysAgo > 0)
-                            v = $"({daysAgo} {((daysAgo == 1) ? "dzień" : "dni")} temu)";
-                        else
-                            v = $"(za {-daysAgo} dni)";
-                        break;
-                }
-
-                return formattedString + v;
+                return Convert(value, targetType, "defaultWithAgo", language);
             }
             else if(prefabs.ContainsKey(param))
             {
@@ -97,7 +65,7 @@ public class DateTimeConverter : IValueConverter
 
                    s= s.Replace("AGO__", HumanLikeAgoAndDays(dateTime));
                 }
-                return s.Replace("_", " ").Replace("!", ",");
+                return FirstLetterToUpper(s.Replace("_", " ").Replace("!", ","));
             }
         }
 
@@ -111,7 +79,7 @@ public class DateTimeConverter : IValueConverter
 
     public string HumanLikeAgoAndDays(DateTime dateTime)
     {
-        int daysAgo = (DateTime.Now - dateTime).Days;
+        int daysAgo = (DateTime.Now.Date - dateTime.Date).Days;
         string v;
         switch (daysAgo)
         {
@@ -134,7 +102,7 @@ public class DateTimeConverter : IValueConverter
                 if (daysAgo > 0)
                     v = $"{daysAgo} {((daysAgo == 1) ? "dzień" : "dni")} temu";
                 else
-                    v = $"za {-daysAgo} dni";
+                    v = $"Za {-daysAgo} dni";
                 break;
         }
         return v;
