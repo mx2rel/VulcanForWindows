@@ -42,7 +42,7 @@
         <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
               VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9">
             <Grid.RowDefinitions>
-                <RowDefinition Height="42"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Style="{StaticResource TitleStack}">
@@ -84,7 +84,7 @@
         <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
               VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
             <Grid.RowDefinitions>
-                <RowDefinition Height="42"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Style="{StaticResource TitleStack}">
@@ -130,6 +130,25 @@
             </Grid>
             <ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsActive="{x:Bind att.isLoading, Mode=OneWay}"/>
+        </Grid>
+
+        <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="17">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Style="{StaticResource TitleStack}">
+                <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                <TextBlock Style="{StaticResource HeaderText}">Plan lekcji</TextBlock>
+                <TextBlock FontWeight="SemiBold" FontSize="12" VerticalAlignment="Bottom" Margin="2" Text="{x:Bind displayDay.Date, Converter={StaticResource DateTimeConverter}, Mode=OneWay}"/>
+            </StackPanel>
+            <Grid Visibility="{x:Bind displayDayLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                Grid.Row="1">
+                <controls:TimetableDayDisplayer Value="{x:Bind displayDay, Mode=OneWay}" DisplayDate="False"/>
+            </Grid>
+            <ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsActive="{x:Bind displayDayLoading, Mode=OneWay}"/>
         </Grid>
     </VariableSizedWrapGrid>
 </Page>

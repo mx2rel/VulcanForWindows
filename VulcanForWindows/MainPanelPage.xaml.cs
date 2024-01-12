@@ -20,7 +20,9 @@ using Vulcanova.Features.Attendance;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Grades;
+using Vulcanova.Features.Timetable;
 using VulcanTest.Vulcan;
+using VulcanTest.Vulcan.Timetable;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -38,6 +40,11 @@ namespace VulcanForWindows
 
         public ObservableCollection<SubjectGrades> sg { get; set; }
         public NewResponseEnvelope<Lesson> att { get; set; }
+
+        public IReadOnlyDictionary<DateTime, IReadOnlyCollection<TimetableListEntry>> lessons;
+        public TimetableDay displayDay { get; set; }
+        public bool displayDayLoaded { get => displayDay != null; }
+        public bool displayDayLoading { get => displayDay == null; }
 
         public int UnjustifiedCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
@@ -59,6 +66,7 @@ namespace VulcanForWindows
             var acc = new AccountRepository().GetActiveAccountAsync();
             FetchAttendance(acc);
             FetchGrades(acc);
+            FetchTimetable(acc);
         }
 
         private async Task FetchGrades(Account acc)
@@ -68,10 +76,36 @@ namespace VulcanForWindows
             Env_Updated(null, null);
         }
 
+        private async Task FetchTimetable(Account acc)
+        {
+            lessons = await Timetable.FetchEntriesForRange(acc, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
+            DateTime dayToDisplay;
+
+            //day to display logic
+            if (lessons.TryGetValue(DateTime.Today, out var today))
+            {
+                if (today.OrderByDescending(r => r.Start).ElementAt(0).End < DateTime.Now)
+                {
+                    dayToDisplay = DateTime.Today.AddDays(1);
+                }
+                else
+                    dayToDisplay = DateTime.Today;
+            }
+            else if (lessons.TryGetValue(DateTime.Today.AddDays(1), out var tommorow))
+                dayToDisplay = DateTime.Today.AddDays(1);
+            else dayToDisplay = DateTime.Today;
+
+            displayDay = (new TimetableDay(
+                new KeyValuePair<DateTime, TimetableListEntry[]>(dayToDisplay, lessons[dayToDisplay].ToArray())));
+            OnPropertyChanged(nameof(displayDay));
+            OnPropertyChanged(nameof(displayDayLoaded));
+            OnPropertyChanged(nameof(displayDayLoading));
+        }
+
         private async Task FetchAttendance(Account acc)
         {
             att.Updated += Att_Updated;
-            await new LessonsService().GetLessonsForRange(acc, DateTime.Now.AddDays(-14), DateTime.Now,att);
+            await new LessonsService().GetLessonsForRange(acc, DateTime.Now.AddDays(-14), DateTime.Now, att);
             Att_Updated(null, null);
         }
 

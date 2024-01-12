@@ -43,14 +43,22 @@ namespace VulcanForWindows
             get => (tdg == null) ? new TimetableDay[0] : (tdg.GetWeek(week));
         }
 
-        public DateTime week;
+        public DateTime week
+        {
+            get => _week;
+            set
+            {
+                _week = GetStartOfTheWeek(value);
+                ChangeWeek();
+            }
+        }
+
+        DateTime _week;
 
         public TimetablePage()
         {
             this.InitializeComponent();
             week = GetStartOfTheWeek(DateTime.Now);
-
-            ChangeWeek();
             //appointments = new ObservableCollection<TimetableEntry>(TimetableEntry.Generate(RandomGenerator.GenerateRandomTimetable()));
 
         }
@@ -142,12 +150,10 @@ namespace VulcanForWindows
         private void Next(object sender, RoutedEventArgs e)
         {
             week = week.AddDays(7);
-            ChangeWeek();
         }
         private void Prev(object sender, RoutedEventArgs e)
         {
             week = week.AddDays(-7);
-            ChangeWeek();
         }
 
         private void ViewDetails(object sender, TappedRoutedEventArgs e)
@@ -158,7 +164,6 @@ namespace VulcanForWindows
         private void CurrentWeek(object sender, RoutedEventArgs e)
         {
             week = GetStartOfTheWeek(DateTime.Now);
-            ChangeWeek();
         }
     }
 
@@ -191,7 +196,7 @@ namespace VulcanForWindows
 
         public static DateTime GetStartOfWeek(DateTime date, bool weekBack = false)
         {
-            var d = date.AddDays(-((int)date.DayOfWeek + -1) );
+            var d = date.AddDays(-((int)date.DayOfWeek + -1));
             return d.Date;
         }
     }
@@ -209,6 +214,7 @@ namespace VulcanForWindows
         public TimetableListEntry[] e => entries.Value;
 
         public int dayOfWeek => (int)entries.Key.DayOfWeek;
+        public DateTime Date => entries.Key.Date;
 
         public string day => new CultureInfo("en-US", false).TextInfo.ToTitleCase(entries.Key.ToString("dddd, dd/MM"));
     }

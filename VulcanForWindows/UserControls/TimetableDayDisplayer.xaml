@@ -21,11 +21,15 @@
         
     </UserControl.Resources>
 
-    <StackPanel>
-        <TextBlock Text="{x:Bind Value.day, Mode=OneWay}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
-        <ListView ItemsSource="{x:Bind Value.e, Mode=OneWay}" VerticalContentAlignment="Stretch" 
+    <Grid x:Name="Grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{x:Bind Value.day, Mode=OneWay}" Visibility="{x:Bind DisplayDate, Converter={StaticResource VisibilityConverter}}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Stretch" Margin="0,0,0,5" TextAlignment="Center"/>
+        <ListView Grid.Row="1" ItemsSource="{x:Bind Value.e, Mode=OneWay}" VerticalContentAlignment="Stretch" 
                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                                      HorizontalContentAlignment="Stretch" Height="500" ItemClick="ShowLessonDetails" IsItemClickEnabled="True" SelectionMode="None">
+                                      HorizontalContentAlignment="Stretch" ItemClick="ShowLessonDetails" IsItemClickEnabled="True" SelectionMode="None">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Padding" Value="0"/>
@@ -39,5 +43,5 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </StackPanel>
+    </Grid>
 </UserControl>

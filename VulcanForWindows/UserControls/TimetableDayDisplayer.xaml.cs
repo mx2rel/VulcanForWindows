@@ -26,22 +26,39 @@ namespace VulcanForWindows.UserControls
         public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register("Value", typeof(TimetableDay), typeof(TimetableDayDisplayer), new PropertyMetadata(null, ValueChanged));
 
+        public static readonly DependencyProperty DisplayDateProperty =
+        DependencyProperty.Register("Value", typeof(TimetableDay), typeof(bool), new PropertyMetadata(null, DisplayDateChanged));
+
 
         public TimetableDay Value
         {
             get => (TimetableDay)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
+        public bool DisplayDate
+        {
+            get => (bool)GetValue(DisplayDateProperty);
+            set => SetValue(DisplayDateProperty, value);
+        }
 
         private static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TimetableDayDisplayer s) s.OnPropertyChanged(nameof(Value));
+        }
+        
+        private static void DisplayDateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TimetableDayDisplayer s)
+            {
+                s.OnPropertyChanged(nameof(DisplayDate));
+            }
         }
 
         public TimetableDayDisplayer()
         {
             this.InitializeComponent();
             OnPropertyChanged(nameof(Value));
+            OnPropertyChanged(nameof(DisplayDate));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
