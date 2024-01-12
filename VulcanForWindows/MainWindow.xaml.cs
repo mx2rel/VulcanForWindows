@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Linq;
 using Vulcanova.Features.Auth;
 using VulcanTest.Vulcan;
 
@@ -15,11 +16,26 @@ namespace VulcanForWindows
     public sealed partial class MainWindow : Window
     {
 
+        public static MainWindow Instance;
+
         public MainWindow()
         {
             this.InitializeComponent();
             new AccountSyncService().SyncAccountsIfRequiredAsync();
             rootFrame.Navigate(typeof(MainPanelPage));
+            Instance = this;
+        }
+
+        public static void NavigateTo(string tag)
+        {
+            Type t = Type.GetType("VulcanForWindows." + tag);
+            if (Instance.rootFrame.CurrentSourcePageType != t)
+            {
+                Instance.rootFrame.Navigate(t);
+                var d = Instance.nvSample.MenuItems.Where(r => (r as FrameworkElement).Tag as string == tag).ElementAt(0);
+                if (d != null)
+                    Instance.nvSample.SelectedItem = d;
+            }
         }
 
         private void NavigationChangedPage(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

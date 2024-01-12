@@ -40,7 +40,7 @@
 
     <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" Margin="5">
         <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9" Tapped="LoadPage" Tag="GradesPage">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -82,7 +82,7 @@
         </Grid>
 
         <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" Tapped="LoadPage" Tag="AttendancePage">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -133,7 +133,7 @@
         </Grid>
 
         <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="17">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="17" Tapped="LoadPage" Tag="TimetablePage">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>

@@ -83,7 +83,7 @@ namespace VulcanForWindows
 
             var to = DateTime.Today.AddDays(1);
             if ((int)DateTime.Today.DayOfWeek >= 5)
-                to =to.AddDays(2);
+                to = to.AddDays(2);
 
             lessons = await Timetable.FetchEntriesForRange(acc, DateTime.Today.AddDays(-1), to);
             DateTime dayToDisplay;
@@ -154,6 +154,12 @@ namespace VulcanForWindows
         void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void LoadPage(object sender, TappedRoutedEventArgs e)
+        {
+            string pageName = (sender as FrameworkElement).Tag as string;
+            MainWindow.NavigateTo(pageName);
         }
     }
 }
