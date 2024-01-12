@@ -18,13 +18,13 @@ namespace VulcanTest.Vulcan
         private static string defaultFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "main.txt");
         public static LiteDatabaseAsync database = new LiteDatabaseAsync("Filename=main.db;Connection=shared;");
 
-
     }
 
     public static class Preferences
     {
+        private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/VulcanForWindows/";
         private static string dataFilePath
-            = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "data.dat");
+            = Path.Combine(folder, "data.dat");
 
 
         public static void Set<T>(string key, object value)
@@ -70,7 +70,8 @@ namespace VulcanTest.Vulcan
                 if (File.Exists(dataFilePath))
                 {
                     string json = File.ReadAllText(dataFilePath);
-                    return JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    var v= JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    if (v != null) return v;
                 }
                 else
                 {
@@ -82,10 +83,13 @@ namespace VulcanTest.Vulcan
                 Console.WriteLine("Error reading data: " + ex.Message);
                 return new Dictionary<string, string>();
             }
+                return new Dictionary<string, string>();
         }
 
         private static void SaveData(Dictionary<string, string> data)
         {
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+            if (!File.Exists(dataFilePath)) File.Create(dataFilePath);
             try
             {
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -93,7 +97,7 @@ namespace VulcanTest.Vulcan
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error saving data: " + ex.Message);
+                Debug.WriteLine("\nError saving data: " + ex.Message);
             }
         }
 

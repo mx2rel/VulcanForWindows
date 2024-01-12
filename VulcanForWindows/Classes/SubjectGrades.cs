@@ -105,7 +105,10 @@ namespace VulcanForWindows.Classes
         }
         public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env, FinalGradesResponseEnvelope fenv)
         {
-            var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env, fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray()[0].FastDisplayGrade)).ToArray();
+            var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env,
+                ((fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray().Length > 0) ? 
+                (fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray()[0].FastDisplayGrade) : "")            
+            )).ToArray();
 
             return r;
         }

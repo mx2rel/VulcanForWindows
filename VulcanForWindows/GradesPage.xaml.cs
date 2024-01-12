@@ -25,6 +25,7 @@ using System.Diagnostics;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades.Final;
 using VulcanForWindows.Vulcan.Grades.Final;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -43,7 +44,7 @@ namespace VulcanForWindows
 
 
             grades = new ObservableCollection<SubjectGrades>();
-            selectedPeriod = new AccountRepository().GetActiveAccountAsync().CurrentPeriod;
+            selectedPeriod = new AccountRepository().GetActiveAccountAsync().Periods.Last();
             PeriodSelector.SelectedIndex = avaiblePeriods.Length - 1;
             PeriodSelector.UpdateLayout();
             AssignGrades();
@@ -78,28 +79,30 @@ namespace VulcanForWindows
 
             if (!envelopes.ContainsKey(selectedPeriodId))
             {
-                env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, false, false);
+                env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, true, false);
                 env.Updated += HandleGradesUpdated;
             }
             else
             {
-                grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(env, fEnvelopes[selectedPeriodId]));
-                LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
-
-                cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
-                chartAndTableGrid.DataContext = cd;
-                chartAndTableGrid.UpdateLayout();
+                HandleGradesUpdated(env, new Grade[0]);
                 //Debug.Write(JsonConvert.SerializeObject(cd));
             }
             //TopLevel.UpdateLayout();
         }
 
-        void HandleGradesUpdated(object sender, IEnumerable<Grade> updatedGrades)
+        async Task<FinalGradesResponseEnvelope> GetFenvelope(int id)
         {
-            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, fEnvelopes[selectedPeriodId]));
+            if (!fEnvelopes.ContainsKey(id))
+                fEnvelopes[id] = await new FinalGrades().GetPeriodGrades(new AccountRepository().GetActiveAccountAsync(), selectedPeriodId, false, true);
+            return fEnvelopes[id];
+        }
+
+        async void HandleGradesUpdated(object sender, IEnumerable<Grade> updatedGrades)
+        {
+            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, await GetFenvelope(selectedPeriodId)));
             LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
 
-            cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
+            cd = MonthChartData.Generate(grades.SelectMany(r=>r.grades).ToArray());
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
         }
