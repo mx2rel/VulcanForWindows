@@ -15,5 +15,10 @@ public class AttendanceReport
     public int Late { get; set; }
 
     [BsonIgnore]
+    public int PresenceAndLate => Presence + Late;
+
+    [BsonIgnore]
     public float PresencePercentage => (float) (Presence + Late) / (Presence + Absence + Late) * 100;
+    [BsonIgnore]
+    public string PresencePercentageDisplay => PresencePercentage.ToString("0.00")+"%";
 }

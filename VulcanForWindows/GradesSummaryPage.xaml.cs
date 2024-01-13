@@ -51,6 +51,9 @@ namespace VulcanForWindows
 
         public GradesSummaryPage()
         {
+            PeriodAverage = -1;
+            YearAverage = -1;
+            FinalAverage = -1;
             periodFinalGrades = new ObservableCollection<PeriodFinalGradeViewModel>();
             this.InitializeComponent();
             selectedPeriod = new AccountRepository().GetActiveAccountAsync().CurrentPeriod;

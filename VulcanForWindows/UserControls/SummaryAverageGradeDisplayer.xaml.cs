@@ -61,7 +61,7 @@ namespace VulcanForWindows.UserControls
             if (d is SummaryAverageGradeDisplayer control && e.NewValue is string newValue)
             {
                 control.AverageText.Text = newValue;
-                bool b = newValue == "0";
+                bool b = newValue == "-1" || newValue=="loading";
                 control.Skeleton.Visibility = b.ToVisibility();
                 control.AverageText.Visibility = (!b).ToVisibility();
 

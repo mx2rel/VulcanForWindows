@@ -19,6 +19,16 @@ public class AttendanceReportService : UonetResourceProvider
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromDays(1);
 
+    public static async Task<IEnumerable<AttendanceReport>> GetReports(Account account)
+    {
+        var r = GetReportResourceKey(account);
+        var s = new AttendanceReportService();
+        if (s.ShouldSync(r))
+            await s.UpdateIfNeededPrivate(account);
+
+        return await AttendanceReportRepository.GetAttendanceReportsAsync(account);
+    }
+
     public static async Task UpdateIfNeeded(Account account) => await new AttendanceReportService().UpdateIfNeededPrivate(account);
     public static async Task ForceUpdate(Account account) => await new AttendanceReportService().InvalidateReportsAsync(account);
 
