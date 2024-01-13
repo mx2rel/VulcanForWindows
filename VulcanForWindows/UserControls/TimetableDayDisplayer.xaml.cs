@@ -69,7 +69,12 @@ namespace VulcanForWindows.UserControls
 
         private static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TimetableDayDisplayer s) s.OnPropertyChanged(nameof(Value));
+            if (d is TimetableDayDisplayer s)
+            {
+                s.OnPropertyChanged(nameof(Value));
+                s.OnPropertyChanged(nameof(isEmpty));
+            }
+
         }
 
         private static void DisplayDateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -82,9 +87,10 @@ namespace VulcanForWindows.UserControls
 
         public TimetableDayDisplayer()
         {
-            this.InitializeComponent();
             OnPropertyChanged(nameof(Value));
+            OnPropertyChanged(nameof(isEmpty));
             OnPropertyChanged(nameof(DisplayDate));
+            this.InitializeComponent();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
