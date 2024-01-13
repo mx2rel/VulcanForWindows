@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vulcanova.Features.Auth;
 using VulcanTest.Vulcan;
@@ -21,6 +22,7 @@ namespace VulcanForWindows
         public MainWindow()
         {
             this.InitializeComponent();
+            history.Add(typeof(MainWindow));
             new AccountSyncService().SyncAccountsIfRequiredAsync();
             rootFrame.Navigate(typeof(MainPanelPage));
             Instance = this;
@@ -31,10 +33,7 @@ namespace VulcanForWindows
             Type t = Type.GetType("VulcanForWindows." + tag);
             if (Instance.rootFrame.CurrentSourcePageType != t)
             {
-                Instance.rootFrame.Navigate(t);
-                var d = Instance.nvSample.MenuItems.Where(r => (r as FrameworkElement).Tag as string == tag).ElementAt(0);
-                if (d != null)
-                    Instance.nvSample.SelectedItem = d;
+                Instance.NavigateTo(t);
             }
         }
 
@@ -55,9 +54,38 @@ namespace VulcanForWindows
                 Type pageType = Type.GetType("VulcanForWindows." + pageName);
 
                 if (rootFrame.CurrentSourcePageType != pageType)
-                    rootFrame.Navigate(pageType);
+                    NavigateTo(pageType);
             }
             //}
+        }
+
+        public void MoveBack()
+        {
+            history.RemoveAt(history.Count - 1);
+            NavigateTo(history.Last(), false);
+        }
+
+        public List<Type> history = new List<Type>();
+
+        private void NavigateTo(Type pageType, bool addToHistory = true)
+        {
+            rootFrame.Navigate(pageType);
+            if (addToHistory)
+                history.Add(pageType);
+            UpdateBackButton();
+
+            var d = Instance.nvSample.MenuItems.Where(r => (r as FrameworkElement).Tag as string == pageType.Name);
+            if (d.Count() > 0)
+                Instance.nvSample.SelectedItem = d.ElementAt(0);
+        }
+
+        void UpdateBackButton() =>
+            nvSample.IsBackEnabled = history.Count > 2;
+
+        private void BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            MoveBack();
+            UpdateBackButton();
         }
     }
 }
