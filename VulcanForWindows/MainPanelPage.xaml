@@ -88,11 +88,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Style="{StaticResource TitleStack}">
-                <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                <TextBlock Style="{StaticResource HeaderText}">Obecność</TextBlock>
-            </StackPanel>
-            <controls:SummaryAverageGradeDisplayer Title="Obecność" Average="{x:Bind PresentPercentDisplay, Mode=OneWay}" Grid.Row="1"/>
+            <Grid HorizontalAlignment="Stretch" Margin="3">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                    <TextBlock Style="{StaticResource HeaderText}">Obecność</TextBlock>
+                </StackPanel>
+                <TextBlock Text="{x:Bind PresentPercentDisplay, Mode=OneWay}" 
+                           HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="18"/>
+            </Grid>
+
             <Grid Visibility="{x:Bind att.isLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
                 Grid.Row="2">
                 <Grid.RowDefinitions>

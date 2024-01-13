@@ -30,6 +30,9 @@ namespace VulcanForWindows
     {
 
         public float PresentPercent { get; set; }
+        public int PresentCount { get; set; }
+        public int AbsentCount { get; set; }
+        public int LateCount { get; set; }
         public string PresentPercentDisplay { get => PresentPercent.ToString("0.00") + "%"; }
 
         public ObservableCollection<AttendanceReport> reports { get; set; }
@@ -44,11 +47,11 @@ namespace VulcanForWindows
         async void Fetch()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
-            PresentPercent = await AttendanceReportService.GetPresencePercentage(acc);
+            (PresentPercent, PresentCount, LateCount, AbsentCount) = await AttendanceReportService.GetPresenceInfo(acc);
 
             OnPropertyChanged(nameof(PresentPercent));
             OnPropertyChanged(nameof(PresentPercentDisplay));
-            reports.ReplaceAll( await AttendanceReportService.GetReports(acc));
+            reports.ReplaceAll(await AttendanceReportService.GetReports(acc));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

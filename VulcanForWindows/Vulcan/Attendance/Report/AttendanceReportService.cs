@@ -19,6 +19,25 @@ public class AttendanceReportService : UonetResourceProvider
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromDays(1);
 
+    public static async Task<(float percent, int present, int late, int absent)> GetPresenceInfo(Account account)
+    {
+        var r = await GetReports(account);
+
+        int absences = 0;
+        int lates = 0;
+        int presences = 0;
+        foreach (var report in r)
+        {
+            absences += report.Absence;
+            presences += report.Late;
+            lates += report.Late;
+            presences += report.Presence;
+        }
+
+        return ((((float)presences) / ((float)(presences + absences))) * 100,presences,lates,absences);
+
+    }
+
     public static async Task<float> GetPresencePercentage(Account account)
     {
         var r = await GetReports(account);
@@ -34,7 +53,7 @@ public class AttendanceReportService : UonetResourceProvider
 
         if (presences + absences == 0) return 100;
 
-        return (((float)absences) / ((float)(presences + absences))) * 100;
+        return (((float)presences) / ((float)(presences + absences))) * 100;
 
     }
 

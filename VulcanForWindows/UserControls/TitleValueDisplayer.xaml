@@ -1,0 +1,46 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.TitleValueDisplayer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:converters="using:Converters"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch">
+        
+        <StackPanel Margin="10" x:Name="spVertical">
+            <TextBlock FontWeight="SemiBold" FontSize="14" TextWrapping="WrapWholeWords" Margin="0,0,0,3" TextAlignment="Center" 
+                   Text="{x:Bind Title,Mode=OneWay}" />
+            <TextBlock TextAlignment="Center" FontSize="22" FontWeight="Medium"
+                   Text="{x:Bind Value,Mode=OneWay}" 
+                       Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}}"/>
+            <ProgressRing IsActive="True" Width="20" Height="20"
+                          Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}, ConverterParameter=True}"/>
+        </StackPanel>
+        
+        <StackPanel Margin="0" x:Name="spHorizontal" Orientation="Horizontal" Spacing="10">
+            <TextBlock FontWeight="SemiBold" FontSize="22" TextWrapping="WrapWholeWords" Margin="0,0,0,3" TextAlignment="Center" 
+                   Text="{x:Bind Title,Mode=OneWay}" />
+
+            <TextBlock TextAlignment="Center" FontSize="22" FontWeight="Normal"
+                   Text="{x:Bind Value,Mode=OneWay}" 
+                       Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}}"/>
+            <ProgressRing IsActive="True" Width="20" Height="20"
+                          Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}, ConverterParameter=True}"/>
+        </StackPanel>
+        
+        <StackPanel x:Name="spHorizontalWithIcon" MaxHeight="32" Orientation="Horizontal" Spacing="5">
+            <Image Stretch="Uniform" x:Name="img" MaxHeight="32"/>
+            <TextBlock TextAlignment="Center" FontSize="22" FontWeight="Medium"
+                   Text="{x:Bind Value,Mode=OneWay}" 
+                       Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}}"/>
+            <ProgressRing IsActive="True" Width="20" Height="20" 
+                          Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}, ConverterParameter=True}"/>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>

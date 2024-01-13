@@ -9,9 +9,12 @@
     xmlns:attendanceReport="using:Vulcanova.Features.Attendance.Report"
         xmlns:UserControls="using:VulcanForWindows.UserControls">
 
-    <ListView>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentPercent, Mode=OneWay}" Title="Frekwencja"/>
+    <ListView SelectionMode="None" Margin="5,20,5,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
+            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentPercentDisplay, Mode=OneWay}" Title="Frekwencja"/>
+            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentCount, Mode=OneWay}" Title="Obecności"/>
+            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind LateCount, Mode=OneWay}" Title="Spóźnienia"/>
+            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind AbsentCount, Mode=OneWay}" Title="Nieobecności"/>
         </StackPanel>
     <GridView ItemsSource="{x:Bind reports, Mode=OneWay}"  HorizontalAlignment="Center" Margin="15,5,15,5">
         <GridView.ItemContainerStyle>

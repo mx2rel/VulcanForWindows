@@ -15,7 +15,7 @@ public class VisibilityConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         bool swap = false;
-        if (parameter is bool s)
+        if (bool.TryParse( (string)parameter,out var s))
             swap = s;
         if (value is bool b)
         {
