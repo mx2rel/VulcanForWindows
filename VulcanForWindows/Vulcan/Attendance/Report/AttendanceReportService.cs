@@ -19,6 +19,25 @@ public class AttendanceReportService : UonetResourceProvider
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromDays(1);
 
+    public static async Task<float> GetPresencePercentage(Account account)
+    {
+        var r = await GetReports(account);
+
+        int absences = 0;
+        int presences = 0;
+        foreach (var report in r)
+        {
+            absences += report.Absence;
+            presences += report.Late;
+            presences += report.Presence;
+        }
+
+        if (presences + absences == 0) return 100;
+
+        return (((float)absences) / ((float)(presences + absences))) * 100;
+
+    }
+
     public static async Task<IEnumerable<AttendanceReport>> GetReports(Account account)
     {
         var r = GetReportResourceKey(account);

@@ -9,6 +9,10 @@
     xmlns:attendanceReport="using:Vulcanova.Features.Attendance.Report"
         xmlns:UserControls="using:VulcanForWindows.UserControls">
 
+    <ListView>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentPercent, Mode=OneWay}" Title="Frekwencja"/>
+        </StackPanel>
     <GridView ItemsSource="{x:Bind reports, Mode=OneWay}"  HorizontalAlignment="Center" Margin="15,5,15,5">
         <GridView.ItemContainerStyle>
             <Style TargetType="ItemContainer">
@@ -46,4 +50,5 @@
             </DataTemplate>
         </GridView.ItemTemplate>
     </GridView>
+    </ListView>
 </Page>

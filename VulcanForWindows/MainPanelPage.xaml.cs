@@ -18,6 +18,7 @@ using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Attendance;
+using Vulcanova.Features.Attendance.Report;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Grades;
@@ -38,6 +39,8 @@ namespace VulcanForWindows
     public sealed partial class MainPanelPage : Page, INotifyPropertyChanged
     {
         public GradesResponseEnvelope env { get; set; }
+        public float PresentPercent { get; set; }
+        public string PresentPercentDisplay { get => PresentPercent.ToString("0.00") + "%"; }
 
         public ObservableCollection<SubjectGrades> sg { get; set; }
         public NewResponseEnvelope<Lesson> att { get; set; }
@@ -121,6 +124,10 @@ namespace VulcanForWindows
 
         private async Task FetchAttendance(Account acc)
         {
+            PresentPercent = await AttendanceReportService.GetPresencePercentage(acc);
+            OnPropertyChanged(nameof(PresentPercent));
+            OnPropertyChanged(nameof(PresentPercentDisplay));
+
             att.Updated += Att_Updated;
             await new LessonsService().GetLessonsForRange(acc, DateTime.Now.AddDays(-14), DateTime.Now, att);
             Att_Updated(null, null);
