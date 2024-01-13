@@ -61,7 +61,11 @@ namespace VulcanForWindows
         public string[] displayPeriods => avaiblePeriods.Select(r => $"Klasa {r.Level}, Semestr {r.Number}").ToArray();
         private void ChangedPeriod(object sender, SelectionChangedEventArgs e)
         {
-            selectedPeriod = avaiblePeriods[(sender as ComboBox).SelectedIndex] as Vulcanova.Features.Shared.Period;
+            var p = avaiblePeriods[(sender as ComboBox).SelectedIndex] as Vulcanova.Features.Shared.Period;
+            if (selectedPeriod.Id == p.Id) return;
+            selectedPeriod = p;
+            LoadingBar.Visibility = Visibility.Visible;
+
             AssignGrades();
         }
 
