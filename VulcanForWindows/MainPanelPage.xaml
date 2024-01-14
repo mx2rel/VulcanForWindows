@@ -16,7 +16,7 @@
         <converters:DateTimeConverter x:Key="DateTimeConverter" />
         <converters:VisibilityConverter x:Key="VisibilityConverter" />
         <Style TargetType="Grid" x:Key="Panel">
-            <Setter Property="Background" Value="{StaticResource LayerOnAccentAcrylicFillColorDefault}"/>
+            <Setter Property="Background" Value="{StaticResource AcrylicBackgroundFillColorBaseBrush}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Margin" Value="5"/>
@@ -37,124 +37,140 @@
             <Setter Property="Width" Value="22"/>
         </Style>
     </Page.Resources>
-
-    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" Margin="5">
-        <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9" Tapped="LoadPage" Tag="GradesPage">
+    <Grid>
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Style="{StaticResource TitleStack}">
-                <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                <TextBlock Style="{StaticResource HeaderText}">Oceny</TextBlock>
-            </StackPanel>
-            <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick">
+            <Image Source="C:\Users\Marcel\Desktop\SchoolBg.png" 
+               VerticalAlignment="Top" HorizontalAlignment="Stretch" Stretch="UniformToFill"/>
+            <!--<Rectangle HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="800">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#7F000000" Offset="0.0"/>
+                    <GradientStop Color="#00000000" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>-->
+        </Grid>
+        <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" Margin="5,200,5,5">
+            <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9" Tapped="LoadPage" Tag="GradesPage">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Style="{StaticResource TitleStack}">
+                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                    <TextBlock Style="{StaticResource HeaderText}">Oceny</TextBlock>
+                </StackPanel>
+                <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick">
 
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="g:SubjectGrades">
-                        <StackPanel Orientation="Horizontal" Height="32">
-                            <TextBlock Text="{x:Bind subject.Name}" VerticalAlignment="Center"/>
-                            <ItemsRepeater ItemsSource="{x:Bind grades}">
-                                <ItemsRepeater.Layout>
-                                    <StackLayout Orientation="Horizontal"/>
-                                </ItemsRepeater.Layout>
-                                <ItemsRepeater.ItemTemplate>
-                                    <DataTemplate x:DataType="grade:Grade">
-                                        <!--<Grid Width="35" Height="35" >-->
-                                        <Border Height="32" Width="32" Padding="8" 
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="g:SubjectGrades">
+                            <StackPanel Orientation="Horizontal" Height="32">
+                                <TextBlock Text="{x:Bind subject.Name}" VerticalAlignment="Center"/>
+                                <ItemsRepeater ItemsSource="{x:Bind grades}">
+                                    <ItemsRepeater.Layout>
+                                        <StackLayout Orientation="Horizontal"/>
+                                    </ItemsRepeater.Layout>
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate x:DataType="grade:Grade">
+                                            <!--<Grid Width="35" Height="35" >-->
+                                            <Border Height="32" Width="32" Padding="8" 
                                                 Background="{StaticResource LayerOnMicaBaseAltFillColorDefault}" 
                                                 VerticalAlignment="Center"
                                                 Margin="5,0,0,0" CornerRadius="4">
-                                            <TextBlock 
+                                                <TextBlock 
                                             Text="{x:Bind Content}"
                                             TextAlignment="Center" VerticalAlignment="Center"
                                             />
-                                            <!--</Grid>-->
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsRepeater.ItemTemplate>
-                            </ItemsRepeater>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
-
-        <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" Tapped="LoadPage" Tag="AttendancePage">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid HorizontalAlignment="Stretch" Margin="3">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                    <TextBlock Style="{StaticResource HeaderText}">Obecność</TextBlock>
-                </StackPanel>
-                <TextBlock Text="{x:Bind PresentPercentDisplay, Mode=OneWay}" 
-                           HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="18"/>
+                                                <!--</Grid>-->
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
 
-            <Grid Visibility="{x:Bind att.isLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
-                Grid.Row="2">
+            <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" Tapped="LoadPage" Tag="AttendancePage">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock x:Name="absenceInfos">
+                <Grid HorizontalAlignment="Stretch" Margin="3">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                        <TextBlock Style="{StaticResource HeaderText}">Obecność</TextBlock>
+                    </StackPanel>
+                    <TextBlock Text="{x:Bind PresentPercentDisplay, Mode=OneWay}" 
+                           HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="18"/>
+                </Grid>
+
+                <Grid Visibility="{x:Bind att.isLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="absenceInfos">
                 <Run>Masz</Run>
                 <Run Text="{x:Bind UnjustifiedCount,Mode=OneWay}"/>
                 <Run>nieusprawiedliwione nieobecności (</Run>
                 <Run Text="{x:Bind InProgressCount,Mode=OneWay}"/>
                 <Run> prośby)</Run>
-                </TextBlock>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieobecności"/>
-                    <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
+                    </TextBlock>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieobecności"/>
+                        <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
                           HorizontalContentAlignment="Stretch" Grid.Row="1">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Margin" Value="0,0,7,0"/>
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="attendance:Lesson">
-                                <controls:AttendanceLessonItem Value="{x:Bind}" DisplayDate="True"/>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Margin" Value="0,0,7,0"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="attendance:Lesson">
+                                    <controls:AttendanceLessonItem Value="{x:Bind}" DisplayDate="True"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <ProgressRing Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <ProgressRing Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsActive="{x:Bind att.isLoading, Mode=OneWay}"/>
-        </Grid>
-
-        <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="17" Tapped="LoadPage" Tag="TimetablePage">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <StackPanel Style="{StaticResource TitleStack}">
-                <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                <TextBlock Style="{StaticResource HeaderText}">Plan lekcji</TextBlock>
-                <TextBlock FontWeight="SemiBold" FontSize="12" VerticalAlignment="Bottom" Margin="2" Text="{x:Bind displayDay.Date, Converter={StaticResource DateTimeConverter}, Mode=OneWay}"/>
-            </StackPanel>
-            <Grid Visibility="{x:Bind displayDayLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
-                Grid.Row="1">
-                <controls:TimetableDayDisplayer Value="{x:Bind displayDay, Mode=OneWay}" DisplayDate="False"/>
             </Grid>
-            <ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+
+            <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="17" Tapped="LoadPage" Tag="TimetablePage">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Style="{StaticResource TitleStack}">
+                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                    <TextBlock Style="{StaticResource HeaderText}">Plan lekcji</TextBlock>
+                    <TextBlock FontWeight="SemiBold" FontSize="12" VerticalAlignment="Bottom" Margin="2" Text="{x:Bind displayDay.Date, Converter={StaticResource DateTimeConverter}, Mode=OneWay}"/>
+                </StackPanel>
+                <Grid Visibility="{x:Bind displayDayLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                Grid.Row="1">
+                    <controls:TimetableDayDisplayer Value="{x:Bind displayDay, Mode=OneWay}" DisplayDate="False"/>
+                </Grid>
+                <ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsActive="{x:Bind displayDayLoading, Mode=OneWay}"/>
-        </Grid>
-    </VariableSizedWrapGrid>
+            </Grid>
+        </VariableSizedWrapGrid>
+    </Grid>
 </Page>
