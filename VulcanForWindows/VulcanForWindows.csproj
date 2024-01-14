@@ -24,14 +24,16 @@
     <None Remove="GradesPage.xaml" />
     <None Remove="GradesSummaryPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
+    <None Remove="MessagesPage.xaml" />
     <None Remove="TimetablePage.xaml" />
-    <None Remove="UserControl1.xaml" />
     <None Remove="UserControls\AttendanceLessonItem.xaml" />
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
+    <None Remove="UserControls\MessageControl.xaml" />
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
     <None Remove="UserControls\TimetableDayDisplayer.xaml" />
     <None Remove="UserControls\TimetableItem.xaml" />
+    <None Remove="Vulcan\BlankPage1.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,11 +76,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="UserControl1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,6 +109,21 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\MessageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MessagesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Vulcan\BlankPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="AttendanceReportPage.xaml">

@@ -27,13 +27,13 @@ namespace VulcanForWindows.UserControls
         }
 
         public static readonly DependencyProperty TitleProperty =
-        DependencyProperty.Register("Title", typeof(string), typeof(UserControl1), new PropertyMetadata(null, TitleChanged));
+        DependencyProperty.Register("Title", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, TitleChanged));
 
         public static readonly DependencyProperty AverageProperty =
-        DependencyProperty.Register("Average", typeof(string), typeof(UserControl1), new PropertyMetadata(null, AverageChanged));
+        DependencyProperty.Register("Average", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, AverageChanged));
 
         public static readonly DependencyProperty IsLoadingProperty =
-        DependencyProperty.Register("IsLoading", typeof(bool), typeof(UserControl1), new PropertyMetadata(null, LoadingChanged));
+        DependencyProperty.Register("IsLoading", typeof(bool), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, LoadingChanged));
 
         public string Title
         {

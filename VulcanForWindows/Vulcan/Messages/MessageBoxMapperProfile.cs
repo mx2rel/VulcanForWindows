@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using Vulcanova.Core.Data;
+using Vulcanova.Uonet.Api.Common.Models;
 using Vulcanova.Uonet.Api.MessageBox;
 
 namespace Vulcanova.Features.Messages;
@@ -14,5 +15,9 @@ public class MessageBoxMapperProfile : Profile
 
         CreateMap<MessagePayload, Message>()
             .ForMember(e => e.Id, cfg => cfg.MapFrom(src => new AccountEntityId<Guid> { VulcanId = src.Id }));
+
+
+        CreateMap<DateTimeInfo, DateTime>()
+            .ConvertUsing(d => DateTimeOffset.FromUnixTimeMilliseconds(d.Timestamp).LocalDateTime);
     }
 }
