@@ -48,30 +48,36 @@ namespace VulcanForWindows
             var acc = new AccountRepository().GetActiveAccountAsync();
             NewResponseEnvelope<MessageBox> v = await new MessageBoxesService().GetMessageBoxesByAccountId(acc, true, true);
 
-            (NewResponseEnvelope<Message> r, NewResponseEnvelope<Message> s, NewResponseEnvelope<Message> t)
-                = await MessagesService.GetMessagesStack(acc, v.entries.First().GlobalKey, false, false);
+            //Debug.WriteLine($"\n{string.Join(", ", v.entries.Select(r => r.Name + r.GlobalKey.ToString()))}\n");
 
+            //(NewResponseEnvelope<Message> r, NewResponseEnvelope<Message> s, NewResponseEnvelope<Message> t)
+            //    = await MessagesService.GetMessagesStack(acc, v.entries.First().GlobalKey, false, true);
+
+            NewResponseEnvelope<Message> r =
+                await new MessagesService().GetMessagesByBox(acc,
+                v.entries.First().GlobalKey, Vulcanova.Uonet.Api.MessageBox.MessageBoxFolder.Received, true, true);
+            //Received.ReplaceAll(new MessageViewModel[] { new MessageViewModel(new Message { Content = "SDasd"}), new MessageViewModel(new Message { Content = "SDasd" }), new MessageViewModel(new Message { Content = "SDasd" }) });
             Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)));
-            Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
-            Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
+            //Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
+            //Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
             Debug.WriteLine($"Loaded {Received.Count()}");
 
-            r.Updated += delegate (object sender, IEnumerable<Message> e)
-            {
-                Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)));
+            //r.Updated += delegate (object sender, IEnumerable<Message> e)
+            //{
+            //    //Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)));
 
-                Debug.WriteLine($"Updated {e.Count()}");
-            };
-            s.Updated += delegate (object sender, IEnumerable<Message> e)
-            {
-                Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
+            //    Debug.WriteLine($"Updated {e.Count()}");
+            //};
+            //s.Updated += delegate (object sender, IEnumerable<Message> e)
+            //{
+            //    //Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
 
-            };
-            t.Updated += delegate (object sender, IEnumerable<Message> e)
-             {
-                 Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
+            //};
+            //t.Updated += delegate (object sender, IEnumerable<Message> e)
+            // {
+            //     //Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
 
-             };
+            // };
         }
 
         public bool MainCheckBoxChecked => Received.ToArray().Where(r => r.IsSelected).Count() > 0;
@@ -98,8 +104,8 @@ namespace VulcanForWindows
         {
             foreach (var v in Received)
             {
-                if(criteria == SelectionCriteria.None)
-                v.IsSelected = false;
+                if (criteria == SelectionCriteria.None)
+                    v.IsSelected = false;
 
                 if (criteria == SelectionCriteria.All)
                     v.IsSelected = true;
@@ -138,38 +144,6 @@ namespace VulcanForWindows
             dialog.CloseButtonText = "Zamknij";
             var result = await dialog.ShowAsync();
         }
-
-        private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            if (sender is FrameworkElement element)
-            {
-                // Access the data of the item being hovered
-                MessageViewModel itemData = element.DataContext as MessageViewModel;
-
-                // Now, you can use itemData to access properties or perform actions
-                // For example, show additional information based on the data
-                if (itemData != null)
-                {
-                    itemData.Hover = true;
-                }
-            }
-        }
-
-        private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            if (sender is FrameworkElement element)
-            {
-                // Access the data of the item being hovered
-                MessageViewModel itemData = element.DataContext as MessageViewModel;
-
-                // Now, you can use itemData to access properties or perform actions
-                // For example, show additional information based on the data
-                if (itemData != null)
-                {
-                    itemData.Hover = false;
-                }
-            }
-        }
     }
 
     public class MessageViewModel : INotifyPropertyChanged
@@ -188,7 +162,7 @@ namespace VulcanForWindows
             }
         }
 
-        public string PlainContent => 
+        public string PlainContent =>
             Regex.Replace(message.Content, "<.*?>", "").Replace("\n", "");
         public string DisplayContent =>
             ConvertHtmlToPlainText(message.Content);
@@ -202,6 +176,9 @@ namespace VulcanForWindows
 
         bool _IsSelected;
         public Message message;
+
+        public async void Trash() => await new MessagesService().TrashMessage(message.MessageBoxId, message.Id);
+        public async void MarkAsRead() => await new MessagesService().MarkMessageAsReadAsync(message.MessageBoxId, message.Id);
 
         public bool IsRead => message.DateRead != null;
         public bool Hover

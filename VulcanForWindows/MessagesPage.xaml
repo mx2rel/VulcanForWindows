@@ -8,42 +8,11 @@
     mc:Ignorable="d"
     xmlns:converters="using:Converters"
     xmlns:messages="using:Vulcanova.Features.Messages"
+    xmlns:controls="using:VulcanForWindows.UserControls"
     >
 
     <Page.Resources>
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
-        <DataTemplate x:Key="MessagePopupContent" x:DataType="local:MessageViewModel">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel>
-                <TextBlock Text="{x:Bind message.Subject}" FontWeight="SemiBold" FontSize="22" Margin="0,0,0,20"/>
-                <TextBlock Foreground="LightGray">
-                    <Run Text="Od:"/>
-                    <Run Text="{x:Bind message.Sender.Name}"/>
-                </TextBlock>
-                <TextBlock Foreground="LightGray">
-                    <Run Text="Do:"/>
-                    <Run Text="{x:Bind Receivers}"/>
-                </TextBlock>
-                <TextBlock Foreground="LightGray">
-                    <Run Text="Data:"/>
-                    <Run Text="{x:Bind message.DateSent}"/>
-                </TextBlock>
-                <TextBlock Foreground="LightGray">
-                    <Run Text="Przeczytana:"/>
-                    <Run Text="{x:Bind IsRead}"/>
-                </TextBlock>
-                </StackPanel>
-                
-                <ListView SelectionMode="None" Grid.Row="1">
-                    <TextBlock Text="{x:Bind DisplayContent}" TextWrapping="WrapWholeWords"/>
-                </ListView>
-
-            </Grid>
-        </DataTemplate>
     </Page.Resources>
 
     <Grid Margin="10">
@@ -87,52 +56,10 @@
             </Button>
         </StackPanel>
 
-        <ListView ItemsSource="{x:Bind Received, Mode=OneWay}" IsItemClickEnabled="True" SelectionMode="None" Grid.Row="1" Margin="0,10,0,0" ItemClick="ListView_ItemClick">
+        <ListView ItemsSource="{x:Bind Received, Mode=OneWay}" SelectionMode="None" Grid.Row="1" Margin="0,10,0,0">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:MessageViewModel">
-                    <ListViewItem Padding="15" PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition Width="250"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <CheckBox IsChecked="{x:Bind IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind message.Sender.Name}"
-                               TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
-                               FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1"/>
-                        <Grid Grid.Column="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{x:Bind message.Subject}" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Text="|" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
-                            <TextBlock Text="{x:Bind PlainContent}" 
-                                   VerticalAlignment="Center" Grid.Column="2"
-                                   TextTrimming="CharacterEllipsis" />
-
-                        </Grid>
-                        <StackPanel Orientation="Horizontal" Grid.Column="3" Padding="10,0,0,0" Spacing="5">
-                            <TextBlock Text="{x:Bind message.DateSent}" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       Visibility="{x:Bind Hover, Mode=OneWay, Converter={StaticResource VisibilityConverter},ConverterParameter=True}"/>
-                                <Button HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       Visibility="{x:Bind Hover, Mode=OneWay, 
-                                    Converter={StaticResource VisibilityConverter},ConverterParameter=False}"
-                                        Width="32" Height="32" Padding="0">
-                                    <SymbolIcon Symbol="Delete" />
-                                </Button>
-                            <Button HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       Visibility="{x:Bind Hover, Mode=OneWay, 
-                                    Converter={StaticResource VisibilityConverter},ConverterParameter=False}"
-                                        Width="32" Height="32" Padding="0">
-                                    <SymbolIcon Symbol="Read" />
-                                </Button>
-                            </StackPanel>
-                    </Grid>
-                    </ListViewItem>
+                    <controls:SingleMessageBig Message="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

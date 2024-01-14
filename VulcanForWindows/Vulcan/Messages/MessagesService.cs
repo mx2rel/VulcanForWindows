@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -17,7 +18,7 @@ namespace Vulcanova.Features.Messages;
 public class MessagesService : UonetResourceProvider
 {
 
-    public static async Task<(NewResponseEnvelope<Message> Received, NewResponseEnvelope<Message> Sent, NewResponseEnvelope<Message> Deleted)> GetMessagesStack(Account account, Guid messageBoxId, bool forceSync = false, bool waitForSync =false)
+    public static async Task<(NewResponseEnvelope<Message> Received, NewResponseEnvelope<Message> Sent, NewResponseEnvelope<Message> Deleted)> GetMessagesStack(Account account, Guid messageBoxId, bool forceSync = false, bool waitForSync = false)
     {
         var instance = new MessagesService();
         return (await
@@ -84,7 +85,8 @@ public class MessagesService : UonetResourceProvider
 
     private async Task<IEnumerable<Message>> FetchMessagesByBoxAsync(Account account, Guid messageBoxId, MessageBoxFolder folder)
     {
-        var lastSync = GetLastSync(GetResourceKey(account.Id, messageBoxId, folder));
+        //var lastSync = GetLastSync(GetResourceKey(account.Id, messageBoxId, folder));
+        var lastSync = DateTime.MinValue;
 
         var query = new GetMessagesByMessageBoxQuery(messageBoxId, folder, lastSync,
             PageSize: int.MaxValue);
@@ -113,6 +115,8 @@ public class MessagesService : UonetResourceProvider
             message.MessageBoxId = messageBoxId;
             message.Folder = folder;
         }
+
+        Debug.WriteLine($"I've got {messages.Count()} {folder}");
 
         return messages;
     }
