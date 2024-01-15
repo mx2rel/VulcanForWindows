@@ -18,7 +18,7 @@ namespace VulcanForWindows
     {
 
         public static MainWindow Instance;
-
+        public static DateTime lastLaunch;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -26,6 +26,8 @@ namespace VulcanForWindows
             new AccountSyncService().SyncAccountsIfRequiredAsync();
             rootFrame.Navigate(typeof(MainPanelPage));
             Instance = this;
+            Preferences.TryGet<DateTime>("lastLaunch", out lastLaunch);
+            Preferences.Set<DateTime>("lastLaunch", DateTime.Now);
         }
 
         public static void NavigateTo(string tag)

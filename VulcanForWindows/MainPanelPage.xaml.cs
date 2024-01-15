@@ -22,6 +22,7 @@ using Vulcanova.Features.Attendance.Report;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Grades;
+using Vulcanova.Features.Messages;
 using Vulcanova.Features.Timetable;
 using VulcanTest.Vulcan;
 using VulcanTest.Vulcan.Timetable;
@@ -61,6 +62,7 @@ namespace VulcanForWindows
             att = new NewResponseEnvelope<Lesson>();
             lastNieusprawiedliwione = new ObservableCollection<Lesson>();
             sg = new ObservableCollection<SubjectGrades>();
+            messages = new ObservableCollection<MessageViewModel>();
             Fetch();
             this.InitializeComponent();
         }
@@ -71,8 +73,27 @@ namespace VulcanForWindows
             FetchAttendance(acc);
             FetchGrades(acc);
             FetchTimetable(acc);
+            FetchMessages(acc);
         }
 
+        public NewResponseEnvelope<Message> messagesEnvelope { get; set; } = new NewResponseEnvelope<Message>();
+
+        public ObservableCollection<MessageViewModel> messages { get; set; }
+        public int MessagesCount => messages.Count;
+        public int NewMessagesCount => messages.ToArray().NewCount();
+        public bool messagesLoaded { get; set; }
+
+        private async Task FetchMessages(Account acc)
+        {
+            NewResponseEnvelope<MessageBox> v = await new MessageBoxesService().GetMessageBoxesByAccountId(acc, true, true);
+            messagesEnvelope = await
+                new MessagesService().GetMessagesByBox(acc, v.entries.First().GlobalKey, Vulcanova.Uonet.Api.MessageBox.MessageBoxFolder.Received, true, true);
+            messages.ReplaceAll(messagesEnvelope.entries.OrderBy(r => (r.DateRead == null) ? 0 : 1).Select(r=>new MessageViewModel(r)));
+            messagesLoaded = true;
+            OnPropertyChanged(nameof(messagesLoaded));
+            OnPropertyChanged(nameof(MessagesCount));
+            OnPropertyChanged(nameof(NewMessagesCount));
+        }
         private async Task FetchGrades(Account acc)
         {
             env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);

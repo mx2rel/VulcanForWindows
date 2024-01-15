@@ -202,6 +202,12 @@ namespace VulcanForWindows
 
     }
 
+    public static class MessagesHelper
+    {
+        public static int NewCount(this IEnumerable<MessageViewModel> m) => NewCount(m.Select(r => r.message));
+        public static int NewCount(this IEnumerable<Message> m) => m.Where(r => r.DateSent >= MainWindow.lastLaunch && r.DateRead == null).Count();
+    }
+
 
     public enum SelectionCriteria
     {
