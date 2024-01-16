@@ -191,7 +191,7 @@
                 </TextBlock>
                 <Grid
                 Grid.Row="2">
-                    <ListView ItemsSource="{x:Bind messages, Mode=OneWay}" Margin="0,5,0,0">
+                    <ListView ItemsSource="{x:Bind messages, Mode=OneWay}" Margin="0,5,0,0" SelectionMode="None">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Margin" Value="0,2,0,2"/>
