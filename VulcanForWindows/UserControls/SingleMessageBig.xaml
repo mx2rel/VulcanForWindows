@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
+        <converts:DateTimeConverter x:Key="DateTimeConverter"/>
         <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel">
             <Grid>
                 <Grid.RowDefinitions>
@@ -45,18 +46,19 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Button Click="Clicked" Padding="15">
+    <Button Click="Clicked" Padding="15" HorizontalAlignment="Stretch">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
             <CheckBox IsChecked="{x:Bind Message.IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
                 <TextBlock Text="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
                                TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
-                               FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1"/>
+                               FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1" Padding="0,0,25,0"
+                           ToolTipService.ToolTip="{x:Bind Message.message.Sender.Name, Mode=OneWay}"/>
             <Grid Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -64,7 +66,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" 
+                           VerticalAlignment="Center" FontWeight="Bold" ToolTipService.ToolTip="{x:Bind Message.message.Subject, Mode=OneWay}"/>
                 <TextBlock Text="|" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
                 <TextBlock Text="{x:Bind Message.PlainContent, Mode=OneWay}" 
                                    VerticalAlignment="Center" Grid.Column="2"
@@ -72,7 +75,7 @@
 
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="3" Padding="10,0,0,0" Spacing="5">
-                <TextBlock Text="{x:Bind Message.message.DateSent, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Visibility="{x:Bind Message.Hover, Mode=OneWay, Converter={StaticResource VisibilityConverter},ConverterParameter=True}"/>
                 <Button HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Visibility="{x:Bind Message.Hover, Mode=OneWay, 

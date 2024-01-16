@@ -11,6 +11,7 @@
 
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
+        <converts:DateTimeConverter x:Key="DateTimeConverter"/>
         <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel">
             <Grid>
                 <Grid.RowDefinitions>
@@ -57,7 +58,7 @@
                                FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1"/>
                 <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" VerticalAlignment="Center" FontWeight="SemiBold"/>
             </StackPanel>
-            <TextBlock Text="{x:Bind Message.message.DateSent, Mode=OneWay}" Margin="20,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"/>
+            <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" Margin="20,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"/>
         </Grid>
     </Button>
 </UserControl>

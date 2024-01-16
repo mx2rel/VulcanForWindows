@@ -80,11 +80,14 @@ namespace VulcanForWindows
             // };
         }
 
-        public bool MainCheckBoxChecked => Received.ToArray().Where(r => r.IsSelected).Count() > 0;
+        public bool MainCheckBoxChecked => Received.ToArray().Where(r => r.IsSelected).Count() == Received.Count;
 
-        private void MainChecked(object sender, RoutedEventArgs e)
+        private void MainChanged(object sender, RoutedEventArgs e)
         {
+            if(checkbox.IsChecked.GetValueOrDefault())
             Select(SelectionCriteria.All);
+            else
+            Select(SelectionCriteria.None);
 
             //OnPropertyChanged(nameof(MainCheckBoxChecked));
         }

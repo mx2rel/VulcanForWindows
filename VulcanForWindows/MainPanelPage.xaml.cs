@@ -88,7 +88,7 @@ namespace VulcanForWindows
             NewResponseEnvelope<MessageBox> v = await new MessageBoxesService().GetMessageBoxesByAccountId(acc, true, true);
             messagesEnvelope = await
                 new MessagesService().GetMessagesByBox(acc, v.entries.First().GlobalKey, Vulcanova.Uonet.Api.MessageBox.MessageBoxFolder.Received, true, true);
-            messages.ReplaceAll(messagesEnvelope.entries.OrderBy(r => (r.DateRead == null) ? 0 : 1).Select(r=>new MessageViewModel(r)));
+            messages.ReplaceAll(messagesEnvelope.entries.GroupBy(r => (r.DateRead == null) ? 0 : 1).Select(r=>r.OrderByDescending(r=>r.DateSent)).SelectMany(r=>r.Select(g=> new MessageViewModel(g))));
             messagesLoaded = true;
             OnPropertyChanged(nameof(messagesLoaded));
             OnPropertyChanged(nameof(MessagesCount));

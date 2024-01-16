@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,12 +36,17 @@ public class DateTimeConverter : IValueConverter
         {"MonthNumber", "DTF_MM_DTF" },
     };
 
+    static string[] customs = new string[]
+    {
+        "MessageDate"
+    };
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         string param = (string)parameter;
-
         if (value is DateTime dateTime)
         {
+            Debug.Write($"\nConverting {dateTime} with param {param}\n");
             if (string.IsNullOrEmpty(param))
             {
                 return Convert(value, targetType, "defaultWithAgo", language);
@@ -48,7 +54,10 @@ public class DateTimeConverter : IValueConverter
             else if(prefabs.ContainsKey(param))
             {
                 return Convert(value, targetType, prefabs[param], language);
-            }else
+            }else if(customs.Contains(param))
+            {
+                return CustomHandler(dateTime, param);
+            } else
             {
                 string s = param ;
                 if(param.Contains("DTF_") && param.Contains("_DTF"))
@@ -72,6 +81,22 @@ public class DateTimeConverter : IValueConverter
         // Return null if the value is not a DateTime
         return null;
     }
+
+    public string CustomHandler(DateTime d , string param)
+    {
+        Debug.WriteLine("Custom");
+        switch (param)
+        {
+            case "MessageDate":
+                if (Math.Abs((d.Date - DateTime.Today).TotalDays) <= 2)
+                    return $"{HumanLikeAgoAndDays(d.Date)}, {d.ToString("HH:mm")}";
+                else
+                    return d.ToString("dd MMM, HH:mm");
+            default:
+                return d.ToString("dd/MM HH:mm");
+        }
+    }
+
     public string DateTimeToString(DateTime dateTime, string arg)
     {
         return FirstLetterToUpper(dateTime.ToString(arg));
