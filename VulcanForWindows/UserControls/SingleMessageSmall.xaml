@@ -55,11 +55,15 @@
             <StackPanel>
                 <TextBlock Text="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
                                TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
-                               FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1"/>
+                               FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1"
+                           Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
                 <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" 
-                           VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                           VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
             </StackPanel>
-            <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" Margin="20,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"/>
+            <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, 
+                ConverterParameter=MessageDate, Mode=OneWay}" Margin="20,0,0,0" 
+                       HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"
+                       Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
         </Grid>
     </Button>
 </UserControl>

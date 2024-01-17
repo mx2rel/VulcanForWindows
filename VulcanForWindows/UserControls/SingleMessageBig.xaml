@@ -58,7 +58,8 @@
                 <TextBlock Text="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
                                TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                                FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1" Padding="0,0,25,0"
-                           ToolTipService.ToolTip="{x:Bind Message.message.Sender.Name, Mode=OneWay}"/>
+                           ToolTipService.ToolTip="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
+                           Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
             <Grid Grid.Column="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -67,16 +68,21 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" 
-                           VerticalAlignment="Center" FontWeight="Bold" ToolTipService.ToolTip="{x:Bind Message.message.Subject, Mode=OneWay}"/>
+                           VerticalAlignment="Center" FontWeight="Bold" 
+                           ToolTipService.ToolTip="{x:Bind Message.message.Subject, Mode=OneWay}"
+                           Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
                 <TextBlock Text="|" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
                 <TextBlock Text="{x:Bind Message.PlainContent, Mode=OneWay}" 
                                    VerticalAlignment="Center" Grid.Column="2"
-                                   TextTrimming="CharacterEllipsis" />
+                                   TextTrimming="CharacterEllipsis" Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}" />
 
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="3" Padding="10,0,0,0" Spacing="5">
-                <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" HorizontalAlignment="Right" VerticalAlignment="Center"
-                                       Visibility="{x:Bind Message.Hover, Mode=OneWay, Converter={StaticResource VisibilityConverter},ConverterParameter=True}"/>
+                <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" 
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       Visibility="{x:Bind Message.Hover, Mode=OneWay, 
+                    Converter={StaticResource VisibilityConverter},ConverterParameter=True}"
+                           Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
                 <Button HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Visibility="{x:Bind Message.Hover, Mode=OneWay, 
                                     Converter={StaticResource VisibilityConverter},ConverterParameter=False}"

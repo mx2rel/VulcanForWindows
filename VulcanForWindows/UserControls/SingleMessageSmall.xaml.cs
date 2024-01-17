@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Vulcanova.Features.Messages;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -65,18 +66,25 @@ namespace VulcanForWindows.UserControls
         private async void Clicked(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new ContentDialog();
+            Message.message.DateRead = DateTime.Now;
             dialog.XamlRoot = this.XamlRoot;
             var v = (Resources["MessagePopupContent"] as DataTemplate).LoadContent() as Grid;
             v.DataContext = Message;
             dialog.Content = v;
             dialog.CloseButtonText = "Zamknij";
             var result = await dialog.ShowAsync();
+            Message.MarkAsRead();
+            Message.OnPropertyChanged(nameof(Message.IsRead));
+            Message.OnPropertyChanged(nameof(Message.DisplayColor));
 
         }
 
         private void MarkAsRead(object sender, RoutedEventArgs e)
         {
             Message.MarkAsRead();
+            Message.message.DateRead = DateTime.Now;
+            Message.OnPropertyChanged(nameof(Message.IsRead));
+            Message.OnPropertyChanged(nameof(Message.DisplayColor));
         }
 
         private void Trash(object sender, RoutedEventArgs e)

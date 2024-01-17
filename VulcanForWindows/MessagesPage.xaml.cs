@@ -57,7 +57,7 @@ namespace VulcanForWindows
                 await new MessagesService().GetMessagesByBox(acc,
                 v.entries.First().GlobalKey, Vulcanova.Uonet.Api.MessageBox.MessageBoxFolder.Received, true, true);
             //Received.ReplaceAll(new MessageViewModel[] { new MessageViewModel(new Message { Content = "SDasd"}), new MessageViewModel(new Message { Content = "SDasd" }), new MessageViewModel(new Message { Content = "SDasd" }) });
-            Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)));
+            Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)).OrderByDescending(r=>r.message.DateSent));
             //Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
             //Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
             Debug.WriteLine($"Loaded {Received.Count()}");
@@ -183,6 +183,8 @@ namespace VulcanForWindows
         public async void Trash() => await new MessagesService().TrashMessage(message.MessageBoxId, message.Id);
         public async void MarkAsRead() => await new MessagesService().MarkMessageAsReadAsync(message.MessageBoxId, message.Id);
 
+        public string DisplayColor => IsRead ? "Silver" : "White";
+
         public bool IsRead => message.DateRead != null;
         public bool Hover
         {
@@ -197,7 +199,7 @@ namespace VulcanForWindows
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
