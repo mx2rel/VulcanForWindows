@@ -15,8 +15,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Button Content="Button 1" HorizontalAlignment="Stretch" />
-        <Button Content="Button 2" HorizontalAlignment="Stretch" Grid.Column="1"/>
+        <Button Content="Clear" HorizontalAlignment="Stretch" Click="Button_Click" x:Name="b1"/>
+        <Button Content="Open files" HorizontalAlignment="Stretch" Grid.Column="1"/>
         <Button Content="Button 3" HorizontalAlignment="Stretch" Grid.Column="2"/>
     </Grid>
 </Page>

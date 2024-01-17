@@ -36,7 +36,7 @@ public class LessonsService : UonetResourceProvider
             var dt = i;
             var resourceKey = GetTimetableResourceKey(acc, dt);
 
-            if (ShouldSync(resourceKey))
+            if (ShouldSync(resourceKey) || forceSync)
                 total.Add(await GetLessonsByMonth(acc, dt, false, true));
             else
             {

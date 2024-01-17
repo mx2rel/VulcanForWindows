@@ -12,6 +12,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using VulcanTest.Vulcan;
+using System.Diagnostics;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,6 +28,14 @@ namespace VulcanForWindows
         public BlankPage1()
         {
             this.InitializeComponent();
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var col in await LiteDbManager.database.GetCollectionNamesAsync())
+                await LiteDbManager.database.DropCollectionAsync(col);
+            Preferences.Clear();
+            b1.Content = "Done!";
         }
     }
 }

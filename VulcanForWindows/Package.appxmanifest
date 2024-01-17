@@ -44,5 +44,6 @@
 
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
+    <uap:Capability Name="removableStorage"/>
   </Capabilities>
 </Package>

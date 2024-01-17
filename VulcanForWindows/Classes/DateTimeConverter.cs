@@ -46,7 +46,6 @@ public class DateTimeConverter : IValueConverter
         string param = (string)parameter;
         if (value is DateTime dateTime)
         {
-            Debug.Write($"\nConverting {dateTime} with param {param}\n");
             if (string.IsNullOrEmpty(param))
             {
                 return Convert(value, targetType, "defaultWithAgo", language);
@@ -84,7 +83,6 @@ public class DateTimeConverter : IValueConverter
 
     public string CustomHandler(DateTime d , string param)
     {
-        Debug.WriteLine("Custom");
         switch (param)
         {
             case "MessageDate":

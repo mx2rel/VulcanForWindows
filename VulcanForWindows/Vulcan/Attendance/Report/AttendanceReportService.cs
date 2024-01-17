@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
@@ -81,8 +82,9 @@ public class AttendanceReportService : UonetResourceProvider
     {
         int accountId = account.Id;
         var (yearStart, yearEnd) = account.GetSchoolYearDuration();
-
-        var entries = (await LessonsRepository.GetLessonsBetweenAsync(accountId, yearStart, yearEnd))
+        NewResponseEnvelope<Lesson> l = new NewResponseEnvelope<Lesson>();
+        await new LessonsService().GetLessonsForRange(account, yearStart, yearEnd, l, true, true,false,true);
+        var entries = l.Entries
             .Where(l => l.PresenceType != null && l.CalculatePresence && l.Subject != null)
             .ToArray();
 

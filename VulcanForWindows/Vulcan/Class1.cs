@@ -22,13 +22,17 @@ namespace VulcanTest.Vulcan
 
     public static class Preferences
     {
-        private static string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/VulcanForWindows/";
+        private static string folder = Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VulcanForWindows");
         private static string dataFilePath
-            = Path.Combine(folder, "data.dat");
+            => Path.Combine(roamingFolder.Path, "data.dat");
+
+        public static Windows.Storage.StorageFolder roamingFolder =
+    Windows.Storage.ApplicationData.Current.RoamingFolder;
 
 
         public static void Set<T>(string key, object value)
         {
+
             Dictionary<string, string> data = GetAllData();
             data[key] = JsonConvert.SerializeObject((T)value);
 
@@ -38,8 +42,6 @@ namespace VulcanTest.Vulcan
         public static T Get<T>(string key)
         {
             Dictionary<string, string> data = GetAllData();
-            //if (!data.ContainsKey(key))
-            //    Debug.Write($"\nCouldn't find key {key}\n{JsonConvert.SerializeObject(data)}\n");
             return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
         }
 
@@ -48,19 +50,19 @@ namespace VulcanTest.Vulcan
         {
             Dictionary<string, string> data = GetAllData();
 
-            //if (!data.ContainsKey(key))
-            //    Debug.Write($"\nCouldn't find key {key}\n{JsonConvert.SerializeObject(data)}\n");
-            try
+            if(data.ContainsKey(key))
             {
-                output = data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
+                output = JsonConvert.DeserializeObject<T>(data[key]);
+                return true;
             }
-            catch
-            {
-                output = default(T);
-                return false;
-            }
+            output = default(T);
+            return false;
 
-            return data.ContainsKey(key);
+        }
+
+        public static void Clear()
+        {
+            SaveData(new Dictionary<string, string>());
         }
 
         private static Dictionary<string, string> GetAllData()
@@ -88,12 +90,16 @@ namespace VulcanTest.Vulcan
 
         private static void SaveData(Dictionary<string, string> data)
         {
-            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-            if (!File.Exists(dataFilePath)) File.Create(dataFilePath);
+            if (!File.Exists(dataFilePath))
+            {
+                var s = File.Create(dataFilePath);
+                Debug.WriteLine($"Created {s.Name}");
+            }
             try
             {
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 File.WriteAllText(dataFilePath, json);
+                Debug.WriteLine($"\n{dataFilePath}\n");
             }
             catch (Exception ex)
             {
