@@ -23,31 +23,28 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Spacing="5" Margin="31,0,31,0"
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" Spacing="5" Margin="15,0,15,0"
                         HorizontalAlignment="Stretch">
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="15"/>
-                    </Grid.ColumnDefinitions>
-                    <CheckBox x:Name="checkbox" Width="30" Content="" IsChecked="{x:Bind MainCheckBoxChecked, Mode=OneWay}"
+                <Button Grid.Column="1" 
+                        Padding="5,0,1,0" VerticalAlignment="Center" Height="35" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" Spacing="2" Width="50">
+                        <CheckBox x:Name="checkbox" Width="10" Content="" IsChecked="{x:Bind MainCheckBoxChecked, Mode=OneWay}"
                           Click="MainChanged"/>
-                    <Button Grid.Column="1" Content="m" 
-                        Padding="0" VerticalAlignment="Center" Height="25" HorizontalAlignment="Left">
-                        <Button.Flyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Text="Wszystkie" Click="SelectAll"/>
-                                <MenuFlyoutItem Text="Żadne" Click="UnselectAll"/>
-                                <MenuFlyoutItem Text="Przeczytane" Click="SelectRead"/>
-                                <MenuFlyoutItem Text="Nieprzeczytane" Click="SelectUnread"/>
-                            </MenuFlyout>
-                        </Button.Flyout>
-                    </Button>
-                </Grid>
+                        <TextBlock Margin="-90,5,0,0">⋮</TextBlock>
+                    </StackPanel>
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Wszystkie" Click="SelectAll"/>
+                            <MenuFlyoutItem Text="Żadne" Click="UnselectAll"/>
+                            <MenuFlyoutItem Text="Przeczytane" Click="SelectRead"/>
+                            <MenuFlyoutItem Text="Nieprzeczytane" Click="SelectUnread"/>
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
 
                 <Button Width="35" Height="35" Padding="0">
                     <SymbolIcon Symbol="Refresh" />
@@ -61,18 +58,24 @@
                         </MenuFlyout>
                     </Button.Flyout>
                 </Button>
+                <Button Width="35" Height="35" Padding="0" IsEnabled="{x:Bind EnableGroupActionsButtons, Mode=OneWay}" Click="TrashSelected">
+                    <SymbolIcon Symbol="Delete" />
+                </Button>
+                <Button Width="35" Height="35" Padding="0" IsEnabled="{x:Bind EnableGroupActionsButtons, Mode=OneWay}" Click="ReadSelected">
+                    <SymbolIcon Symbol="Read" />
+                </Button>
 
 
             </StackPanel>
 
-            <Grid HorizontalAlignment="Right"  Grid.Row="1">
-            <Pivot SelectionChanged="Pivot_SelectionChanged" 
+            <Grid Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Pivot SelectionChanged="Pivot_SelectionChanged" 
                    x:Name="Pivot" Width="350" Height="100" 
                    VerticalAlignment="Center" HorizontalAlignment="Right">
-                <PivotItem Header="Odebrane"/>
-                <PivotItem Header="Wysłane"/>
-                <PivotItem Header="Kosz"/>
-            </Pivot>
+                    <PivotItem Header="Odebrane"/>
+                    <PivotItem Header="Wysłane"/>
+                    <PivotItem Header="Kosz"/>
+                </Pivot>
             </Grid>
         </Grid>
 

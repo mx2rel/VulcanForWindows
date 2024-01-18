@@ -80,7 +80,8 @@ namespace VulcanForWindows
 
         }
 
-        public bool MainCheckBoxChecked => Received.ToArray().Where(r => r.IsSelected).Count() == Received.Count;
+        public bool MainCheckBoxChecked => CurrentCollection.ToArray().Where(r => r.IsSelected).Count() == CurrentCollection.Count && CurrentCollection.Count > 0;
+        public bool EnableGroupActionsButtons => CurrentCollection.ToArray().Where(r => r.IsSelected).Count() > 0;
 
         private void MainChanged(object sender, RoutedEventArgs e)
         {
@@ -105,7 +106,8 @@ namespace VulcanForWindows
 
         public void Select(SelectionCriteria criteria)
         {
-            foreach (var v in Received)
+           
+            foreach (var v in CurrentCollection)
             {
                 if (criteria == SelectionCriteria.None)
                     v.IsSelected = false;
@@ -158,6 +160,18 @@ namespace VulcanForWindows
             pivotPrevValue = Pivot.SelectedIndex;
 
         }
+
+        private void ReadSelected(object sender, RoutedEventArgs e)
+        {
+            foreach (var v in GetCollection(pivotPrevValue).Where(r => r.IsSelected && !r.IsRead))
+                v.MarkAsRead();
+        }
+
+        private void TrashSelected(object sender, RoutedEventArgs e)
+        {
+            foreach (var v in GetCollection(pivotPrevValue).Where(r => r.IsSelected))
+                v.Trash();
+        }
     }
 
     public class MessageViewModel : INotifyPropertyChanged
@@ -172,7 +186,9 @@ namespace VulcanForWindows
             {
                 _IsSelected = value;
                 OnPropertyChanged(nameof(IsSelected));
+                if (MessagesPage.instance == null) return;
                 MessagesPage.instance.OnPropertyChanged(nameof(MessagesPage.MainCheckBoxChecked));
+                MessagesPage.instance.OnPropertyChanged(nameof(MessagesPage.EnableGroupActionsButtons));
             }
         }
 
