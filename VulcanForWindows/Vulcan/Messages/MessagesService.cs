@@ -114,9 +114,9 @@ public class MessagesService : UonetResourceProvider
             message.Id.AccountId = account.Id;
             message.MessageBoxId = messageBoxId;
             message.Folder = folder;
+            if(folder == MessageBoxFolder.Sent)
+                message.DateRead = DateTime.MinValue;
         }
-
-        Debug.WriteLine($"I've got {messages.Count()} {folder}");
 
         return messages;
     }

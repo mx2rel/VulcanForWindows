@@ -46,16 +46,16 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Button Click="Clicked" Padding="15" HorizontalAlignment="Stretch">
-        <Grid>
+    <Button Click="Clicked" Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <CheckBox IsChecked="{x:Bind Message.IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
-                <TextBlock Text="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
+            <TextBlock Text="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
                                TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
                                FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1" Padding="0,0,25,0"
                            ToolTipService.ToolTip="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
@@ -74,7 +74,8 @@
                 <TextBlock Text="|" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
                 <TextBlock Text="{x:Bind Message.PlainContent, Mode=OneWay}" 
                                    VerticalAlignment="Center" Grid.Column="2"
-                                   TextTrimming="CharacterEllipsis" Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}" />
+                                   TextTrimming="CharacterEllipsis"
+                           Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}" HorizontalAlignment="Stretch"/>
 
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="3" Padding="10,0,0,0" Spacing="5">

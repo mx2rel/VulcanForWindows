@@ -43,51 +43,51 @@ namespace VulcanForWindows
         public ObservableCollection<MessageViewModel> Received { get; set; } = new ObservableCollection<MessageViewModel>();
         public ObservableCollection<MessageViewModel> Sent { get; set; } = new ObservableCollection<MessageViewModel>();
         public ObservableCollection<MessageViewModel> Trash { get; set; } = new ObservableCollection<MessageViewModel>();
+
+        public ObservableCollection<MessageViewModel> GetCollection(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    return Received;
+                case 1:
+                    return Sent;
+                case 2:
+                    return Trash;
+            }
+
+            return null;
+
+        }
+        public ObservableCollection<MessageViewModel> CurrentCollection
+        {
+            get => GetCollection(Pivot.SelectedIndex);
+        }
+
         async void Fetch()
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
             NewResponseEnvelope<MessageBox> v = await new MessageBoxesService().GetMessageBoxesByAccountId(acc, true, true);
 
-            //Debug.WriteLine($"\n{string.Join(", ", v.entries.Select(r => r.Name + r.GlobalKey.ToString()))}\n");
 
-            //(NewResponseEnvelope<Message> r, NewResponseEnvelope<Message> s, NewResponseEnvelope<Message> t)
-            //    = await MessagesService.GetMessagesStack(acc, v.entries.First().GlobalKey, false, true);
+            (NewResponseEnvelope<Message> r, NewResponseEnvelope<Message> s, NewResponseEnvelope<Message> t)
+                = await MessagesService.GetMessagesStack(acc, v.entries.First().GlobalKey, false, true);
 
-            NewResponseEnvelope<Message> r =
-                await new MessagesService().GetMessagesByBox(acc,
-                v.entries.First().GlobalKey, Vulcanova.Uonet.Api.MessageBox.MessageBoxFolder.Received, true, true);
-            //Received.ReplaceAll(new MessageViewModel[] { new MessageViewModel(new Message { Content = "SDasd"}), new MessageViewModel(new Message { Content = "SDasd" }), new MessageViewModel(new Message { Content = "SDasd" }) });
-            Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)).OrderByDescending(r=>r.message.DateSent));
-            //Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
-            //Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
-            Debug.WriteLine($"Loaded {Received.Count()}");
+            Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)).OrderByDescending(r => r.message.DateSent));
+            Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)).OrderByDescending(r => r.message.DateSent));
+            Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)).OrderByDescending(r => r.message.DateSent));
 
-            //r.Updated += delegate (object sender, IEnumerable<Message> e)
-            //{
-            //    //Received.ReplaceAll(r.entries.Select(r => new MessageViewModel(r)));
 
-            //    Debug.WriteLine($"Updated {e.Count()}");
-            //};
-            //s.Updated += delegate (object sender, IEnumerable<Message> e)
-            //{
-            //    //Sent.ReplaceAll(s.entries.Select(r => new MessageViewModel(r)));
-
-            //};
-            //t.Updated += delegate (object sender, IEnumerable<Message> e)
-            // {
-            //     //Trash.ReplaceAll(t.entries.Select(r => new MessageViewModel(r)));
-
-            // };
         }
 
         public bool MainCheckBoxChecked => Received.ToArray().Where(r => r.IsSelected).Count() == Received.Count;
 
         private void MainChanged(object sender, RoutedEventArgs e)
         {
-            if(checkbox.IsChecked.GetValueOrDefault())
-            Select(SelectionCriteria.All);
+            if (checkbox.IsChecked.GetValueOrDefault())
+                Select(SelectionCriteria.All);
             else
-            Select(SelectionCriteria.None);
+                Select(SelectionCriteria.None);
 
             //OnPropertyChanged(nameof(MainCheckBoxChecked));
         }
@@ -146,6 +146,17 @@ namespace VulcanForWindows
             dialog.Content = v;
             dialog.CloseButtonText = "Zamknij";
             var result = await dialog.ShowAsync();
+        }
+
+        int pivotPrevValue = 0;
+        private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CurrentCollection));
+            foreach (var v in GetCollection(pivotPrevValue))
+                v.IsSelected = false;
+
+            pivotPrevValue = Pivot.SelectedIndex;
+
         }
     }
 
