@@ -1,0 +1,56 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.Settings.ReminderSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls.Settings"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Expander VerticalAlignment="Top" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+        <Expander.Header>
+            <TextBlock Grid.Row="0" Text="Powiadomienia o sprawdzianach i zadaniach" FontWeight="SemiBold" FontSize="18" Margin="0,0,0,5"/>
+        </Expander.Header>
+        <Expander.Content >
+            <Grid Margin="10" HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" MaxHeight="400"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <ListView ItemsSource="{x:Bind Entries, Mode=OneWay}" SelectionMode="None" Grid.Row="1" HorizontalAlignment="Stretch" 
+          HorizontalContentAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:ReminderSettingEntry">
+                            <ListViewItem Margin="0" Padding="0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Spacing="5">
+                                <NumberBox
+    Value="{x:Bind daysPrior,Mode=TwoWay}"
+    SpinButtonPlacementMode="Inline"
+    SmallChange="1"
+    LargeChange="2" 
+                        Minimum="1" Maximum="14" Width="145"/>
+                                <TextBlock VerticalAlignment="Center" Width="147" TextAlignment="Center">
+                            <Run Text="{x:Bind daysText, Mode=OneWay}"/>
+                            <Run Text="przed o godzinie"/>
+                                </TextBlock>
+                                <TimePicker SelectedTime="{x:Bind hour, Mode=TwoWay}" 
+                                    ClockIdentifier="24HourClock" MinuteIncrement="15"/>
+                                <Button Click="RemoveEntry">
+                                    <SymbolIcon Symbol="Remove"/>
+                                </Button>
+                            </StackPanel>
+                            </ListViewItem>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Button Grid.Row="2" Click="NewEntry" IsEnabled="{x:Bind allowNewEntries, Mode=OneWay}">
+                    <SymbolIcon Symbol="Add"/>
+                </Button>
+
+            </Grid>
+        </Expander.Content>
+    </Expander>
+    
+</UserControl>

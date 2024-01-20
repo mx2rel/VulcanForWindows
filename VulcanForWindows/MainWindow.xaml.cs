@@ -41,13 +41,15 @@ namespace VulcanForWindows
 
         private void NavigationChangedPage(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            //if (args.IsSettingsSelected)
-            //{
-            //    contentFrame.Navigate(typeof(SampleSettingsPage));
-            //}
-            //else
-            //{
-            var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
+            if (args.IsSettingsSelected)
+            {
+
+                if (rootFrame.CurrentSourcePageType != typeof(SettingsPage))
+                    NavigateTo(typeof(SettingsPage));
+            }
+            else
+            {
+                var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
             if (selectedItem != null)
             {
                 string selectedItemTag = ((string)selectedItem.Tag);
@@ -58,7 +60,7 @@ namespace VulcanForWindows
                 if (rootFrame.CurrentSourcePageType != pageType)
                     NavigateTo(pageType);
             }
-            //}
+            }
         }
 
         public void MoveBack()

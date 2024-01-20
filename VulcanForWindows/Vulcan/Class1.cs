@@ -44,6 +44,11 @@ namespace VulcanTest.Vulcan
             Dictionary<string, string> data = GetAllData();
             return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
         }
+        public static T Get<T>(string key, T defaultVal)
+        {
+            Dictionary<string, string> data = GetAllData();
+            return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : defaultVal;
+        }
 
 
         public static bool TryGet<T>(string key, out T output)
