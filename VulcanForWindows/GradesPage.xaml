@@ -25,6 +25,11 @@
                     <Run Text="{x:Bind Column.Name}"/>
                 </TextBlock>
                 <Rectangle Height="10"/>
+
+                <TextBlock>
+                    <Run Text="Waga:"/>
+                    <Run Text="{x:Bind Column.Weight}"/>
+                </TextBlock>
                 <TextBlock>
                     <Run Text="Wpisano:"/>
                     <Run Text="{x:Bind DateCreated}"/>
@@ -243,6 +248,9 @@
                                                        Foreground="{x:Bind AverageColor, Mode=OneWay}">
                                         <Run Text="{x:Bind AverageText, Mode=OneWay}"/>
                                         <Run Text="{x:Bind averageDisplay, Mode=OneWay}" x:Name="average"/>
+                                                <Run Text="("/>
+                                                <Run Text="{x:Bind grades.Count, Mode=OneWay}"/>
+                                                <Run Text=")"/>
                                             </TextBlock>
                                         </Grid>
                                         <GridView SelectionMode="None" ItemsSource="{x:Bind recentGrades}" 
