@@ -16,6 +16,7 @@
     <Page.Resources>
         <converters:DateTimeConverter x:Key="DateTimeConverter" />
         <converters:VisibilityConverter x:Key="VisibilityConverter" />
+        <converters:ListToVisibility x:Key="ListToVisibility" />
         <Style TargetType="Grid" x:Key="Panel">
             <Setter Property="Background" Value="{StaticResource AcrylicBackgroundFillColorBaseBrush}"/>
             <Setter Property="Padding" Value="10"/>
@@ -133,7 +134,7 @@
                         </Grid.RowDefinitions>
                         <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieobecności"/>
                         <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
-                          HorizontalContentAlignment="Stretch" Grid.Row="1">
+                          HorizontalContentAlignment="Stretch" Grid.Row="1" Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay}">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="Margin" Value="0,0,7,0"/>
@@ -148,6 +149,13 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+
+                        <StackPanel 
+            VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Spacing="10"
+            Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay, ConverterParameter=true}">
+                            <BitmapIcon UriSource="ms-appx:///Assets/JustifyDenied.png" Height="48" HorizontalAlignment="Stretch" Foreground="{StaticResource SystemChromeGrayColor}"/>
+                            <TextBlock FontWeight="SemiBold" FontSize="20" Margin="10" Text="Brak nieobecności w przeciągu ostatnich dwóch tygodni" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="{StaticResource SystemChromeGrayColor}" TextWrapping="WrapWholeWords"/>
+                        </StackPanel>
                     </Grid>
                 </Grid>
                 <ProgressRing Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
