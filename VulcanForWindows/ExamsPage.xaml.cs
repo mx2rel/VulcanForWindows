@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,53 +30,67 @@ namespace VulcanForWindows
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ExamsPage : Page
+    public sealed partial class ExamsPage : Page, INotifyPropertyChanged
     {
 
         public IDictionary<DateTime, NewResponseEnvelope<Exam>> exams { get; set; } = new Dictionary<DateTime, NewResponseEnvelope<Exam>>();
-        DateTime _currentMonth;
-        public DateTime currentMonth
+        DateTime _from;
+        public DateTime From
         {
-            get => _currentMonth;
+            get => _from;
             set
             {
-                _currentMonth = value.Date;
-                _currentMonth = _currentMonth.AddDays(-_currentMonth.Day + 1);
+                _from = value.Date;
+                _from = _from.AddDays(-_from.Day + 1);
+            }
+        }
+        DateTime _to;
+        public DateTime To
+        {
+            get => _to;
+            set
+            {
+                _to = value.Date;
+                _to = _to.AddDays(-_to.Day + 1);
+                _to = _to.AddMonths(1);
             }
         }
 
         public ObservableCollection<Exam> display { get; set; } = new ObservableCollection<Exam>();
-        public async void ChangeMonth(DateTime month, bool loadAround = true)
+        public bool allowLoadButtons { get; set; } = true;
+        public void LoadBefore()
         {
-            //start of month
-            month = month.Date;
-            month = month.AddDays(-month.Day + 1);
-            var v = await GetMonth(month, loadAround);
-            if (exams.ContainsKey(currentMonth))
-                exams[currentMonth].Updated -= ExamsPage_Updated;
-
-            currentMonth = month;
-            v.Updated += ExamsPage_Updated;
-            display.ReplaceAll(v.Entries);
-            Debug.WriteLine($"EPSet\n{JsonConvert.SerializeObject(v.Entries)}");
-
+            From = From.AddMonths(-1);
+            LoadMonth(From, true, true);
+        }
+        public void LoadAfter()
+        {
+            To = To.AddMonths(1);
+            LoadMonth(To, true, true);
         }
 
-        private void ExamsPage_Updated(object sender, IEnumerable<Exam> e)
+        public async void LoadMonth(DateTime month, bool loadAround = true, bool insertAtStart = false)
         {
-            Debug.WriteLine("EPUp");
-            display.ReplaceAll(e);
+            allowLoadButtons = false;
+            OnPropertyChanged(nameof(allowLoadButtons));
+            //start of month
+            month = month.Date;
+            var v = await GetMonth(month, loadAround);
+
+            if (insertAtStart) display.ReplaceAll(v.entries.Concat(display.ToList()));
+            else display.ReplaceAll(display.ToList().Concat(v.entries));
+            allowLoadButtons = true;    
+            OnPropertyChanged(nameof(allowLoadButtons));
         }
 
         public async Task<NewResponseEnvelope<Exam>> GetMonth(DateTime month, bool loadAround = true)
         {
             //start of month
             month = month.Date;
-            month = month.AddDays(-month.Day + 1);
             if (!exams.ContainsKey(month))
             {
                 var acc = new AccountRepository().GetActiveAccountAsync();
-                exams.Add(month, await new ExamsService().GetExamsByDateRange(acc, month, month.AddMonths(1),false,true));
+                exams.Add(month, await new ExamsService().GetExamsByDateRange(acc, month, month.AddMonths(1),true,true));
             }
 
 
@@ -95,7 +110,18 @@ namespace VulcanForWindows
         public ExamsPage()
         {
             this.InitializeComponent();
-            ChangeMonth(DateTime.Now);
+            From = DateTime.Now;
+            To = DateTime.Now;
+            LoadMonth(From,true,true);
         }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void BeforeButton(object sender, RoutedEventArgs e) => LoadBefore();
+        private void AfterButton(object sender, RoutedEventArgs e) => LoadAfter();
     }
 }

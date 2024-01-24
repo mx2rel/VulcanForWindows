@@ -13,28 +13,43 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{x:Bind display, Mode=OneWay}" >
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="exams:Exam">
-                    <ListViewItem Padding="0" 
+        <ListView Margin="10" SelectionMode="None">
+            <ListViewItem Padding="0">
+                <Button Content="Wczytaj wcześniejsze" 
+                    HorizontalAlignment="Stretch" 
+                    IsEnabled="{x:Bind allowLoadButtons, Mode=OneWay}"
+                    Click="BeforeButton"/>
+            </ListViewItem>
+            <ListViewItem Padding="0">
+                <ItemsView ItemsSource="{x:Bind display, Mode=OneWay}" Margin="0,0,0,-5">
+                    <ItemsView.ItemTemplate>
+                        <DataTemplate x:DataType="exams:Exam">
+                            <ItemContainer Padding="0"  Margin="0,0,0,5"
                                   Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
-                        <Grid
+                                <Grid
                             Padding="13,10,13,10" Margin="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="{x:Bind Content}"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind Content}"/>
 
-                                <TextBlock Text="{x:Bind Subject.Name}"/>
-                            </StackPanel>
-                            <TextBlock Text="{x:Bind Deadline}" Grid.Column="1" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </ListViewItem>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-
+                                        <TextBlock Text="{x:Bind Subject.Name}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{x:Bind Deadline}" Grid.Column="1" HorizontalAlignment="Right"/>
+                                </Grid>
+                            </ItemContainer>
+                        </DataTemplate>
+                    </ItemsView.ItemTemplate>
+                </ItemsView>
+            </ListViewItem>
+            <ListViewItem Padding="0">
+                <Button Content="Wczytaj późniejsze" 
+                    HorizontalAlignment="Stretch" 
+                    IsEnabled="{x:Bind allowLoadButtons, Mode=OneWay}"
+                    Click="AfterButton"/>
+            </ListViewItem>
         </ListView>
     </Grid>
 </Page>
