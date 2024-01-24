@@ -6,8 +6,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:exams="using:Vulcanova.Features.Exams"
+    xmlns:converters="using:Converters"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <converters:DateTimeConverter x:Key="DateTimeConverter" />
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -37,7 +40,7 @@
 
                                         <TextBlock Text="{x:Bind Subject.Name}"/>
                                     </StackPanel>
-                                    <TextBlock Text="{x:Bind Deadline}" Grid.Column="1" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="{x:Bind Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayDate}" Grid.Column="1" HorizontalAlignment="Right"/>
                                 </Grid>
                             </ItemContainer>
                         </DataTemplate>
