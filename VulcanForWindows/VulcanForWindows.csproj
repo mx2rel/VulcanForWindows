@@ -21,6 +21,7 @@
   <ItemGroup>
     <None Remove="AttendanceReportPage.xaml" />
     <None Remove="BlankPage1.xaml" />
+    <None Remove="ExamsPage.xaml" />
     <None Remove="GradesPage.xaml" />
     <None Remove="GradesSummaryPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
@@ -117,6 +118,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ExamsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\Settings\ReminderSettings.xaml">

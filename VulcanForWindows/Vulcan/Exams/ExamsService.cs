@@ -24,7 +24,7 @@ public class ExamsService : UonetResourceProvider
         var items = await ExamsRepository.GetExamsForPupilAsync(acc.Id, from, to);
 
 
-        var v = new NewResponseEnvelope<Exam>(FetchExamsAsync(acc), async delegate (object sender, IEnumerable<Exam> e)
+        var v = new NewResponseEnvelope<Exam>(FetchExamsAsync(acc,from,to), async delegate (object sender, IEnumerable<Exam> e)
         {
             SetJustSynced(resourceKey);
             await ExamsRepository.UpdateExamsForPupilAsync(acc.Id, e);
@@ -43,9 +43,9 @@ public class ExamsService : UonetResourceProvider
         return v;
     }
 
-    private async Task<IEnumerable<Exam>> FetchExamsAsync(Account account)
+    private async Task<IEnumerable<Exam>> FetchExamsAsync(Account account, DateTime from, DateTime to)
     {
-        var query = new GetExamsByPupilQuery(account.Unit.Id, account.Pupil.Id, DateTime.MinValue, 500);
+        var query = new GetExamsByPupilQuery(account.Unit.Id, account.Pupil.Id, from.AddDays(-60), 500);
 
         var client =  await new ApiClientFactory().GetAuthenticatedAsync(account);
 
@@ -66,7 +66,7 @@ public class ExamsService : UonetResourceProvider
             entry.Id.AccountId = account.Id;
         }
 
-        return entries;
+        return entries.Where(r=>r.Deadline >= from && r.Deadline <= to);
     }
 
     private static string GetExamsResourceKey(Account account, DateTime from, DateTime to)
