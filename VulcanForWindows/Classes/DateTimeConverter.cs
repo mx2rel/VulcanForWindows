@@ -22,16 +22,17 @@ public class DateTimeConverter : IValueConverter
 
     static IDictionary<string, string> prefabs = new Dictionary<string, string>
     {
-        {"defaultWithAgo", "DTF_dddd!_dd.MM_DTF_(AGO__)" },
-        {"WeekdayDateAgo", "DTF_dddd!_dd.MM_DTF_(AGO__)" },
-        {"default", "DTF_dddd!_dd.MM_DTF" },
-        {"WeekdayDate", "DTF_dddd!_dd.MM_DTF" },
-        {"Date", "DTF_dd.MM_DTF" },
+        {"defaultWithAgo", "DTF_dddd!_dd.MM_DTF.YIF_(AGO__)" },
+        {"WeekdayDateAgo", "DTF_dddd!_dd.MM_DTF.YIF_(AGO__)" },
+        {"default", "DTF_dddd!_dd.MM_DTF.YIF" },
+        {"WeekdayDate", "DTF_dddd!_dd.MM_DTF.YIF" },
+        {"Date", "DTF_dd.MM_DTF.YIF" },
         {"DateWithYear", "DTF_dd.MM.YY_DTF" },
         {"DayMonthName", "DTF_dd_MMMM_DTF" },
         {"DayMonthShort", "DTF_dd_MMM_DTF" },
         {"Weekday", "DTF_dddd_DTF" },
         {"MonthName", "DTF_MMMM_DTF" },
+        {"MonthNameYear", "DTF_MMMM_DTF YIF" },
         {"MonthShort", "DTF_MMM_DTF" },
         {"MonthNumber", "DTF_MM_DTF" },
     };
@@ -59,7 +60,8 @@ public class DateTimeConverter : IValueConverter
             } else
             {
                 string s = param ;
-                if(param.Contains("DTF_") && param.Contains("_DTF"))
+
+                if (param.Contains("DTF_") && param.Contains("_DTF"))
                 {
                     string inside;
                     inside = param.Split("DTF_")[1].Split("_DTF")[0];
@@ -68,7 +70,17 @@ public class DateTimeConverter : IValueConverter
                     s = s.Replace("DTF_", "");
                     s= s.Replace("_DTF", "");
                 }
-                if(param.Contains("AGO__"))
+                if (param.Contains(".YIF") || param.Contains("/YIF") || param.Contains(" YIF"))
+                {
+                    string toReplace = "";
+                    bool notThisYear = dateTime.Year != DateTime.Now.Year;
+                    if (notThisYear)
+                        toReplace = dateTime.ToString("yy");
+                    s = s.Replace(".YIF", $"{(notThisYear ? "." : "")}{toReplace}")
+                        .Replace("/YIF", $"{(notThisYear ? "/" : "")}{toReplace}")
+                        .Replace(" YIF", $"{(notThisYear ? " " : "")}{toReplace}");
+                }
+                if (param.Contains("AGO__"))
                 {
 
                    s= s.Replace("AGO__", HumanLikeAgoAndDays(dateTime));

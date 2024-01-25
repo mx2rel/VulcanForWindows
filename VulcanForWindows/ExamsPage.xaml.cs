@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Exams;
+using Vulcanova.Features.Shared;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -56,64 +57,56 @@ namespace VulcanForWindows
             }
         }
 
-        public ObservableCollection<Exam> display { get; set; } = new ObservableCollection<Exam>();
+        public ObservableCollection<MonthExamsPair> display { get; set; } = new ObservableCollection<MonthExamsPair>();
         public bool allowLoadButtons { get; set; } = true;
         public void LoadBefore()
         {
+            var acc = new AccountRepository().GetActiveAccountAsync();
+
             From = From.AddMonths(-1);
-            LoadMonth(From, true, true);
+            (var start, var end) = acc.GetSchoolYearDuration();
+            From = new DateTime( Math.Clamp(From.Ticks, start.Ticks, end.Ticks));
+            UpdateDisplay();
         }
         public void LoadAfter()
         {
+            var acc = new AccountRepository().GetActiveAccountAsync();
+
             To = To.AddMonths(1);
-            LoadMonth(To, true, true);
+            (var start, var end) = acc.GetSchoolYearDuration();
+            From = new DateTime(Math.Clamp(From.Ticks, start.Ticks, end.Ticks));
+            UpdateDisplay();
         }
 
-        public async void LoadMonth(DateTime month, bool loadAround = true, bool insertAtStart = false)
+        public async void UpdateDisplay()
         {
             allowLoadButtons = false;
             OnPropertyChanged(nameof(allowLoadButtons));
             //start of month
-            month = month.Date;
-            var v = await GetMonth(month, loadAround);
+            var v = await Load(From, To);
 
-            if (insertAtStart) display.ReplaceAll(v.entries.Concat(display.ToList()));
-            else display.ReplaceAll(display.ToList().Concat(v.entries));
-            allowLoadButtons = true;    
+            display.ReplaceAll(v.GroupBy(r => r.Deadline.ToString("MM/yy"))
+                .Where(r => r.ToList().Count > 0).
+                Select(r => new MonthExamsPair(r.FirstOrDefault().Deadline, r.ToArray())).OrderBy(r => r.month));
+
+            allowLoadButtons = true;
             OnPropertyChanged(nameof(allowLoadButtons));
         }
-
-        public async Task<NewResponseEnvelope<Exam>> GetMonth(DateTime month, bool loadAround = true)
-        {
-            //start of month
-            month = month.Date;
-            if (!exams.ContainsKey(month))
-            {
-                var acc = new AccountRepository().GetActiveAccountAsync();
-                exams.Add(month, await new ExamsService().GetExamsByDateRange(acc, month, month.AddMonths(1),true,true));
-            }
-
-
-            if (loadAround) LoadAround(month);
-            return exams[month];
-        }
-
-        public async void LoadAround(DateTime month)
+        public async Task<Exam[]> Load(DateTime from, DateTime to)
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
-            if (!exams.ContainsKey(month.AddMonths(-1)))
-                exams.Add(month.AddMonths(-1), await new ExamsService().GetExamsByDateRange(acc, month.AddMonths(-1), month));
-            if (!exams.ContainsKey(month.AddMonths(1)))
-                exams.Add(month.AddMonths(1), await new ExamsService().GetExamsByDateRange(acc, month.AddMonths(1), month));
+            return (await new ExamsService().GetExamsByDateRange(acc, from, to, true, true)).entries.ToArray();
+
         }
 
         public ExamsPage()
         {
             this.InitializeComponent();
             From = DateTime.Now;
-            To = DateTime.Now;
-            LoadMonth(From,true,true);
+            To = DateTime.Now.AddMonths(1);
+            UpdateDisplay();
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged(string propertyName)
@@ -123,5 +116,18 @@ namespace VulcanForWindows
 
         private void BeforeButton(object sender, RoutedEventArgs e) => LoadBefore();
         private void AfterButton(object sender, RoutedEventArgs e) => LoadAfter();
+
+
+    }
+
+    public class MonthExamsPair
+    {
+        public MonthExamsPair(DateTime m, Exam[] e)
+        {
+            exams = new ObservableCollection<Exam>(e.OrderBy(r => r.Deadline).ToArray());
+            month = m;
+        }
+        public DateTime month { get; set; }
+        public ObservableCollection<Exam> exams { get; set; } = new ObservableCollection<Exam>();
     }
 }

@@ -24,28 +24,44 @@
                     Click="BeforeButton"/>
             </ListViewItem>
             <ListViewItem Padding="0">
-                <ItemsView ItemsSource="{x:Bind display, Mode=OneWay}" Margin="0,0,0,-5">
-                    <ItemsView.ItemTemplate>
-                        <DataTemplate x:DataType="exams:Exam">
-                            <ItemContainer Padding="0"  Margin="0,0,0,5"
+                <ListView ItemsSource="{x:Bind display, Mode=OneWay}" Margin="0,0,0,-5" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:MonthExamsPair">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{x:Bind month, 
+                                    Converter={StaticResource DateTimeConverter}, ConverterParameter=MonthNameYear}" 
+                                           Margin="2,2,2,3"/>
+                                <ItemsView ItemsSource="{x:Bind exams}" Grid.Row="1">
+                                    <ItemsView.ItemTemplate>
+                                        <DataTemplate x:DataType="exams:Exam">
+                                            <ItemContainer Padding="0"  Margin="0,0,0,5"
                                   Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
-                                <Grid
+                                                <Grid
                             Padding="13,10,13,10" Margin="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="{x:Bind Content}"/>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel VerticalAlignment="Center">
+                                                        <TextBlock Text="{x:Bind Content}"/>
 
-                                        <TextBlock Text="{x:Bind Subject.Name}"/>
-                                    </StackPanel>
-                                    <TextBlock Text="{x:Bind Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayDate}" Grid.Column="1" HorizontalAlignment="Right"/>
-                                </Grid>
-                            </ItemContainer>
+                                                        <TextBlock Text="{x:Bind Subject.Name}"/>
+                                                    </StackPanel>
+                                                    <TextBlock Text="{x:Bind Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayDate}" Grid.Column="1" HorizontalAlignment="Right"/>
+                                                </Grid>
+                                            </ItemContainer>
+                                        </DataTemplate>
+                                    </ItemsView.ItemTemplate>
+                                </ItemsView>
+                            </Grid>
                         </DataTemplate>
-                    </ItemsView.ItemTemplate>
-                </ItemsView>
+                    </ListView.ItemTemplate>
+                    
+                </ListView>
             </ListViewItem>
             <ListViewItem Padding="0">
                 <Button Content="Wczytaj późniejsze" 
