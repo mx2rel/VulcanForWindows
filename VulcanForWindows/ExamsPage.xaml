@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:exams="using:Vulcanova.Features.Exams"
     xmlns:converters="using:Converters"
+    xmlns:controls="using:VulcanForWindows.UserControls"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:DateTimeConverter x:Key="DateTimeConverter" />
@@ -42,35 +43,7 @@
                                         <DataTemplate x:DataType="exams:Exam">
                                             <ItemContainer Padding="0"  Margin="0,0,0,5"
                                   Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
-                                                <Grid
-                            Padding="13,10,13,10" Margin="0">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <StackPanel VerticalAlignment="Center">
-                                                        <TextBlock Text="{x:Bind Content}" 
-                                                                   Foreground="{x:Bind IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White}"
-                                                                   FontWeight="{x:Bind IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold}"
-                                                                   TextDecorations="{x:Bind IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None}"
-                                                                   />
-
-                                                        <TextBlock
-                                                                    Foreground="{x:Bind IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!LightGray}"
-                                                                   FontWeight="{x:Bind IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=SemiLight!Normal}"
-                                                                   TextDecorations="{x:Bind IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None}"
-                                                                   >
-                                                            <Run Text="{x:Bind Subject.Name}"/>
-                                                            <Run Text="-"/>
-                                                            <Run Text="{x:Bind Type}"/>
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                    <TextBlock Text="{x:Bind Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayDate}" Grid.Column="1" HorizontalAlignment="Right"
-                                                                Foreground="{x:Bind IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White}"
-                                                                   FontWeight="{x:Bind IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold}"
-                                                                   TextDecorations="{x:Bind IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None}"
-                                                                   />
-                                                </Grid>
+                                                <controls:SingleExam Exam="{x:Bind}"/>
                                             </ItemContainer>
                                         </DataTemplate>
                                     </ItemsView.ItemTemplate>

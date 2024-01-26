@@ -33,6 +33,7 @@
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
     <None Remove="UserControls\Settings\ReminderSettings.xaml" />
+    <None Remove="UserControls\SingleExam.xaml" />
     <None Remove="UserControls\SingleMessageBig.xaml" />
     <None Remove="UserControls\SingleMessageSmall.xaml" />
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
@@ -118,6 +119,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\SingleExam.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="ExamsPage.xaml">
