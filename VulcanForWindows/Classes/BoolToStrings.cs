@@ -42,9 +42,13 @@ public class BoolToStrings : IValueConverter
                 if (s.Contains("!"))
                 {
                     var split = s.Split("!");
-                    var weightString = b ? split[0] : split[1];
-                    return
-                        (FontWeight)(typeof(FontWeights).GetProperty(weightString).GetValue(null));
+                    var result = b ? split[0] : split[1];
+                    if (targetType == typeof(FontWeight))
+                        return
+                            (FontWeight)(typeof(FontWeights).GetProperty(result).GetValue(null));
+                    if (targetType == typeof(TextDecorations))
+                        return
+                        (TextDecorations)Enum.Parse(typeof(TextDecorations), result);
                 }
             }
         }
@@ -59,7 +63,7 @@ public class BoolToStrings : IValueConverter
         switch (param)
         {
             default:
-                return b ? "Normal" : "Normal";
+                return null;
         }
     }
 
