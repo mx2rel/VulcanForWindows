@@ -16,4 +16,6 @@ public class Exam
     public string CreatorName { get; set; }
     public Subject Subject { get; set; }
     public int PupilId { get; set; }
+
+    public bool IsInPast { get => Deadline < DateTime.Now; }
 }
