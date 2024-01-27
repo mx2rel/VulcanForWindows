@@ -29,8 +29,7 @@
             <TextBlock
                                                                     Foreground="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!LightGray, Mode=OneWay}"
                                                                    FontWeight="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=SemiLight!Normal, Mode=OneWay}"
-                                                                   TextDecorations="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}"
-                                                                   >
+                                                                   TextDecorations="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}">
                                                             <Run Text="{x:Bind Exam.Subject.Name, Mode=OneWay}"/>
                                                             <Run Text="-"/>
                                                             <Run Text="{x:Bind Exam.Type, Mode=OneWay}"/>
