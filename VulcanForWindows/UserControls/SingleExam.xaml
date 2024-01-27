@@ -14,8 +14,7 @@
     </UserControl.Resources>
 
 
-    <Grid
-                            Padding="13,10,13,10" Margin="0">
+    <Grid Padding="13,10,13,10" Margin="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
