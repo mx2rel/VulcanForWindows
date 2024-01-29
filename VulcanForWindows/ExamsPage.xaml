@@ -38,7 +38,8 @@
                                 <TextBlock Text="{x:Bind month, 
                                     Converter={StaticResource DateTimeConverter}, ConverterParameter=MonthNameYear}" 
                                            Margin="2,2,2,3"/>
-                                <ItemsView ItemsSource="{x:Bind exams}" Grid.Row="1">
+                                <ItemsView ItemsSource="{x:Bind exams}" Grid.Row="1" 
+                                           SelectionChanged="SelectionChanged" SelectionMode="Single">
                                     <ItemsView.ItemTemplate>
                                         <DataTemplate x:DataType="exams:Exam">
                                             <ItemContainer Padding="0"  Margin="0,0,0,5"
@@ -61,5 +62,23 @@
                     Click="AfterButton"/>
             </ListViewItem>
         </ListView>
+        <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Margin="10" Spacing="2">
+            <TextBlock  FontWeight="Medium" FontSize="32">
+                <Run Text="{x:Bind selectedExam.Content}"/>
+                <Run Text="-"/>
+                <Run Text="{x:Bind selectedExam.Type}"/>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock FontWeight="Medium" FontSize="18">
+                <Run Text="{x:Bind selectedExam.Subject.Name}"/>
+                </TextBlock>
+                <TextBlock Text="{x:Bind selectedExam.CreatorName}" 
+                       FontWeight="Normal" Foreground="Silver" FontSize="14" VerticalAlignment="Bottom"/>
+            </StackPanel>
+
+            <TextBlock Text="{x:Bind selectedExam.Deadline, Converter={StaticResource DateTimeConverter}}" 
+                       FontWeight="Normal" Foreground="Silver" FontSize="14"/>
+
+        </StackPanel>
     </Grid>
 </Page>

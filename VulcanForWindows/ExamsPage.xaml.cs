@@ -57,6 +57,7 @@ namespace VulcanForWindows
             }
         }
 
+        public Exam selectedExam { get; set; }
         public ObservableCollection<MonthExamsPair> display { get; set; } = new ObservableCollection<MonthExamsPair>();
         public bool allowLoadButtons { get; set; } = true;
         public void LoadBefore()
@@ -91,6 +92,11 @@ namespace VulcanForWindows
 
             allowLoadButtons = true;
             OnPropertyChanged(nameof(allowLoadButtons));
+            if (selectedExam == null)
+            {
+                selectedExam = display.SelectMany(r => r.exams).Where(r => !r.IsInPast).OrderBy(r => r.Deadline).First();
+                OnPropertyChanged(nameof(selectedExam));
+            }
         }
         public async Task<Exam[]> Load(DateTime from, DateTime to)
         {
@@ -117,7 +123,11 @@ namespace VulcanForWindows
         private void BeforeButton(object sender, RoutedEventArgs e) => LoadBefore();
         private void AfterButton(object sender, RoutedEventArgs e) => LoadAfter();
 
-
+        private void SelectionChanged(ItemsView sender, ItemsViewSelectionChangedEventArgs args)
+        {
+            selectedExam = sender.SelectedItem as Exam;
+            OnPropertyChanged(nameof(selectedExam));
+        }
     }
 
     public class MonthExamsPair
