@@ -40,7 +40,7 @@
                 </StackPanel>
 
                 <ListView SelectionMode="None" Grid.Row="1">
-                    <TextBlock Text="{x:Bind DisplayContent}" TextWrapping="WrapWholeWords"/>
+                    <TextBlock Text="{x:Bind DisplayContent}" TextWrapping="WrapWholeWords" IsTextSelectionEnabled="True"/>
                     <GridView ItemsSource="{x:Bind message.Attachments}" SelectionMode="None">
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="attachments:Attachment">
