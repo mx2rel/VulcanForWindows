@@ -193,9 +193,11 @@ namespace VulcanForWindows
         }
 
         public string PlainContent =>
-            Regex.Replace(message.Content, "<.*?>", "").Replace("\n", "");
+    message?.Content?.Replace("\n", "")?.Replace("<.*?>", "") ?? string.Empty;
+
         public string DisplayContent =>
-            ConvertHtmlToPlainText(message.Content);
+            ConvertHtmlToPlainText(message?.Content) ?? string.Empty;
+
 
         static string ConvertHtmlToPlainText(string html)
         {
