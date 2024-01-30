@@ -71,6 +71,8 @@ namespace VulcanForWindows.UserControls
             v.DataContext = Message;
             dialog.Content = v;
             dialog.CloseButtonText = "Zamknij";
+            dialog.MinWidth = 600;
+            dialog.MinHeight = 600;
             var result = await dialog.ShowAsync();
             Message.MarkAsRead();
             Message.OnPropertyChanged(nameof(Message.IsRead));

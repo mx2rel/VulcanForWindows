@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Vulcanova.Core.Data;
 using Vulcanova.Uonet.Api.MessageBox;
@@ -21,4 +22,9 @@ public class Message
     public List<Correspondent> Receiver { get; set; }
     public List<Attachment> Attachments { get; set; }
     public int Importance { get; set; }
+
+    public bool HasAttachments => Attachments.Count > 0;
+    public string AttachmentsText => $"{Attachments.Count} {(Attachments.Count == 1 ? "za³¹cznik" : ((Attachments.Count > 4) ? "za³¹czników" : "za³¹czniki"))}";
+    public string AttachmentsTooltip => string.Join(", ", Attachments.Select(r => r.Name));
+
 }

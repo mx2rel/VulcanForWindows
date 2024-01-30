@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converts="using:Converters"
     xmlns:main="using:VulcanForWindows"
+    xmlns:attachments="using:Vulcanova.Uonet.Api.MessageBox"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -40,6 +41,13 @@
 
                 <ListView SelectionMode="None" Grid.Row="1">
                     <TextBlock Text="{x:Bind DisplayContent}" TextWrapping="WrapWholeWords"/>
+                    <GridView ItemsSource="{x:Bind message.Attachments}" SelectionMode="None">
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="attachments:Attachment">
+                                <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Link}" Padding="2"/>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
                 </ListView>
 
             </Grid>
@@ -79,7 +87,18 @@
 
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="3" Padding="10,0,0,0" Spacing="5">
-                <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" 
+                <Border Background="White" HorizontalAlignment="Left" 
+                        Padding="8,0,8,0" CornerRadius="4" Margin="3"
+                        Visibility="{x:Bind Message.message.HasAttachments, Mode=OneWay, 
+                    Converter={StaticResource VisibilityConverter},ConverterParameter=False}"
+                        ToolTipService.ToolTip="{x:Bind Message.message.AttachmentsTooltip}">
+                        <TextBlock 
+                            Foreground="Black" FontWeight="SemiBold"
+                            VerticalAlignment="Center" 
+                            Text="{x:Bind Message.message.AttachmentsText, Mode=OneWay}"/>
+                    </Border>
+                
+                    <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" 
                            HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Visibility="{x:Bind Message.Hover, Mode=OneWay, 
                     Converter={StaticResource VisibilityConverter},ConverterParameter=True}"
