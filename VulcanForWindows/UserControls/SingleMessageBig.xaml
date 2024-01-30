@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
         <converts:DateTimeConverter x:Key="DateTimeConverter"/>
-        <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel">
+        <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel"> <!--TODO: MOVE TO OWN CONTROL-->
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
