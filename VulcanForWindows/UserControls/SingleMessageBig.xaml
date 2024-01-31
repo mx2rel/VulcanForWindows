@@ -13,14 +13,18 @@
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
         <converts:DateTimeConverter x:Key="DateTimeConverter"/>
-        <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel"> <!--TODO: MOVE TO OWN CONTROL-->
-            <Grid>
+        <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel">
+            <!--TODO: MOVE TO OWN CONTROL-->
+            <Grid RowSpacing="20">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel>
-                    <TextBlock Text="{x:Bind message.Subject}" FontWeight="SemiBold" FontSize="22" Margin="0,0,0,20"/>
+                    <StackPanel Margin="0,0,0,10" Spacing="3">
+                        <TextBlock Text="{x:Bind message.Subject}" FontWeight="SemiBold" FontSize="22" />
+                        <local:AttachmentsIndicator Attachments="{x:Bind message.Attachments, Mode=OneWay}"/>
+                    </StackPanel>
                     <TextBlock Foreground="LightGray">
                     <Run Text="Od:"/>
                     <Run Text="{x:Bind message.Sender.Name}"/>
@@ -39,9 +43,12 @@
                     </TextBlock>
                 </StackPanel>
 
-                <ListView SelectionMode="None" Grid.Row="1">
-                    <TextBlock Text="{x:Bind DisplayContent}" TextWrapping="WrapWholeWords" IsTextSelectionEnabled="True"/>
-                    <GridView ItemsSource="{x:Bind message.Attachments}" SelectionMode="None">
+                <ListView SelectionMode="None" Grid.Row="1" Padding="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <TextBlock Text="{x:Bind DisplayContent}" 
+                               TextWrapping="WrapWholeWords" IsTextSelectionEnabled="True"
+                               HorizontalAlignment="Stretch"/>
+
+                    <GridView ItemsSource="{x:Bind message.Attachments}" SelectionMode="None" HorizontalAlignment="Left">
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="attachments:Attachment">
                                 <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Link}" Padding="2"/>
@@ -87,18 +94,9 @@
 
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="3" Padding="10,0,0,0" Spacing="5">
-                <Border Background="White" HorizontalAlignment="Left" 
-                        Padding="8,0,8,0" CornerRadius="4" Margin="3"
-                        Visibility="{x:Bind Message.message.HasAttachments, Mode=OneWay, 
-                    Converter={StaticResource VisibilityConverter},ConverterParameter=False}"
-                        ToolTipService.ToolTip="{x:Bind Message.message.AttachmentsTooltip}">
-                        <TextBlock 
-                            Foreground="Black" FontWeight="SemiBold"
-                            VerticalAlignment="Center" 
-                            Text="{x:Bind Message.message.AttachmentsText, Mode=OneWay}"/>
-                    </Border>
-                
-                    <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" 
+                <local:AttachmentsIndicator Attachments="{x:Bind Message.message.Attachments, Mode=OneWay}"/>
+
+                <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, ConverterParameter=MessageDate, Mode=OneWay}" 
                            HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Visibility="{x:Bind Message.Hover, Mode=OneWay, 
                     Converter={StaticResource VisibilityConverter},ConverterParameter=True}"
