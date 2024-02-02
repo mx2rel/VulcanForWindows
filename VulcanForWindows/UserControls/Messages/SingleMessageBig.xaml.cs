@@ -76,7 +76,6 @@ namespace VulcanForWindows.UserControls
             var result = await dialog.ShowAsync();
             Message.MarkAsRead();
             Message.OnPropertyChanged(nameof(Message.IsRead));
-            Message.OnPropertyChanged(nameof(Message.DisplayColor));
 
         }
 
@@ -85,7 +84,6 @@ namespace VulcanForWindows.UserControls
             Message.MarkAsRead();
             Message.message.DateRead = DateTime.Now;
             Message.OnPropertyChanged(nameof(Message.IsRead));
-            Message.OnPropertyChanged(nameof(Message.DisplayColor));
         }
 
         private void Trash(object sender, RoutedEventArgs e)
