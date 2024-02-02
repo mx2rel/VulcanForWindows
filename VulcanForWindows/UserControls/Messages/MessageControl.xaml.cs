@@ -25,22 +25,27 @@ namespace VulcanForWindows.UserControls
 
 
         public static readonly DependencyProperty MessageProperty =
-            DependencyProperty.Register("Message", typeof(Message), typeof(MessageControl), new PropertyMetadata(null, Message_Changed));
+            DependencyProperty.Register("Message", typeof(MessageViewModel), typeof(MessageControl), new PropertyMetadata(null, Message_Changed));
 
-        public Message Message
+        public MessageViewModel Message
         {
-            get => (Message)GetValue(MessageProperty);
+            get => (MessageViewModel)GetValue(MessageProperty);
             set => SetValue(MessageProperty, value);
         }
 
         private static void Message_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MessageControl control && e.NewValue is Message newValue)
+            if (d is MessageControl control && e.NewValue is MessageViewModel newValue)
             {
                 control.OnPropertyChanged(nameof(Message));
             }
         }
 
+        public MessageControl(MessageViewModel m)
+        {
+            Message= m;
+            this.InitializeComponent();
+        }
         public MessageControl()
         {
             this.InitializeComponent();

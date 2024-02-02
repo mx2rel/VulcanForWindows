@@ -13,52 +13,6 @@
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
         <converts:DateTimeConverter x:Key="DateTimeConverter"/>
-        <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel">
-            <!--TODO: MOVE TO OWN CONTROL-->
-            <Grid RowSpacing="20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel>
-                    <StackPanel Margin="0,0,0,10" Spacing="3">
-                        <TextBlock Text="{x:Bind message.Subject}" FontWeight="SemiBold" FontSize="22" />
-                        <local:AttachmentsIndicator Attachments="{x:Bind message.Attachments, Mode=OneWay}"/>
-                    </StackPanel>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Od:"/>
-                    <Run Text="{x:Bind message.Sender.Name}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Do:"/>
-                    <Run Text="{x:Bind Receivers}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Data:"/>
-                    <Run Text="{x:Bind message.DateSent}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Przeczytana:"/>
-                    <Run Text="{x:Bind IsRead}"/>
-                    </TextBlock>
-                </StackPanel>
-
-                <ListView SelectionMode="None" Grid.Row="1" Padding="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                    <TextBlock Text="{x:Bind DisplayContent}" 
-                               TextWrapping="WrapWholeWords" IsTextSelectionEnabled="True"
-                               HorizontalAlignment="Stretch"/>
-
-                    <GridView ItemsSource="{x:Bind message.Attachments}" SelectionMode="None" HorizontalAlignment="Left">
-                        <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="attachments:Attachment">
-                                <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Link}" Padding="2"/>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
-                </ListView>
-
-            </Grid>
-        </DataTemplate>
     </UserControl.Resources>
 
     <Button Click="Clicked" Padding="15" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">

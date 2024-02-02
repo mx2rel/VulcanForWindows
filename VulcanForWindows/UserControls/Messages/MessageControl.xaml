@@ -1,0 +1,54 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.MessageControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:attachments="using:Vulcanova.Uonet.Api.MessageBox"
+    mc:Ignorable="d">
+
+    <Grid RowSpacing="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <StackPanel Margin="0,0,0,10" Spacing="3">
+                <TextBlock Text="{x:Bind Message.message.Subject}" FontWeight="SemiBold" FontSize="22" />
+                <local:AttachmentsIndicator Attachments="{x:Bind Message.message.Attachments, Mode=OneWay}"/>
+            </StackPanel>
+            <TextBlock Foreground="LightGray">
+                    <Run Text="Od:"/>
+                    <Run Text="{x:Bind Message.message.Sender.Name}"/>
+            </TextBlock>
+            <TextBlock Foreground="LightGray">
+                    <Run Text="Do:"/>
+                    <Run Text="{x:Bind Message.Receivers}"/>
+            </TextBlock>
+            <TextBlock Foreground="LightGray">
+                    <Run Text="Data:"/>
+                    <Run Text="{x:Bind Message.message.DateSent}"/>
+            </TextBlock>
+            <TextBlock Foreground="LightGray">
+                    <Run Text="Przeczytana:"/>
+                    <Run Text="{x:Bind Message.IsRead}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <ListView SelectionMode="None" Grid.Row="1" Padding="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <TextBlock Text="{x:Bind Message.DisplayContent}" 
+                               TextWrapping="WrapWholeWords" IsTextSelectionEnabled="True"
+                               HorizontalAlignment="Stretch"/>
+
+            <GridView ItemsSource="{x:Bind Message.message.Attachments}" SelectionMode="None" HorizontalAlignment="Left">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="attachments:Attachment">
+                        <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Link}" Padding="2"/>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </ListView>
+
+    </Grid>
+</UserControl>

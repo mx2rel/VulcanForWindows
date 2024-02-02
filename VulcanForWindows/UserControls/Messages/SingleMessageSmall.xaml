@@ -12,38 +12,7 @@
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
         <converts:DateTimeConverter x:Key="DateTimeConverter"/>
-        <DataTemplate x:Key="MessagePopupContent" x:DataType="main:MessageViewModel">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel>
-                    <TextBlock Text="{x:Bind message.Subject}" FontWeight="SemiBold" FontSize="22" Margin="0,0,0,20"/>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Od:"/>
-                    <Run Text="{x:Bind message.Sender.Name}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Do:"/>
-                    <Run Text="{x:Bind Receivers}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Data:"/>
-                    <Run Text="{x:Bind message.DateSent}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray">
-                    <Run Text="Przeczytana:"/>
-                    <Run Text="{x:Bind IsRead}"/>
-                    </TextBlock>
-                </StackPanel>
-
-                <ListView SelectionMode="None" Grid.Row="1">
-                    <TextBlock Text="{x:Bind DisplayContent}" TextWrapping="WrapWholeWords"/>
-                </ListView>
-
-            </Grid>
-        </DataTemplate>
+        
     </UserControl.Resources>
 
     <Button Click="Clicked" Padding="10,5,10,5" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">

@@ -11,7 +11,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Vulcanova.Features.Messages;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -20,7 +19,7 @@ using Windows.Foundation.Collections;
 
 namespace VulcanForWindows.UserControls
 {
-    public sealed partial class SingleMessageSmall : UserControl, INotifyPropertyChanged
+    public sealed partial class SingleMessageBig : UserControl, INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -31,7 +30,7 @@ namespace VulcanForWindows.UserControls
         }
 
         public static readonly DependencyProperty MessageProperty =
-            DependencyProperty.Register("Message", typeof(MessageViewModel), typeof(SingleMessageSmall), new PropertyMetadata(null, Message_Changed));
+            DependencyProperty.Register("Message", typeof(MessageViewModel), typeof(SingleMessageBig), new PropertyMetadata(null, Message_Changed));
 
         public MessageViewModel Message
         {
@@ -55,7 +54,7 @@ namespace VulcanForWindows.UserControls
         {
             Message.Hover = false;
         }
-        public SingleMessageSmall()
+        public SingleMessageBig()
         {
             OnPropertyChanged(nameof(Message));
             this.InitializeComponent();
@@ -68,10 +67,12 @@ namespace VulcanForWindows.UserControls
             ContentDialog dialog = new ContentDialog();
             Message.message.DateRead = DateTime.Now;
             dialog.XamlRoot = this.XamlRoot;
-            var v = (Resources["MessagePopupContent"] as DataTemplate).LoadContent() as Grid;
+            var v = new MessageControl(Message);
             v.DataContext = Message;
             dialog.Content = v;
             dialog.CloseButtonText = "Zamknij";
+            dialog.MinWidth = 600;
+            dialog.MinHeight = 600;
             var result = await dialog.ShowAsync();
             Message.MarkAsRead();
             Message.OnPropertyChanged(nameof(Message.IsRead));
