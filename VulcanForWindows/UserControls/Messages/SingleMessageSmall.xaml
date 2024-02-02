@@ -5,16 +5,16 @@
     xmlns:local="using:VulcanForWindows.UserControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converts="using:Converters"
+    xmlns:converters="using:Converters"
     xmlns:main="using:VulcanForWindows"
     xmlns:attachments="using:Vulcanova.Uonet.Api.MessageBox"
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <converts:VisibilityConverter x:Key="VisibilityConverter"/>
-        <converts:DateTimeConverter x:Key="DateTimeConverter"/>
-        <converts:BoolToColor x:Key="BoolToColor"/>
-        <converts:BoolToStrings x:Key="BoolToStrings"/>
+        <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+        <converters:DateTimeConverter x:Key="DateTimeConverter"/>
+        <converters:BoolToColor x:Key="BoolToColor"/>
+        <converters:BoolToStrings x:Key="BoolToStrings"/>
 
     </UserControl.Resources>
 
