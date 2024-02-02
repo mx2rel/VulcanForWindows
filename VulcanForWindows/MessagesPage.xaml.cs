@@ -212,8 +212,6 @@ namespace VulcanForWindows
         public async void Trash() => await new MessagesService().TrashMessage(message.MessageBoxId, message.Id);
         public async void MarkAsRead() => await new MessagesService().MarkMessageAsReadAsync(message.MessageBoxId, message.Id);
 
-        public string DisplayColor => IsRead ? "Silver" : "White";
-
         public bool IsRead => message.DateRead != null;
         public bool Hover
         {

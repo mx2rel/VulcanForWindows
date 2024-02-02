@@ -1,10 +1,11 @@
 using System;
+using VulcanForWindows.Classes;
 using Vulcanova.Core.Data;
 using Vulcanova.Features.Shared;
 
 namespace Vulcanova.Features.Exams;
 
-public class Exam
+public class Exam : IDeadlineable
 {
     public AccountEntityId Id { get; set; }
     public string Key { get; set; }
@@ -16,6 +17,5 @@ public class Exam
     public string CreatorName { get; set; }
     public Subject Subject { get; set; }
     public int PupilId { get; set; }
-
-    public bool IsInPast { get => Deadline < DateTime.Now; }
+    IDeadlineable.Type IDeadlineable.type { get => IDeadlineable.Type.Exam; }
 }

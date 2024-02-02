@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Exams;
@@ -94,7 +95,7 @@ namespace VulcanForWindows
             OnPropertyChanged(nameof(allowLoadButtons));
             if (selectedExam == null)
             {
-                selectedExam = display.SelectMany(r => r.exams).Where(r => !r.IsInPast).OrderBy(r => r.Deadline).First();
+                selectedExam = display.SelectMany(r => r.exams).Where(r => !r.IsInPast()).OrderBy(r => r.Deadline).First();
                 OnPropertyChanged(nameof(selectedExam));
             }
         }
