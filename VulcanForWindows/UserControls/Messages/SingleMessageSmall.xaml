@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converts="using:Converters"
     xmlns:main="using:VulcanForWindows"
+    xmlns:attachments="using:Vulcanova.Uonet.Api.MessageBox"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -29,6 +30,9 @@
                 <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" 
                            VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
             </StackPanel>
+            <local:AttachmentsIndicator Attachments="{x:Bind Message.message.Attachments, Mode=OneWay}"
+                                        Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right"
+                                        Height="20" FontSize="12"/>
             <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, 
                 ConverterParameter=MessageDate, Mode=OneWay}" Margin="20,0,0,0" 
                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"
