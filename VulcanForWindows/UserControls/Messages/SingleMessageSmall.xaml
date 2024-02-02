@@ -13,7 +13,9 @@
     <UserControl.Resources>
         <converts:VisibilityConverter x:Key="VisibilityConverter"/>
         <converts:DateTimeConverter x:Key="DateTimeConverter"/>
-        
+        <converts:BoolToColor x:Key="BoolToColor"/>
+        <converts:BoolToStrings x:Key="BoolToStrings"/>
+
     </UserControl.Resources>
 
     <Button Click="Clicked" Padding="10,5,10,5" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
@@ -25,10 +27,13 @@
             <StackPanel>
                 <TextBlock Text="{x:Bind Message.message.Sender.Name, Mode=OneWay}"
                                TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
-                               FontWeight="Medium" FontSize="16" VerticalAlignment="Center" Grid.Column="1"
-                           Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
+                               FontSize="16" VerticalAlignment="Center" Grid.Column="1"
+                            Foreground="{x:Bind Message.IsRead, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
+                           FontWeight="{x:Bind Message.IsRead, Converter={StaticResource BoolToStrings}, ConverterParameter=SemiBold!Medium, Mode=OneWay}"/>
                 <TextBlock Text="{x:Bind Message.message.Subject, Mode=OneWay}" 
-                           VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
+                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                            Foreground="{x:Bind Message.IsRead, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
+                           FontWeight="{x:Bind Message.IsRead, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold, Mode=OneWay}"/>
             </StackPanel>
             <local:AttachmentsIndicator Attachments="{x:Bind Message.message.Attachments, Mode=OneWay}"
                                         Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right"
@@ -36,7 +41,7 @@
             <TextBlock Text="{x:Bind Message.message.DateSent, Converter={StaticResource DateTimeConverter}, 
                 ConverterParameter=MessageDate, Mode=OneWay}" Margin="20,0,0,0" 
                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"
-                       Foreground="{x:Bind Message.DisplayColor, Mode=OneWay}"/>
+                        Foreground="{x:Bind Message.IsRead, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"/>
         </Grid>
     </Button>
 </UserControl>
