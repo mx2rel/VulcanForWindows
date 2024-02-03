@@ -11,7 +11,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VulcanForWindows.Classes;
 using Vulcanova.Features.Exams;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -19,9 +18,9 @@ using Windows.Foundation.Collections;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace VulcanForWindows.UserControls
+namespace VulcanForWindows.UserControls.Deadlinables
 {
-    public sealed partial class SingleDeadlineable : UserControl, INotifyPropertyChanged
+    public sealed partial class ExamPopup : UserControl, INotifyPropertyChanged
     {
 
 
@@ -32,26 +31,26 @@ namespace VulcanForWindows.UserControls
 
         }
 
-
         public static readonly DependencyProperty ExamProperty =
-            DependencyProperty.Register("ExamOrTest", typeof(Deadlineable), typeof(SingleDeadlineable), new PropertyMetadata(null, Exam_Changed));
+            DependencyProperty.Register("Exam", typeof(Exam), typeof(ExamPopup), new PropertyMetadata(null, Exam_Changed));
 
-        public Deadlineable Exam
+        public Exam Exam
         {
-            get => (Deadlineable)GetValue(ExamProperty);
+            get => (Exam)GetValue(ExamProperty);
             set => SetValue(ExamProperty, value);
         }
 
         private static void Exam_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is SingleDeadlineable control && e.NewValue is string newValue)
+            if (d is ExamPopup control && e.NewValue is Exam newValue)
             {
                 // TODO: Implement your logic here
             }
         }
 
-        public SingleDeadlineable()
+        public ExamPopup(Exam e)
         {
+            Exam = e;
             OnPropertyChanged(nameof(Exam));
             this.InitializeComponent();
         }

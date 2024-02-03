@@ -48,12 +48,12 @@
                                     Converter={StaticResource DateTimeConverter}, ConverterParameter=MonthNameYear}" 
                                            Margin="2,2,2,3"/>
                                 <ListView ItemsSource="{x:Bind exams}" Grid.Row="1" 
-                                           SelectionChanged="SelectionChanged" SelectionMode="None">
+                                           SelectionChanged="SelectionChanged" SelectionMode="None" IsItemClickEnabled="True">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="classes:Deadlineable">
                                             <ListViewItem Padding="0"  Margin="0,0,5,5"
-                                  Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
-                                                <controls:SingleDeadlineable Exam="{x:Bind}"/>
+                                  Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}" >
+                                                <controls:SingleDeadlineable Deadlinable="{x:Bind}"/>
                                             </ListViewItem>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

@@ -24,4 +24,6 @@ public class Homework : IDeadlineable
     { get => (((DateCreated - Deadline).TotalDays > 12) ? IDeadlineable.DeadlineableType.Project : IDeadlineable.DeadlineableType.Homework); }
 
     public bool IsInPast => this.IsInPast();
+    public int DeadlineIn => this.DeadlineIn();
+
 }

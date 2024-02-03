@@ -26,6 +26,7 @@ namespace VulcanForWindows.Classes
         public DateTime Deadline { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsInPast { get; }
+        public int DeadlineIn { get; }
 
     }
 
@@ -56,7 +57,7 @@ namespace VulcanForWindows.Classes
                 }
             }
         }
-        public int DeadlineIn => (int)Math.Ceiling((Deadline - DateTime.Now).TotalDays);
+        public int DeadlineIn => createdFrom.DeadlineIn;
         public Deadlineable(IDeadlineable d)
         {
             Type = d.Type;
@@ -78,6 +79,10 @@ namespace VulcanForWindows.Classes
         public static bool IsInPast(this IDeadlineable deadlineable)
         {
             return deadlineable.Deadline < DateTime.Now;
+        }
+        public static int DeadlineIn(this IDeadlineable deadlineable)
+        {
+            return (int)Math.Ceiling((deadlineable.Deadline - DateTime.Now).TotalDays);
         }
     }
 }

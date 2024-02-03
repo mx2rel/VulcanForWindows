@@ -21,4 +21,5 @@ public class Exam : IDeadlineable
     public bool IsInPast => this.IsInPast();
 
     IDeadlineable.DeadlineableType IDeadlineable.Type { get => IDeadlineable.DeadlineableType.ExamOrTest; }
+    public int DeadlineIn => this.DeadlineIn();
 }

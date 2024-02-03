@@ -1,0 +1,50 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.SingleDeadlineable"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Converters"
+    xmlns:controls="using:VulcanForWindows.UserControls"
+    mc:Ignorable="d"
+    Tapped="Tapped">
+    <UserControl.Resources>
+        <converters:DateTimeConverter x:Key="DateTimeConverter" />
+        <converters:BoolToColor x:Key="BoolToColor" />
+        <converters:BoolToStrings x:Key="BoolToStrings" />
+    </UserControl.Resources>
+
+
+    <Grid Padding="13,10,13,10" Margin="0" ColumnSpacing="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="{x:Bind Deadlinable.Content, Mode=OneWay}" 
+                                                                   Foreground="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
+                                                                   FontWeight="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold, Mode=OneWay}"
+                                                                   TextDecorations="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}"
+                                                                   TextTrimming="CharacterEllipsis"/>
+
+            <TextBlock
+                                                                    Foreground="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!LightGray, Mode=OneWay}"
+                                                                   FontWeight="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=SemiLight!Normal, Mode=OneWay}"
+                                                                   TextDecorations="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}">
+                                                            <Run Text="{x:Bind Deadlinable.Subject.Name, Mode=OneWay}"/>
+                                                            <Run Text="-"/>
+                                                            <Run Text="{x:Bind Deadlinable.TypeText, Mode=OneWay}"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+            <TextBlock Text="{x:Bind Deadlinable.Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayShortDate, Mode=OneWay}"
+                                                                Foreground="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
+                                                                   FontWeight="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold, Mode=OneWay}"
+                                                                   TextDecorations="{x:Bind Deadlinable.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}"
+                                                                   TextAlignment="Right"/>
+            <controls:DeadlineDisplayer DeadlineIn="{x:Bind Deadlinable.DeadlineIn}"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+        </StackPanel>
+    </Grid>
+
+</UserControl>
