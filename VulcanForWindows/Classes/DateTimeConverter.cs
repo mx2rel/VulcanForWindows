@@ -92,7 +92,7 @@ public class DateTimeConverter : IValueConverter
         }
         if(value is int days)
         {
-            HumanLikeAgoAndDays(days);
+            return HumanLikeAgoAndDays(days);
         }
 
         // Return null if the value is not a DateTime
@@ -118,32 +118,32 @@ public class DateTimeConverter : IValueConverter
         return FirstLetterToUpper(dateTime.ToString(arg));
     }
 
-    public string HumanLikeAgoAndDays(DateTime dateTime) => HumanLikeAgoAndDays((DateTime.Now.Date - dateTime.Date).Days);
-    public string HumanLikeAgoAndDays(int daysAgo)
+    public string HumanLikeAgoAndDays(DateTime dateTime) => HumanLikeAgoAndDays(-(DateTime.Now.Date - dateTime.Date).Days);
+    public string HumanLikeAgoAndDays(int inDays)
     {
         string v;
-        switch (daysAgo)
+        switch (inDays)
         {
             case 0:
                 v = "Dzisiaj";
                 break;
-            case 1:
+            case -1:
                 v = "Wczoraj";
                 break;
-            case 2:
+            case -2:
                 v = "Przedwczoraj";
                 break;
-            case -1:
+            case 1:
                 v = "Jutro";
                 break;
-            case -2:
+            case 2:
                 v = "Pojutrze";
                 break;
             default:
-                if (daysAgo > 0)
-                    v = $"{daysAgo} {((daysAgo == 1) ? "dzień" : "dni")} temu";
+                if (inDays < 0)
+                    v = $"{-inDays} {((inDays == -1) ? "dzień" : "dni")} temu";
                 else
-                    v = $"Za {-daysAgo} dni";
+                    v = $"Za {inDays} dni";
                 break;
         }
         return v;
