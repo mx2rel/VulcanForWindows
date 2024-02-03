@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Converters"
+    xmlns:controls="using:VulcanForWindows.UserControls"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:DateTimeConverter x:Key="DateTimeConverter" />
@@ -35,10 +36,14 @@
                                                             <Run Text="{x:Bind Exam.TypeText, Mode=OneWay}"/>
             </TextBlock>
         </StackPanel>
-        <TextBlock Text="{x:Bind Exam.Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayShortDate, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Right"
+        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+            <TextBlock Text="{x:Bind Exam.Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayShortDate, Mode=OneWay}"
                                                                 Foreground="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
                                                                    FontWeight="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold, Mode=OneWay}"
                                                                    TextDecorations="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}"
                                                                    TextAlignment="Right"/>
+            <controls:DeadlineDisplayer DeadlineIn="{x:Bind Exam.DeadlineIn}"  HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+        </StackPanel>
     </Grid>
+
 </UserControl>

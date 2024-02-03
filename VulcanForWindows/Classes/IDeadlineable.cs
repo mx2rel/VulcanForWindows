@@ -56,7 +56,7 @@ namespace VulcanForWindows.Classes
                 }
             }
         }
-
+        public int DeadlineIn => (int)Math.Ceiling((Deadline - DateTime.Now).TotalDays);
         public Deadlineable(IDeadlineable d)
         {
             Type = d.Type;
