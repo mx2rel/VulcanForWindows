@@ -10,6 +10,7 @@
     xmlns:attendance="using:Vulcanova.Features.Attendance"
     xmlns:converters="using:Converters"
     xmlns:controls="using:VulcanForWindows.UserControls"
+    xmlns:deadlineablecontrols="using:VulcanForWindows.UserControls.Deadlinables"
     xmlns:messages="using:Vulcanova.Features.Messages"
     mc:Ignorable="d">
 
@@ -57,7 +58,7 @@
         </Grid>
         <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" Margin="5,200,5,5">
             <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9" Tapped="LoadPage" Tag="GradesPage">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" Tapped="LoadPage" Tag="GradesPage">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -66,7 +67,7 @@
                     <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
                     <TextBlock Style="{StaticResource HeaderText}">Oceny</TextBlock>
                 </StackPanel>
-                <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick">
+                <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick" Padding="-2">
 
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="g:SubjectGrades">
@@ -99,7 +100,7 @@
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" Tapped="LoadPage" Tag="AttendancePage">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9" Tapped="LoadPage" Tag="AttendancePage">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -218,6 +219,19 @@
                 <!--<ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsActive="{x:Bind messagesLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>-->
 
+            </Grid>
+
+            <Grid Style="{StaticResource Panel}" x:Name="DeadlineablesPanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="10" RowSpacing="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Style="{StaticResource TitleStack}">
+                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                    <TextBlock Style="{StaticResource HeaderText}">Zadania i sprawdziany</TextBlock>
+                </StackPanel>
+                <deadlineablecontrols:DeadlineablesWidget Grid.Row="1"/>
             </Grid>
         </VariableSizedWrapGrid>
     </Grid>

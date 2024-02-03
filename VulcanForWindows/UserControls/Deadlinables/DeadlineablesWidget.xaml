@@ -1,0 +1,23 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.Deadlinables.DeadlineablesWidget"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls.Deadlinables"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Converters"
+    xmlns:classes="using:VulcanForWindows.Classes"
+    xmlns:controls="using:VulcanForWindows.UserControls"
+    mc:Ignorable="d">
+
+    <ListView ItemsSource="{x:Bind display}"  SelectionMode="None" IsItemClickEnabled="True">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="classes:Deadlineable">
+                <ListViewItem Padding="0"  Margin="0,0,5,0"
+                                  Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}" >
+                    <controls:SingleDeadlineable Deadlinable="{x:Bind}"/>
+                </ListViewItem>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</UserControl>

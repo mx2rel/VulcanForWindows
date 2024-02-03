@@ -51,7 +51,7 @@
                                            SelectionChanged="SelectionChanged" SelectionMode="None" IsItemClickEnabled="True">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="classes:Deadlineable">
-                                            <ListViewItem Padding="0"  Margin="0,0,5,5"
+                                            <ListViewItem Padding="0"  Margin="0,0,5,0"
                                   Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}" >
                                                 <controls:SingleDeadlineable Deadlinable="{x:Bind}"/>
                                             </ListViewItem>
