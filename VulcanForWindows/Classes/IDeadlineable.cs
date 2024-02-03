@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vulcanova.Features.Exams;
 using Vulcanova.Features.Shared;
 
 namespace VulcanForWindows.Classes
@@ -13,18 +14,60 @@ namespace VulcanForWindows.Classes
     public interface IDeadlineable
     {
 
-        public enum Type
+        public enum DeadlineableType
         {
-            Exam, Homework, Project
+            ExamOrTest, Homework, Project
         }
 
-        public Type type { get; }
+        public DeadlineableType Type { get; }
         public string Content { get; set; }
         public string CreatorName { get; set; }
         public Subject Subject { get; set; }
         public DateTime Deadline { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool IsInPast { get; }
 
+    }
+
+    public class Deadlineable
+    {
+        public IDeadlineable createdFrom;
+        public IDeadlineable.DeadlineableType Type { get; }
+        public string Content { get; set; }
+        public string CreatorName { get; set; }
+        public Subject Subject { get; set; }
+        public DateTime Deadline { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsInPast { get; }
+        public string TypeText
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case IDeadlineable.DeadlineableType.ExamOrTest:
+                        return (createdFrom as Exam).Type;
+                    case IDeadlineable.DeadlineableType.Homework:
+                        return "Zadanie Domowe";
+                    case IDeadlineable.DeadlineableType.Project:
+                        return "Projekt";
+                    default:
+                        return "???";
+                }
+            }
+        }
+
+        public Deadlineable(IDeadlineable d)
+        {
+            Type = d.Type;
+            Content = d.Content;
+            CreatorName = d.CreatorName;
+            Subject = d.Subject;
+            Deadline = d.Deadline;
+            DateCreated = d.DateCreated;
+            IsInPast = d.IsInPast;
+            createdFrom = d;
+        }
     }
 
     /// <summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vulcanova.Uonet.Api.Auth;
@@ -21,4 +22,8 @@ public class Account
     public string Partition { get; set; }
 
     public Shared.Period CurrentPeriod => Periods.Where(r => r.Current).ToArray()[0];
+    public Shared.Period[] PeriodsInRange(DateTime from, DateTime to)
+    {
+        return Periods.Where(r => r.End >= from && r.Start <= to).ToArray();
+    }
 }

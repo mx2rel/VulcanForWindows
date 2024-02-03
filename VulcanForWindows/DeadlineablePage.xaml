@@ -1,0 +1,79 @@
+﻿<Page
+    x:Class="VulcanForWindows.DeadlineablePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:exams="using:Vulcanova.Features.Exams"
+    xmlns:converters="using:Converters"
+    xmlns:classes="using:VulcanForWindows.Classes"
+    xmlns:controls="using:VulcanForWindows.UserControls"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <converters:DateTimeConverter x:Key="DateTimeConverter" />
+        <converters:BoolToColor x:Key="BoolToColor" />
+        <converters:BoolToStrings x:Key="BoolToStrings" />
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+    HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto"
+    VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" x:Name="scrollViewer">
+
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <!--<ListViewItem Padding="0">-->
+                <Button 
+                    VerticalAlignment="Stretch"
+                    IsEnabled="{x:Bind allowLoadButtons, Mode=OneWay}"
+                    Click="BeforeButton">
+                    <Path Width="20" Height="20" Data="F1M646.688,13.5518L646.783,13.4593 646.965,13.639 668.383,35.0583 689.459,35.0583 665.155,10.751 657.503,3.10126 657.323,2.92023 664.876,-4.63837 689.184,-28.9417 668.109,-28.9417 646.688,-7.52637 636.15,3.01398 646.688,13.5518z" Stretch="Uniform" Fill="#FFFFFFFF" RenderTransformOrigin="0.5,0.5" />
+                </Button>
+                <!--</ListViewItem>-->
+                <!--<ListViewItem Padding="0">-->
+                <ItemsRepeater ItemsSource="{x:Bind display, Mode=OneWay}" Margin="0,0,0,-5" >
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Horizontal" Spacing="0"></StackLayout>
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="local:MonthExamsPair">
+                            <Grid Width="400">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{x:Bind month, 
+                                    Converter={StaticResource DateTimeConverter}, ConverterParameter=MonthNameYear}" 
+                                           Margin="2,2,2,3"/>
+                                <ListView ItemsSource="{x:Bind exams}" Grid.Row="1" 
+                                           SelectionChanged="SelectionChanged" SelectionMode="None">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="classes:Deadlineable">
+                                            <ListViewItem Padding="0"  Margin="0,0,5,5"
+                                  Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
+                                                <controls:SingleDeadlineable Exam="{x:Bind}"/>
+                                            </ListViewItem>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+
+                </ItemsRepeater>
+                <!--</ListViewItem>-->
+                <!--<ListViewItem Padding="0">-->
+
+                <Button 
+                    VerticalAlignment="Stretch"
+                    IsEnabled="{x:Bind allowLoadButtons, Mode=OneWay}"
+                    Click="AfterButton">
+                    <Path Width="20" Height="20" Data="F1M568.254,-7.43524L568.159,-7.34277 567.977,-7.52246 546.559,-28.9417 525.484,-28.9417 549.787,-4.63446 557.439,3.01532 557.619,3.19629 550.067,10.7549 525.758,35.0583 546.834,35.0583 568.254,13.6429 578.792,3.10254 568.254,-7.43524z" Stretch="Uniform" Fill="#FFFFFFFF" RenderTransformOrigin="0.5,0.5" />
+                </Button>
+                <!--</ListViewItem>-->
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VulcanForWindows.Classes;
 using Vulcanova.Features.Exams;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -20,7 +21,7 @@ using Windows.Foundation.Collections;
 
 namespace VulcanForWindows.UserControls
 {
-    public sealed partial class SingleExam : UserControl, INotifyPropertyChanged
+    public sealed partial class SingleDeadlineable : UserControl, INotifyPropertyChanged
     {
 
 
@@ -33,23 +34,23 @@ namespace VulcanForWindows.UserControls
 
 
         public static readonly DependencyProperty ExamProperty =
-            DependencyProperty.Register("Exam", typeof(Exam), typeof(SingleExam), new PropertyMetadata(null, Exam_Changed));
+            DependencyProperty.Register("ExamOrTest", typeof(Deadlineable), typeof(SingleDeadlineable), new PropertyMetadata(null, Exam_Changed));
 
-        public Exam Exam
+        public Deadlineable Exam
         {
-            get => (Exam)GetValue(ExamProperty);
+            get => (Deadlineable)GetValue(ExamProperty);
             set => SetValue(ExamProperty, value);
         }
 
         private static void Exam_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is SingleExam control && e.NewValue is string newValue)
+            if (d is SingleDeadlineable control && e.NewValue is string newValue)
             {
                 // TODO: Implement your logic here
             }
         }
 
-        public SingleExam()
+        public SingleDeadlineable()
         {
             OnPropertyChanged(nameof(Exam));
             this.InitializeComponent();

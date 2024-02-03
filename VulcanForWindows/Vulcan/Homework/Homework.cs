@@ -20,6 +20,8 @@ public class Homework : IDeadlineable
     public string CreatorName { get; set; }
     public Subject Subject { get; set; }
 
-    public IDeadlineable.Type type 
-    { get => (((DateCreated - Deadline).TotalDays > 12) ? IDeadlineable.Type.Project : IDeadlineable.Type.Homework); }
+    public IDeadlineable.DeadlineableType Type 
+    { get => (((DateCreated - Deadline).TotalDays > 12) ? IDeadlineable.DeadlineableType.Project : IDeadlineable.DeadlineableType.Homework); }
+
+    public bool IsInPast => this.IsInPast();
 }

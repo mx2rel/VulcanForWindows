@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="VulcanForWindows.UserControls.SingleExam"
+    x:Class="VulcanForWindows.UserControls.SingleDeadlineable"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:VulcanForWindows.UserControls"
@@ -14,17 +14,17 @@
     </UserControl.Resources>
 
 
-    <Grid Padding="13,10,13,10" Margin="0">
+    <Grid Padding="13,10,13,10" Margin="0" ColumnSpacing="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel VerticalAlignment="Center">
             <TextBlock Text="{x:Bind Exam.Content, Mode=OneWay}" 
                                                                    Foreground="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
                                                                    FontWeight="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold, Mode=OneWay}"
                                                                    TextDecorations="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}"
-                                                                   />
+                                                                   TextTrimming="CharacterEllipsis"/>
 
             <TextBlock
                                                                     Foreground="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!LightGray, Mode=OneWay}"
@@ -32,13 +32,13 @@
                                                                    TextDecorations="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}">
                                                             <Run Text="{x:Bind Exam.Subject.Name, Mode=OneWay}"/>
                                                             <Run Text="-"/>
-                                                            <Run Text="{x:Bind Exam.Type, Mode=OneWay}"/>
+                                                            <Run Text="{x:Bind Exam.TypeText, Mode=OneWay}"/>
             </TextBlock>
         </StackPanel>
-        <TextBlock Text="{x:Bind Exam.Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayDate, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Right"
+        <TextBlock Text="{x:Bind Exam.Deadline, Converter={StaticResource DateTimeConverter}, ConverterParameter=WeekdayShortDate, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Right"
                                                                 Foreground="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToColor}, ConverterParameter=Silver!White, Mode=OneWay}"
                                                                    FontWeight="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Normal!SemiBold, Mode=OneWay}"
                                                                    TextDecorations="{x:Bind Exam.IsInPast, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}"
-                                                                   />
+                                                                   TextAlignment="Right"/>
     </Grid>
 </UserControl>

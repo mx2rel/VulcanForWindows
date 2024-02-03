@@ -19,6 +19,7 @@ using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Exams;
+using Vulcanova.Features.Homework;
 using Vulcanova.Features.Shared;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
@@ -32,10 +33,11 @@ namespace VulcanForWindows
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ExamsPage : Page, INotifyPropertyChanged
+    public sealed partial class DeadlineablePage : Page, INotifyPropertyChanged
     {
 
         public IDictionary<DateTime, NewResponseEnvelope<Exam>> exams { get; set; } = new Dictionary<DateTime, NewResponseEnvelope<Exam>>();
+        public IDictionary<DateTime, NewResponseEnvelope<Homework>> hws { get; set; } = new Dictionary<DateTime, NewResponseEnvelope<Homework>>();
         DateTime _from;
         public DateTime From
         {
@@ -58,7 +60,7 @@ namespace VulcanForWindows
             }
         }
 
-        public Exam selectedExam { get; set; }
+        public Deadlineable selectedExam { get; set; }
         public ObservableCollection<MonthExamsPair> display { get; set; } = new ObservableCollection<MonthExamsPair>();
         public bool allowLoadButtons { get; set; } = true;
         public void LoadBefore()
@@ -67,7 +69,7 @@ namespace VulcanForWindows
 
             From = From.AddMonths(-1);
             (var start, var end) = acc.GetSchoolYearDuration();
-            From = new DateTime( Math.Clamp(From.Ticks, start.Ticks, end.Ticks));
+            From = new DateTime(Math.Clamp(From.Ticks, start.Ticks, end.Ticks));
             UpdateDisplay();
         }
         public void LoadAfter()
@@ -77,40 +79,45 @@ namespace VulcanForWindows
             To = To.AddMonths(1);
             (var start, var end) = acc.GetSchoolYearDuration();
             From = new DateTime(Math.Clamp(From.Ticks, start.Ticks, end.Ticks));
-            UpdateDisplay();
+            UpdateDisplay(true);
         }
 
-        public async void UpdateDisplay()
+        public async void UpdateDisplay(bool moveToEnd = false)
         {
             allowLoadButtons = false;
             OnPropertyChanged(nameof(allowLoadButtons));
             //start of month
             var v = await Load(From, To);
-
-            display.ReplaceAll(v.GroupBy(r => r.Deadline.ToString("MM/yy"))
+            var replaceW = v.GroupBy(r => r.Deadline.ToString("MM/yy"))
                 .Where(r => r.ToList().Count > 0).
-                Select(r => new MonthExamsPair(r.FirstOrDefault().Deadline, r.ToArray())).OrderBy(r => r.month));
+                Select(r => new MonthExamsPair(r.FirstOrDefault().Deadline, r.ToArray())).OrderBy(r => r.month);
+            display.ReplaceAll(MonthExamsPair.AddMissingMonths(From, To, replaceW.ToArray()));
 
             allowLoadButtons = true;
             OnPropertyChanged(nameof(allowLoadButtons));
             if (selectedExam == null)
             {
-                selectedExam = display.SelectMany(r => r.exams).Where(r => !r.IsInPast()).OrderBy(r => r.Deadline).First();
+                selectedExam = display.SelectMany(r => r.exams).Where(r => !r.IsInPast).OrderBy(r => r.Deadline).First();
                 OnPropertyChanged(nameof(selectedExam));
             }
+            //if(moveToEnd) MoveToEnd(); TODO: execute after ui updates, so it actually moves to the end
         }
-        public async Task<Exam[]> Load(DateTime from, DateTime to)
+        public async Task<IDeadlineable[]> Load(DateTime from, DateTime to)
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
-            return (await new ExamsService().GetExamsByDateRange(acc, from, to, true, true)).entries.ToArray();
+            var lexams = (await new ExamsService().GetExamsByDateRange(acc, from, to, true, true)).entries.ToArray();
+            List<NewResponseEnvelope<Homework>> homeworkEnvelopes = new List<NewResponseEnvelope<Homework>>();
+            foreach (var period in acc.PeriodsInRange(from, to))
+                homeworkEnvelopes.Add(await new HomeworkService().GetHomework(acc, period.Id, true, true));
+            return lexams.Select(r => r as IDeadlineable).Concat(homeworkEnvelopes.SelectMany(r => r.entries).Where(r => r.Deadline >= from && r.Deadline <= to).Select(r => r as IDeadlineable)).ToArray();
 
         }
 
-        public ExamsPage()
+        public DeadlineablePage()
         {
             this.InitializeComponent();
-            From = DateTime.Now;
-            To = DateTime.Now.AddMonths(1);
+            From = DateTime.Now.AddMonths(-1);
+            To = DateTime.Now.AddMonths(3);
             UpdateDisplay();
         }
 
@@ -122,23 +129,57 @@ namespace VulcanForWindows
         }
 
         private void BeforeButton(object sender, RoutedEventArgs e) => LoadBefore();
-        private void AfterButton(object sender, RoutedEventArgs e) => LoadAfter();
-
-        private void SelectionChanged(ItemsView sender, ItemsViewSelectionChangedEventArgs args)
+        private void AfterButton(object sender, RoutedEventArgs e)
         {
-            selectedExam = sender.SelectedItem as Exam;
+            LoadAfter();
+        }
+
+        private void MoveToEnd()
+        {
+            Panel contentPanel = scrollViewer.Content as Panel;
+
+            if (contentPanel != null)
+            {
+                double maxHorizontalOffset = contentPanel.ActualWidth - scrollViewer.ActualWidth;
+
+                if (maxHorizontalOffset > 0)
+                {
+                    scrollViewer.ChangeView(maxHorizontalOffset, 0, 1);
+                }
+            }
+        }
+
+        private void SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedExam = (sender as ListView).SelectedItem as Deadlineable;
             OnPropertyChanged(nameof(selectedExam));
         }
     }
 
     public class MonthExamsPair
     {
-        public MonthExamsPair(DateTime m, Exam[] e)
+        public MonthExamsPair(DateTime m, IDeadlineable[] e)
         {
-            exams = new ObservableCollection<Exam>(e.OrderBy(r => r.Deadline).ToArray());
-            month = m;
+            month = m.AddDays(-m.Day + 1);
+
+            exams = new ObservableCollection<Deadlineable>(e.OrderBy(r => r.Deadline).Select(r => r as IDeadlineable).Select(r => new Deadlineable(r)).ToArray());
         }
         public DateTime month { get; set; }
-        public ObservableCollection<Exam> exams { get; set; } = new ObservableCollection<Exam>();
+        public ObservableCollection<Deadlineable> exams { get; set; } = new ObservableCollection<Deadlineable>();
+
+        public static IEnumerable<MonthExamsPair> AddMissingMonths(DateTime from, DateTime to, IEnumerable<MonthExamsPair> months)
+        {
+            var list = months.ToList();
+            var foundM = list.GroupBy(r => r.month).Select(r => r.First().month).ToList();
+            do
+            {
+                if (!foundM.Contains(from))
+                    list.Add(new MonthExamsPair(from, new IDeadlineable[0]));
+                from = from.AddMonths(1);
+
+            } while (from < to);
+
+            return list;
+        }
     }
 }

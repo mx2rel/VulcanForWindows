@@ -17,5 +17,8 @@ public class Exam : IDeadlineable
     public string CreatorName { get; set; }
     public Subject Subject { get; set; }
     public int PupilId { get; set; }
-    IDeadlineable.Type IDeadlineable.type { get => IDeadlineable.Type.Exam; }
+
+    public bool IsInPast => this.IsInPast();
+
+    IDeadlineable.DeadlineableType IDeadlineable.Type { get => IDeadlineable.DeadlineableType.ExamOrTest; }
 }

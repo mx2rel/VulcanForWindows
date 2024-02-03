@@ -21,7 +21,7 @@
   <ItemGroup>
     <None Remove="AttendanceReportPage.xaml" />
     <None Remove="BlankPage1.xaml" />
-    <None Remove="ExamsPage.xaml" />
+    <None Remove="DeadlineablePage.xaml" />
     <None Remove="GradesPage.xaml" />
     <None Remove="GradesSummaryPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
@@ -34,7 +34,7 @@
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
     <None Remove="UserControls\Settings\ReminderSettings.xaml" />
-    <None Remove="UserControls\SingleExam.xaml" />
+    <None Remove="UserControls\SingleDeadlineable.xaml" />
     <None Remove="UserControls\SingleMessageBig.xaml" />
     <None Remove="UserControls\SingleMessageSmall.xaml" />
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
@@ -127,12 +127,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="UserControls\SingleExam.xaml">
+    <Page Update="UserControls\SingleDeadlineable.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="ExamsPage.xaml">
+    <Page Update="DeadlineablePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
