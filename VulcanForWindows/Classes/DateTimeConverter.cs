@@ -24,8 +24,10 @@ public class DateTimeConverter : IValueConverter
     {
         {"defaultWithAgo", "DTF_dddd!_dd.MM_DTF.YIF_(AGO__)" },
         {"WeekdayDateAgo", "DTF_dddd!_dd.MM_DTF.YIF_(AGO__)" },
+        {"WeekdayShortDateAgo", "DTF_ddd!_dd.MM_DTF.YIF_(AGO__)" },
         {"default", "DTF_dddd!_dd.MM_DTF.YIF" },
         {"WeekdayDate", "DTF_dddd!_dd.MM_DTF.YIF" },
+        {"WeekdayShortDate", "DTF_ddd!_dd.MM_DTF.YIF" },
         {"Date", "DTF_dd.MM_DTF.YIF" },
         {"DateWithYear", "DTF_dd.MM.YY_DTF" },
         {"DayMonthName", "DTF_dd_MMMM_DTF" },
