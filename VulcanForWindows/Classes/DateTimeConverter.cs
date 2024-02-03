@@ -90,6 +90,10 @@ public class DateTimeConverter : IValueConverter
                 return FirstLetterToUpper(s.Replace("_", " ").Replace("!", ","));
             }
         }
+        if(value is int days)
+        {
+            HumanLikeAgoAndDays(days);
+        }
 
         // Return null if the value is not a DateTime
         return null;
@@ -114,9 +118,9 @@ public class DateTimeConverter : IValueConverter
         return FirstLetterToUpper(dateTime.ToString(arg));
     }
 
-    public string HumanLikeAgoAndDays(DateTime dateTime)
+    public string HumanLikeAgoAndDays(DateTime dateTime) => HumanLikeAgoAndDays((DateTime.Now.Date - dateTime.Date).Days);
+    public string HumanLikeAgoAndDays(int daysAgo)
     {
-        int daysAgo = (DateTime.Now.Date - dateTime.Date).Days;
         string v;
         switch (daysAgo)
         {
