@@ -36,11 +36,22 @@ namespace VulcanForWindows
             }
             Preferences.TryGet<DateTime>("lastLaunch", out lastLaunch);
             Preferences.Set<DateTime>("lastLaunch", DateTime.Now);
+
+
+            
+            Preferences.Set<int>("timesLaunched", Preferences.Get<int>("timesLaunched", 0)+1);
         }
         bool isLoggedIn = false;
+        public void Logout()
+        {
+            isLoggedIn = false;
+            nvSample.Visibility = Visibility.Collapsed;
+            rootFrame.Navigate(typeof(LoginPage));
+        }
         public void LoadMainPage()
         {
             nvSample.Visibility = Visibility.Visible;
+            history = new List<Type>();
             history.Add(typeof(MainWindow));
             new AccountSyncService().SyncAccountsIfRequiredAsync();
             rootFrame.Navigate(typeof(MainPanelPage));

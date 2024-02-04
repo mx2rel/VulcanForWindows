@@ -96,5 +96,11 @@ namespace Vulcanova.Features.Auth
                 SaveData();
             }
         }
+
+        public void Logout()
+        {
+            accounts = new List<Account>();
+            SaveData();
+        }
     }
 }

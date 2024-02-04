@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Vulcanova.Features.Auth;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -26,6 +27,12 @@ namespace VulcanForWindows
         public SettingsPage()
         {
             this.InitializeComponent();
+        }
+
+        private void Logout(object sender, RoutedEventArgs e)
+        {
+            new AccountRepository().Logout();
+            MainWindow.Instance.Logout();
         }
     }
 }

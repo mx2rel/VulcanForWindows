@@ -10,6 +10,9 @@
     mc:Ignorable="d">
 
     <Grid Margin="5">
+        <StackPanel Spacing="10">
         <scontrols:ReminderSettings/>
+            <Button Content="Wyloguj" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
+        </StackPanel>
     </Grid>
 </Page>
