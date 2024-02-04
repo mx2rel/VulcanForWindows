@@ -13,9 +13,10 @@
         <converters:VisibilityConverter x:Key="VisibilityConverter" />
     </UserControl.Resources>
 
+    
     <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
                                         HorizontalAlignment="Stretch"
-                                        CornerRadius="6" Margin="3" Padding="5"  VerticalAlignment="Stretch" DataContext="{x:Bind Value, Mode=OneWay}">
+                                        CornerRadius="4" Margin="3" Padding="5"  VerticalAlignment="Stretch" DataContext="{x:Bind Value, Mode=OneWay}">
         <Grid.Resources>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{x:Bind Value.textColor, Mode=OneWay}"/>
