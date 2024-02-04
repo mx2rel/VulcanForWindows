@@ -1,0 +1,34 @@
+﻿<Page
+    x:Class="VulcanForWindows.NotesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:notes="using:Vulcanova.Features.Notes"
+    mc:Ignorable="d">
+
+    <ListView ItemsSource="{x:Bind notes}" Margin="3" SelectionMode="None" IsItemClickEnabled="True">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="notes:Note">
+                <ListViewItem Padding="0" Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
+                    <StackPanel Padding="10" >
+                        <TextBlock FontWeight="SemiBold" FontSize="18">
+                            <Run Text="{x:Bind CreatorName}"/>
+                            <Run Text="-"/>
+                            <Run Text="{x:Bind CategoryName}"/>
+                        </TextBlock>
+                        <Grid ColumnSpacing="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Bind Content}" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{x:Bind DateModified}" Grid.Column="1"/>
+                        </Grid>
+                    </StackPanel>
+                </ListViewItem>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</Page>

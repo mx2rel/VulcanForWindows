@@ -20,5 +20,8 @@ public class NoteMapperProfile : Profile
 
         CreateMap<DateTimeInfo, DateTime>()
             .ConvertUsing(d => DateTimeOffset.FromUnixTimeMilliseconds(d.Timestamp).LocalDateTime);
+
+        CreateMap<object, int?>()
+                .ConvertUsing(obj => obj as int?);
     }
 }
