@@ -13,18 +13,25 @@
             <DataTemplate x:DataType="notes:Note">
                 <ListViewItem Padding="0" Background="{StaticResource LayerOnAccentAcrylicFillColorDefault}">
                     <StackPanel Padding="10" >
-                        <TextBlock FontWeight="SemiBold" FontSize="18">
-                            <Run Text="{x:Bind CreatorName}"/>
-                            <Run Text="-"/>
-                            <Run Text="{x:Bind CategoryName}"/>
-                        </TextBlock>
-                        <Grid ColumnSpacing="20">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                        <TextBlock Text="{x:Bind Content}" TextTrimming="CharacterEllipsis"/>
-                        <TextBlock Text="{x:Bind DateModified}" Grid.Column="1"/>
+                        <TextBlock FontWeight="SemiBold" FontSize="18">
+                            <Run Text="{x:Bind CreatorName}"/>
+                            <Run Text="-"/>
+                            <Run Text="{x:Bind CategoryName}"/>
+                            </TextBlock>
+                            <TextBlock Text="{x:Bind DateModified}" Grid.Column="1"/>
+
+                        </Grid>
+
+                        <Grid ColumnSpacing="20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                        <TextBlock Text="{x:Bind Content}" TextWrapping="WrapWholeWords"/>
                         </Grid>
                     </StackPanel>
                 </ListViewItem>
