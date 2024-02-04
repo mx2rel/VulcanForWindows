@@ -19,10 +19,7 @@ namespace Vulcanova.Core.Uonet
 
         public static DateTime GetLastSync(string resourceKey)
         {
-            if (Preferences.TryGet<DateTime>($"LastSync_{resourceKey}", out var output))
-                return output;
-
-            return DateTime.MinValue;
+            return Preferences.Get<DateTime>($"LastSync_{resourceKey}", DateTime.MinValue);
         }
 
         public static void SetJustSynced(string resourceKey)
