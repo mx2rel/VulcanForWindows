@@ -24,6 +24,7 @@
     <None Remove="DeadlineablePage.xaml" />
     <None Remove="GradesPage.xaml" />
     <None Remove="GradesSummaryPage.xaml" />
+    <None Remove="LoginPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
     <None Remove="MessagesPage.xaml" />
     <None Remove="NotesPage.xaml" />
@@ -124,6 +125,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="NotesPage.xaml">

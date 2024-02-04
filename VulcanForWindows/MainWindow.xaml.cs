@@ -22,12 +22,28 @@ namespace VulcanForWindows
         public MainWindow()
         {
             this.InitializeComponent();
+            Instance = this;
+            isLoggedIn = (new AccountRepository().GetActiveAccountAsync() != null);
+            if (!isLoggedIn)
+            {
+                nvSample.Visibility = Visibility.Collapsed;
+                rootFrame.Navigate(typeof(LoginPage));
+
+            }
+            else
+            {
+                LoadMainPage();
+            }
+            Preferences.TryGet<DateTime>("lastLaunch", out lastLaunch);
+            Preferences.Set<DateTime>("lastLaunch", DateTime.Now);
+        }
+        bool isLoggedIn = false;
+        public void LoadMainPage()
+        {
+            nvSample.Visibility = Visibility.Visible;
             history.Add(typeof(MainWindow));
             new AccountSyncService().SyncAccountsIfRequiredAsync();
             rootFrame.Navigate(typeof(MainPanelPage));
-            Instance = this;
-            Preferences.TryGet<DateTime>("lastLaunch", out lastLaunch);
-            Preferences.Set<DateTime>("lastLaunch", DateTime.Now);
         }
 
         public static void NavigateTo(string tag)
@@ -50,16 +66,16 @@ namespace VulcanForWindows
             else
             {
                 var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
-            if (selectedItem != null)
-            {
-                string selectedItemTag = ((string)selectedItem.Tag);
-                //sender.Header = "Sample Page " + selectedItemTag.Substring(selectedItemTag.Length - 1);
-                string pageName = selectedItemTag;
-                Type pageType = Type.GetType("VulcanForWindows." + pageName);
+                if (selectedItem != null)
+                {
+                    string selectedItemTag = ((string)selectedItem.Tag);
+                    //sender.Header = "Sample Page " + selectedItemTag.Substring(selectedItemTag.Length - 1);
+                    string pageName = selectedItemTag;
+                    Type pageType = Type.GetType("VulcanForWindows." + pageName);
 
-                if (rootFrame.CurrentSourcePageType != pageType)
-                    NavigateTo(pageType);
-            }
+                    if (rootFrame.CurrentSourcePageType != pageType)
+                        NavigateTo(pageType);
+                }
             }
         }
 

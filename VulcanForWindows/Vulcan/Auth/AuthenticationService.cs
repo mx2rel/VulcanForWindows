@@ -26,7 +26,7 @@ public class AuthenticationService : IAuthenticationService
 
         var x509Certificate2 = identity.Certificate;
 
-        var device = $"Vulcanova – {System.Environment.MachineName}";
+        var device = $"Vulcan dla Windows (mx2rel) – {System.Environment.MachineName}";
 
         var request = new RegisterClientRequest
         {
