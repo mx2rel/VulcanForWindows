@@ -56,6 +56,18 @@ public class GradesService : UonetResourceProvider
 
         return d;
     }
+    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromCurrentLevelAsync(Account account)
+    {
+        IDictionary<Period, Grade[]> d = new Dictionary<Period, Grade[]>();
+        //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
+        int currentLevel = account.CurrentPeriod.Level;
+        foreach (var period in account.Periods.Where(r=>r.Level == currentLevel))
+        {
+            d.Add(period, (await GetPeriodGrades(account, period.Id,false,true)).Grades.ToArray());
+        }
+
+        return d;
+    }
 
     public async Task<Grade[]> FetchGradesFromCurrentPeriodAsync(Account account)
         => await FetchPeriodGradesAsync(account, account.CurrentPeriod.Id);
