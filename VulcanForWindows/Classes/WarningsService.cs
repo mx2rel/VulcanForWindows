@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VulcanForWindows.Classes;
+using Vulcanova.Features.Attendance.Report;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Grades;
@@ -19,7 +20,7 @@ namespace VulcanForWindows.Warnings
         public async Task<Warning[]> Generate()
         {
             acc = new AccountRepository().GetActiveAccountAsync();
-            return new Warning[] { await GenerateGradesWarning() };
+            return (new Warning[] { await GenerateGradesWarning(), await GenerateAttendanceWarning() }).Where(r=>r!=null).ToArray();
         }
 
         public async Task<Warning> GenerateGradesWarning()
@@ -32,6 +33,8 @@ namespace VulcanForWindows.Warnings
             (Subject Key, int final)[] failingFinalGrades = FinalGradesResponse.Where(r => !string.IsNullOrEmpty(r.FinalGrade)).Where(r => int.TryParse(r.FinalGrade, out int _))
                .Select(r => (r.Subject, int.Parse(r.FinalGrade))).Where(r => r.Item2 < 2).ToArray();
 
+            if (failingGrades.Length == 0 && failingFinalGrades.Length == 0) return null;
+
             (Subject s, bool isFinalFail)[] grouped = failingGrades.Where(r => !failingFinalGrades.Select(j => j.Key).ToList().Contains(r.Key)).Select(r => (r.Key, false)).ToArray()
             .Concat(failingFinalGrades.Select(r => (r.Key, true))).ToArray();
 
@@ -39,6 +42,17 @@ namespace VulcanForWindows.Warnings
             return new Warning($"Nie zdajesz z {grouped.Length} przedmiotu/ów!",
             $"Twoja średnia lub oceny końcowe z: {string.Join(", ", grouped.Select(r => r.s.Name))} są zbyt niskie.",
             "GradesPage", null, Warning.Severity.Critical);
+        }
+
+        public async Task<Warning> GenerateAttendanceWarning()
+        {
+            var AttendanceResponse = await AttendanceReportService.GetReports(acc);
+            var FailingAt = AttendanceResponse.Where(r => r.PresencePercentage < 50).ToArray();
+
+            if (FailingAt.Length == 0) return null;
+
+            return new Warning($"Masz za niską frekwencję z {FailingAt.Length} przedmiotów!",
+                $"Twoja frekwencja jest niższa niż 50% z {string.Join(",", FailingAt.Select(r => r.Subject.Name))}.", "AttendanceReportPage", null, Warning.Severity.Critical);
         }
     }
     public class Warning
