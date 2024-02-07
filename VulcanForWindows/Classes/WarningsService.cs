@@ -29,18 +29,18 @@ namespace VulcanForWindows.Warnings
 
             (Subject Key, double avg)[] failingGrades = GradesResponse.SelectMany(r => r.Value).GroupBy(r => r.Column.Subject)
                 .Select(r => (r.Key, r.ToArray().CalculateAverage())).Where(r => r.Item2 < 1.75).ToArray();
-            (Subject Key, int final)[] failingFinalGrades = FinalGradesResponse.Where(r=>!string.IsNullOrEmpty(r.FinalGrade)).Where(r=> int.TryParse(r.finalGrade))
+            (Subject Key, int final)[] failingFinalGrades = FinalGradesResponse.Where(r => !string.IsNullOrEmpty(r.FinalGrade)).Where(r => int.TryParse(r.FinalGrade, out int _))
                .Select(r => (r.Subject, int.Parse(r.FinalGrade))).Where(r => r.Item2 < 2).ToArray();
 
-            (Subject s, bool isFinalFail)[] grouped = failingGrades.Where(r=> !failingFinalGrades.Selcet(j=>j.Key).ToList().Contains(r.Key)).Select(r=> (r, false))
-            .Concat(failingFinalGrades.Select(r=>(r.Key, true)));
+            (Subject s, bool isFinalFail)[] grouped = failingGrades.Where(r => !failingFinalGrades.Select(j => j.Key).ToList().Contains(r.Key)).Select(r => (r.Key, false)).ToArray()
+            .Concat(failingFinalGrades.Select(r => (r.Key, true))).ToArray();
 
             // return failingGrades.GroupBy(r=>r.isFinalFail).Select(r=> new Severity(r.Key ? $"Nie zdajesz z "))
-            return new Warning($"Nie zdajesz z {grouped.Length} przedmiotu/ów!", 
-            $"Twoja średnia lub oceny końcowe z: {string.Join(", ",grouped.Select(r=>s.Name))} są zbyt niskie.",
+            return new Warning($"Nie zdajesz z {grouped.Length} przedmiotu/ów!",
+            $"Twoja średnia lub oceny końcowe z: {string.Join(", ", grouped.Select(r => r.s.Name))} są zbyt niskie.",
             "GradesPage", null, Warning.Severity.Critical);
+        }
     }
-
     public class Warning
     {
         public enum Severity
