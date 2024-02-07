@@ -19,21 +19,26 @@ namespace VulcanForWindows.Warnings
         public async Task<Warning[]> Generate()
         {
             acc = new AccountRepository().GetActiveAccountAsync();
-            return await GenerateGradesWarning();
+            return new Warning[] { await GenerateGradesWarning() };
         }
 
-        public async Task<Warning[]> GenerateGradesWarning()
+        public async Task<Warning> GenerateGradesWarning()
         {
             var GradesResponse = await new GradesService().FetchGradesFromCurrentLevelAsync(acc);
             var FinalGradesResponse = await new FinalGrades().FetchPeriodGradesAsync(acc, acc.CurrentPeriod.Id);
 
             (Subject Key, double avg)[] failingGrades = GradesResponse.SelectMany(r => r.Value).GroupBy(r => r.Column.Subject)
                 .Select(r => (r.Key, r.ToArray().CalculateAverage())).Where(r => r.Item2 < 1.75).ToArray();
-            //(r.=Subject, float final)[] failingFinalGrades = FinalGradesResponse.Where(r=>!string.IsNullOrEmpty(r.FinalGrade))
-            //    .Select(r => (r.Subject, float.Parse(r.FinalGrade))).Where(r => r.Item2 < 2).ToArray();
+            (Subject Key, int final)[] failingFinalGrades = FinalGradesResponse.Where(r=>!string.IsNullOrEmpty(r.FinalGrade)).Where(r=> int.TryParse(r.finalGrade))
+               .Select(r => (r.Subject, int.Parse(r.FinalGrade))).Where(r => r.Item2 < 2).ToArray();
 
-            return failingGrades.Select(r => new Warning($"Nie zdajesz z przedmiotu {r.Key.Name}!", $"Twoja średnia wynosi {r.avg}.", "", null, Warning.Severity.Critical)).ToArray();
-        }
+            (Subject s, bool isFinalFail)[] grouped = failingGrades.Where(r=> !failingFinalGrades.Selcet(j=>j.Key).ToList().Contains(r.Key)).Select(r=> (r, false))
+            .Concat(failingFinalGrades.Select(r=>(r.Key, true)));
+
+            // return failingGrades.GroupBy(r=>r.isFinalFail).Select(r=> new Severity(r.Key ? $"Nie zdajesz z "))
+            return new Warning($"Nie zdajesz z {grouped.Length} przedmiotu/ów!", 
+            $"Twoja średnia lub oceny końcowe z: {string.Join(", ",grouped.Select(r=>s.Name))} są zbyt niskie.",
+            "GradesPage", null, Warning.Severity.Critical);
     }
 
     public class Warning
