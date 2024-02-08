@@ -6,6 +6,7 @@
 	+ Sprawdzaj oceny końcowe
 	+ **Sprawdzaj historyczne oceny cząstkowe i końcowe**
 	+ **Dodaj hipotetyczne oceny i sprawdź swoją średnią**
+ 	+ **Zobacz swoje oceny na przestrzeni czasu jako wykresy**
 + Plan lekcji 📅
 	+ Sprawdzaj plan lekcji
 	+ Sprawdzaj nadchodzące zastępstwa
