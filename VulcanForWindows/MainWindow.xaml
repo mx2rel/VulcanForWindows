@@ -44,6 +44,7 @@
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Szczegóły" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
                             <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
+                            <NavigationViewItem Content="Wykresy" ToolTipService.ToolTip="Zobacz twoje oceny jako wykres" Tag="GradesChartsPage"/>
                         </NavigationViewItem.MenuItems>
 
                     </NavigationViewItem>

@@ -22,6 +22,22 @@ public static class AverageCalculator
 
         return nonNullGrades.Sum() / nonNullGrades.Count;
     }
+    public static (decimal average, int sumOfWeights)? AverageRaw(this IEnumerable<Grade> grades, ModifiersSettings modifiers)
+    {
+        var nonNullGrades = grades
+            .Where(g => g.Value != null)
+            .SelectMany(g => Enumerable.Repeat(TryGetValueFromContentRaw(g.ContentRaw, modifiers), g.Column.Weight))
+            .Where(g => g != null)
+            .ToList();
+
+        if (!nonNullGrades.Any())
+        {
+            return null;
+        }
+
+        return ((decimal)nonNullGrades.Sum() / nonNullGrades.Count, nonNullGrades.Count);
+
+    }
 
     private static readonly Regex ValueRegex = new("(\\d+)([+|-])?");
 

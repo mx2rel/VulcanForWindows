@@ -63,7 +63,7 @@ public class GradesService : UonetResourceProvider
         int currentLevel = account.CurrentPeriod.Level;
         foreach (var period in account.Periods.Where(r=>r.Level == currentLevel))
         {
-            d.Add(period, (await GetPeriodGrades(account, period.Id,false,true)).Grades.ToArray());
+            d.Add(period, (await GetPeriodGrades(account, period.Id,true,true)).Grades.ToArray());
         }
 
         return d;

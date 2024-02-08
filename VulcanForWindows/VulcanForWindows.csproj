@@ -35,6 +35,7 @@
     <None Remove="UserControls\Deadlinables\DeadlineablesWidget.xaml" />
     <None Remove="UserControls\Deadlinables\ExamPopup.xaml" />
     <None Remove="UserControls\DeadlineDisplayer.xaml" />
+    <None Remove="UserControls\GradesCharts\SubjectMonthGrades.xaml" />
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
@@ -46,6 +47,7 @@
     <None Remove="UserControls\TimetableDayDisplayer.xaml" />
     <None Remove="UserControls\TimetableItem.xaml" />
     <None Remove="Vulcan\BlankPage1.xaml" />
+    <None Remove="Vulcan\GradesChartsPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -125,6 +127,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\GradesCharts\SubjectMonthGrades.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="GradesChartsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="LoginPage.xaml">

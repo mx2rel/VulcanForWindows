@@ -31,6 +31,26 @@ namespace VulcanForWindows.Classes
 
             return (double)Math.Round(sum / weightSum * 100) / 100;
         }
+        public static (double avg, double sum, int weights) CalculateAverageRaw(this Grade[] grades)
+        {
+            decimal sum = 0;
+            decimal weightSum = 0;
+
+            foreach (var grade in grades)
+            {
+                if (grade.ContentRaw != null)
+                    if (GetValue(grade.ContentRaw, out var g))
+                    {
+                        sum += g * grade.Column.Weight;
+                        weightSum += grade.Column.Weight;
+                    }
+            }
+
+            if (weightSum == 0)
+                return (0,0,0);
+
+            return ((double)Math.Round(sum / weightSum * 100) / 100, (double)sum, (int)weightSum);
+        }
 
 
         public static double CalculateAverage(this FinalGradesEntry[] grades)
