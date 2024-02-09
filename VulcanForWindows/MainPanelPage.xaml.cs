@@ -170,13 +170,6 @@ namespace VulcanForWindows
         {
             sg.ReplaceAll(SubjectGrades.CreateRecent(env));
         }
-
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            //(e.ClickedItem as SubjectGrades)
-            //TODO: LOAD SUBJECT
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged(string propertyName)

@@ -124,6 +124,17 @@ namespace VulcanForWindows.Classes
 
             return GetSubjectsGrades(grades, 5).OrderByDescending(r => r.grades.Last().DateCreated).Take(5).ToArray();
         }
+        public static SubjectGrades[] CreateRecent(Grade[] e)
+        {
+            var gradesDates = e.GroupBy(r=>r.Column.Subject.Name).Select(r => r.OrderByDescending(d=>d.DateCreated).Take(5)).OrderByDescending(r => r.FirstOrDefault().DateCreated).SelectMany(r=>r).ToList();
+
+            var limit = (gradesDates[(gradesDates.Count > 25) ? 25 : (gradesDates.Count - 1)]).DateCreated;
+
+            var grades = e.Where(r => r.DateCreated.GetValueOrDefault() >= limit).ToArray();
+
+
+            return GetSubjectsGrades(grades, 5).OrderByDescending(r => r.grades.Last().DateCreated).Take(5).ToArray();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

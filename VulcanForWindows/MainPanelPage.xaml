@@ -12,6 +12,7 @@
     xmlns:controls="using:VulcanForWindows.UserControls"
     xmlns:deadlineablecontrols="using:VulcanForWindows.UserControls.Deadlinables"
     xmlns:messages="using:Vulcanova.Features.Messages"
+    xmlns:widgets="using:VulcanForWindows.UserControls.Widgets"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -58,7 +59,7 @@
         </Grid>
         <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" Margin="5,200,5,5">
             <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" Tapped="LoadPage" Tag="GradesPage">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -67,36 +68,7 @@
                     <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
                     <TextBlock Style="{StaticResource HeaderText}">Oceny</TextBlock>
                 </StackPanel>
-                <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick" Padding="-2">
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="g:SubjectGrades">
-                            <StackPanel Orientation="Horizontal" Height="32">
-                                <TextBlock Text="{x:Bind subject.Name}" VerticalAlignment="Center"/>
-                                <ItemsRepeater ItemsSource="{x:Bind grades}">
-                                    <ItemsRepeater.Layout>
-                                        <StackLayout Orientation="Horizontal"/>
-                                    </ItemsRepeater.Layout>
-                                    <ItemsRepeater.ItemTemplate>
-                                        <DataTemplate x:DataType="grade:Grade">
-                                            <!--<Grid Width="35" Height="35" >-->
-                                            <Border Height="32" Width="32" Padding="8" 
-                                                Background="{StaticResource LayerOnMicaBaseAltFillColorDefault}" 
-                                                VerticalAlignment="Center"
-                                                Margin="5,0,0,0" CornerRadius="4">
-                                                <TextBlock 
-                                            Text="{x:Bind Content}"
-                                            TextAlignment="Center" VerticalAlignment="Center"
-                                            />
-                                                <!--</Grid>-->
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsRepeater.ItemTemplate>
-                                </ItemsRepeater>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <widgets:GradesWidget Grid.Row="1"/>
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
