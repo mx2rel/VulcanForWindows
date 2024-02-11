@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
     HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto"
-    VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Auto" x:Name="scrollViewer">
+    VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled" x:Name="scrollViewer">
 
             <StackPanel Margin="10" Orientation="Horizontal">
                 <!--<ListViewItem Padding="0">-->
@@ -33,7 +33,7 @@
                 </Button>
                 <!--</ListViewItem>-->
                 <!--<ListViewItem Padding="0">-->
-                <ItemsRepeater ItemsSource="{x:Bind display, Mode=OneWay}" Margin="0,0,0,-5" >
+                <ItemsRepeater ItemsSource="{x:Bind display, Mode=OneWay}" Margin="0,0,0,-5">
                     <ItemsRepeater.Layout>
                         <StackLayout Orientation="Horizontal" Spacing="0"></StackLayout>
                     </ItemsRepeater.Layout>
@@ -47,7 +47,7 @@
                                 <TextBlock Text="{x:Bind month, 
                                     Converter={StaticResource DateTimeConverter}, ConverterParameter=MonthNameYear}" 
                                            Margin="2,2,2,3"/>
-                                <ListView ItemsSource="{x:Bind exams}" Grid.Row="1" 
+                                <ListView ItemsSource="{x:Bind exams}" Grid.Row="1"
                                            SelectionChanged="SelectionChanged" SelectionMode="None" IsItemClickEnabled="True">
                                     <ListView.ItemTemplate>
                                         <DataTemplate x:DataType="classes:Deadlineable">

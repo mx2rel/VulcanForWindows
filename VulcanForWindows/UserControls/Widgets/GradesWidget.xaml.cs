@@ -170,6 +170,7 @@ namespace VulcanForWindows.UserControls.Widgets
 
         private void flipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_timer == null) return;
             _timer.Stop();
             _timer.Start();
         }
