@@ -130,7 +130,7 @@ namespace VulcanForWindows.UserControls.Widgets
                 var output = grouped[i].grades.CalculateAverageRaw();
                 sumOfWeights += output.weights;
                 sum += output.sum;
-                values.Add((grouped[i].month, sum / sumOfWeights));
+                values.Add((grouped[i].month, Math.Round(sum / sumOfWeights,2)));
             }
 
 
