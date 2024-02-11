@@ -72,9 +72,8 @@
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="AttendancePanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9" Tapped="LoadPage" Tag="AttendancePage">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
@@ -87,52 +86,7 @@
                            HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="18"/>
                 </Grid>
 
-                <Grid Visibility="{x:Bind att.isLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
-                Grid.Row="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock x:Name="absenceInfos">
-                <Run>Masz</Run>
-                <Run Text="{x:Bind UnjustifiedCount,Mode=OneWay}"/>
-                <Run>nieusprawiedliwione nieobecności (</Run>
-                <Run Text="{x:Bind InProgressCount,Mode=OneWay}"/>
-                <Run> prośby)</Run>
-                    </TextBlock>
-                    <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieobecności"/>
-                        <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
-                          HorizontalContentAlignment="Stretch" Grid.Row="1" Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay}">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Margin" Value="0,0,7,0"/>
-                                    <Setter Property="Padding" Value="0"/>
-                                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.ItemTemplate>
-                                <DataTemplate x:DataType="attendance:Lesson">
-                                    <controls:AttendanceLessonItem Value="{x:Bind}" DisplayDate="True"/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-
-                        <StackPanel 
-            VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Spacing="10"
-            Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay, ConverterParameter=true}">
-                            <BitmapIcon UriSource="ms-appx:///Assets/JustifyDenied.png" Height="48" HorizontalAlignment="Stretch" Foreground="{StaticResource SystemChromeGrayColor}"/>
-                            <TextBlock FontWeight="SemiBold" FontSize="20" Margin="10" Text="Brak nieobecności w przeciągu ostatnich dwóch tygodni" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="{StaticResource SystemChromeGrayColor}" TextWrapping="WrapWholeWords"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-                <ProgressRing Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsActive="{x:Bind att.isLoading, Mode=OneWay}"/>
+                <widgets:AttendanceWidget Grid.Row="1"/>
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"

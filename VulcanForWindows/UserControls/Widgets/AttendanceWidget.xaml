@@ -1,0 +1,69 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.Widgets.AttendanceWidget"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls.Widgets"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:VulcanForWindows.UserControls"
+    xmlns:attendance="using:Vulcanova.Features.Attendance"
+    xmlns:converters="using:Converters"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:DateTimeConverter x:Key="DateTimeConverter" />
+        <converters:VisibilityConverter x:Key="VisibilityConverter" />
+        <converters:ListToVisibility x:Key="ListToVisibility" />
+    </UserControl.Resources>
+    <FlipView Background="Transparent" DataContext="{x:Bind}">
+        <Grid>
+            <Grid Visibility="{x:Bind att.isLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="absenceInfos">
+                <Run>Masz</Run>
+                <Run Text="{x:Bind UnjustifiedCount,Mode=OneWay}"/>
+                <Run>nieusprawiedliwione nieobecności (</Run>
+                <Run Text="{x:Bind InProgressCount,Mode=OneWay}"/>
+                <Run> prośby)</Run>
+                </TextBlock>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieobecności"/>
+                    <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
+                          HorizontalContentAlignment="Stretch" Grid.Row="1" Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Margin" Value="0,0,7,0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="attendance:Lesson">
+                                <controls:AttendanceLessonItem Value="{x:Bind}" DisplayDate="True"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackPanel 
+            VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Spacing="10"
+            Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay, ConverterParameter=true}">
+                        <BitmapIcon UriSource="ms-appx:///Assets/JustifyDenied.png" Height="48" HorizontalAlignment="Stretch" Foreground="{StaticResource SystemChromeGrayColor}"/>
+                        <TextBlock FontWeight="SemiBold" FontSize="20" Margin="10" Text="Brak nieobecności w przeciągu ostatnich dwóch tygodni" HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="{StaticResource SystemChromeGrayColor}" TextWrapping="WrapWholeWords"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <ProgressRing Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsActive="{x:Bind att.isLoading, Mode=OneWay}"/>
+        </Grid>
+        <lvc:PieChart Series="{Binding seriesRadial}" InitialRotation="270" LegendPosition="Right" LegendTextSize="12" LegendTextPaint="{x:Bind LegendTextPaint}" />
+    </FlipView>
+</UserControl>
