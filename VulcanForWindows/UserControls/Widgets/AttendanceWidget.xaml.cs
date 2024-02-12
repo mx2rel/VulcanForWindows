@@ -53,7 +53,7 @@ namespace VulcanForWindows.UserControls.Widgets
             .Where(r => r.JustificationStatus == Vulcanova.Uonet.Api.Lessons.JustificationStatus.Requested).Count())) : -1;
         public ObservableCollection<Lesson> lastNieusprawiedliwione = new ObservableCollection<Lesson>();
 
-        public IEnumerable<ISeries> seriesRadial { get; set; }
+        public IEnumerable<ISeries> seriesRadial { get; set; } = new ObservableCollection<ISeries>();
 
         public float PresentPercent { get; set; }
         public string PresentPercentDisplay { get => PresentPercent.ToString("0.00") + "%"; }

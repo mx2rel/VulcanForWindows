@@ -18,12 +18,14 @@ namespace VulcanForWindows.Classes
     public class SubjectGrades : INotifyPropertyChanged
     {
         public SubjectGrades() { }
-        public SubjectGrades(Subject subject, GradesResponseEnvelope env, string fGrade = "")
+        public SubjectGrades(Subject subject, GradesResponseEnvelope env, string fGrade = "", GradesResponseEnvelope prevPeriod = null)
         {
             this.subject = subject;
             this.env = env;
             grades = new ObservableCollection<Grade>(env.Grades.Where(r => r.Column.Subject.Id == subject.Id));
             finalGrade = fGrade;
+            if(prevPeriod!=null)
+            prevPeriodGrades = prevPeriod.Grades.ToArray();
         }
         public SubjectGrades(Subject subject, Grade[] g, string fGrade = "", int trim = 0)
         {
@@ -42,6 +44,8 @@ namespace VulcanForWindows.Classes
         {
             get; set;
         }
+
+        public Grade[] prevPeriodGrades = new Grade[0];
 
         public List<Grade> addedGrades = new List<Grade>();
 
@@ -91,23 +95,17 @@ namespace VulcanForWindows.Classes
 
         public string averageDisplay => average.ToString("0.00");
 
-        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env)
-        {
-            var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env)).ToArray();
-
-            return r;
-        }
         public static SubjectGrades[] GetSubjectsGrades(Grade[] g, int trim = 0)
         {
             var r = g.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, g, "", trim)).ToArray();
 
             return r;
         }
-        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env, FinalGradesResponseEnvelope fenv)
+        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env, FinalGradesResponseEnvelope fenv, GradesResponseEnvelope otherPeriod=null)
         {
             var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env,
                 ((fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray().Length > 0) ? 
-                (fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray()[0].FastDisplayGrade) : "")            
+                (fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray()[0].FastDisplayGrade) : ""), otherPeriod
             )).ToArray();
 
             return r;

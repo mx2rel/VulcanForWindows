@@ -13,41 +13,21 @@ namespace VulcanForWindows.Classes
     {
         public static double CalculateAverage(this Grade[] grades)
         {
-            decimal sum = 0;
-            decimal weightSum = 0;
-
-            foreach (var grade in grades)
-            {
-                if (grade.ContentRaw != null)
-                    if (GetValue(grade.ContentRaw, out var g))
-                    {
-                        sum += g * grade.Column.Weight;
-                        weightSum += grade.Column.Weight;
-                    }
-            }
-
-            if (weightSum == 0)
-                return 0;
-
-            return (double)Math.Round(sum / weightSum * 100) / 100;
+            return grades.CalculateAverageRaw().avg;
         }
         public static (double avg, double sum, int weights) CalculateAverageRaw(this Grade[] grades)
         {
             decimal sum = 0;
             decimal weightSum = 0;
 
-            foreach (var grade in grades)
+            foreach (var grade in grades.Where(r => r.Value.HasValue))
             {
-                if (grade.ContentRaw != null)
-                    if (GetValue(grade.ContentRaw, out var g))
-                    {
-                        sum += g * grade.Column.Weight;
-                        weightSum += grade.Column.Weight;
-                    }
+                sum += grade.Value.Value * grade.Column.Weight;
+                weightSum += grade.Column.Weight;
             }
 
             if (weightSum == 0)
-                return (0,0,0);
+                return (0, 0, 0);
 
             return ((double)Math.Round(sum / weightSum * 100) / 100, (double)sum, (int)weightSum);
         }
