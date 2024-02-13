@@ -312,7 +312,8 @@ namespace VulcanForWindows
                 {
                     Name = "Hipotetyczna ocena",
                     Weight = weight
-                }
+                },
+                Value=grade
             });
             eSgu.DataContext = eSg;
             eSgu.UpdateLayout();
@@ -337,7 +338,7 @@ namespace VulcanForWindows
                     if ((v as FrameworkElement).Tag != null)
                         if (v is TextBlock t)
                         {
-                            t.Text = $"{t.Tag}: {(sender.DataContext as SubjectGrades).CountAverage(int.Parse(t.Tag.ToString()), (decimal)sender.Value)}";
+                            t.Text = $"{t.Tag}: {(sender.DataContext as SubjectGrades).CountAverage(int.Parse(t.Tag.ToString()), (int)sender.Value)}";
                         }
                 }
         }

@@ -55,28 +55,12 @@ namespace VulcanForWindows.Classes
             return (double)Math.Round(sum / weightSum * 100) / 100;
         }
 
-        public static double CountAverage(this SubjectGrades grades, decimal newGrade, decimal newWeight)
+        public static double CountAverage(this SubjectGrades grades, double newGrade, int newWeight)
         {
-            decimal sum = 0;
-            decimal weightSum = 0;
-
-            foreach (var grade in grades.grades)
-            {
-                if (grade.ContentRaw != null)
-                    if (GetValue(grade.ContentRaw, out var g))
-                    {
-                        sum += g * grade.Column.Weight;
-                        weightSum += grade.Column.Weight;
-                    }
-            }
-
-            sum += newGrade * newWeight;
-            weightSum += newWeight;
-
-            if (weightSum == 0)
-                return 0;
-
-            return (double)Math.Round(sum / weightSum * 100) / 100;
+            var raw = grades.yearlyGrades.CalculateAverageRaw();
+            var newSum = raw.sum + newGrade * newWeight;
+            double newWeightsSum = raw.weights + newWeight;
+            return Math.Round(newSum / newWeightsSum, 2);
         }
 
         public static bool GetValue(string s, out decimal o)

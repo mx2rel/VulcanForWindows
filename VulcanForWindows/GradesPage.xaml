@@ -233,7 +233,7 @@
 
                                     <Grid PointerEntered="Expander_PointerEntered" PointerExited="Expander_PointerExited">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="80"/>
+                                            <ColumnDefinition Width="120"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="10"/>
                                             <ColumnDefinition Width="35"/>
@@ -243,13 +243,13 @@
                                                 <RowDefinition Height="24"/>
                                                 <RowDefinition Height="18"/>
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{x:Bind subject.Name}" HorizontalTextAlignment="Left" VerticalAlignment="Center" FontWeight="Medium"/>
+                                            <TextBlock Text="{x:Bind subject.Name}" HorizontalTextAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontWeight="Medium"/>
                                             <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" 
                                                        Foreground="{x:Bind AverageColor, Mode=OneWay}">
                                         <Run Text="{x:Bind AverageText, Mode=OneWay}"/>
-                                        <Run Text="{x:Bind averageDisplay, Mode=OneWay}" x:Name="average"/>
+                                        <Run Text="{x:Bind yearlyAverage, Mode=OneWay}" x:Name="average"/>
                                                 <Run Text="("/>
-                                                <Run Text="{x:Bind grades.Count, Mode=OneWay}"/>
+                                                <Run Text="{x:Bind yearGradesCount, Mode=OneWay}"/>
                                                 <Run Text=")"/>
                                             </TextBlock>
                                         </Grid>

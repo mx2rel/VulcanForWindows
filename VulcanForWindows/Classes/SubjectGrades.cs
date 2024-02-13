@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VulcanForWindows.Vulcan.Grades;
 using VulcanForWindows.Vulcan.Grades.Final;
+using Vulcanova.Features.Auth;
 using Vulcanova.Features.Grades;
 using Vulcanova.Features.Grades.Final;
 using Vulcanova.Features.Shared;
@@ -26,13 +27,15 @@ namespace VulcanForWindows.Classes
             finalGrade = fGrade;
             if(prevPeriod!=null)
             prevPeriodGrades = prevPeriod.Grades.ToArray();
+            CalculateYearlyAverage();
+
         }
         public SubjectGrades(Subject subject, Grade[] g, string fGrade = "", int trim = 0)
         {
             this.subject = subject;
             grades = new ObservableCollection<Grade>(g.Where(r => r.Column.Subject.Id == subject.Id));
             finalGrade = fGrade;
-
+            CalculateYearlyAverage();
             if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
         }
 
@@ -59,7 +62,7 @@ namespace VulcanForWindows.Classes
             OnPropertyChanged("removeButtonVisibility");
 
             //OnPropertyChanged(nameof(grades));
-
+            CalculateYearlyAverage();
         }
 
         public Visibility removeButtonVisibility => (addedGrades.Count == 0) ? Visibility.Collapsed : Visibility.Visible;
@@ -76,6 +79,7 @@ namespace VulcanForWindows.Classes
             OnPropertyChanged("AverageColor");
             OnPropertyChanged("AverageText");
             OnPropertyChanged("removeButtonVisibility");
+            CalculateYearlyAverage();
         }
 
         public Grade[] recentGrades => grades.OrderByDescending(r => r.DateCreated).ToList().Take(10).ToArray();
@@ -85,15 +89,30 @@ namespace VulcanForWindows.Classes
         [JsonIgnore]
         public GradesCountChartData gradesCountChart => GradesCountChartData.Generate(grades.ToArray());
 
-        public double average
+        IDictionary<Period, Grade[]> _yearGrades;
+        public async void CalculateYearlyAverage()
         {
-            get
-            {
-                return grades.ToArray().CalculateAverage();
-            }
+            if (_yearGrades == null) _yearGrades =
+                    (await (new GradesService()).FetchGradesFromCurrentLevelAsync(new AccountRepository().GetActiveAccountAsync()));
+
+
+            var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r=>r.Column.Subject.Id == subject.Id);
+            yearlyGrades = gradesOnly.Concat(addedGrades).ToArray();
+
+            yearlyAverage = yearlyGrades.CalculateAverage();
+            yearGradesCount = $"{yearlyGrades.Count()}";
+
+            OnPropertyChanged(nameof(yearlyAverage));
+            OnPropertyChanged(nameof(averageDisplay));
+            OnPropertyChanged(nameof(yearGradesCount));
         }
 
-        public string averageDisplay => average.ToString("0.00");
+        public Grade[] yearlyGrades = new Grade[0];
+
+        public double yearlyAverage { get; set; }
+        public string yearGradesCount { get; set; }
+        
+        public string averageDisplay => yearlyAverage.ToString("0.00");
 
         public static SubjectGrades[] GetSubjectsGrades(Grade[] g, int trim = 0)
         {
