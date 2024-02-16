@@ -34,15 +34,18 @@ public class BoolToStrings : IValueConverter
             {
                 return CustomHandler(b, param);
             }
-            else
+
+            string s = param;
+            if (s.Contains("!"))
             {
-                string s = param;
+                var split = s.Split("!");
+                var result = b ? split[0] : split[1];
 
-
-                if (s.Contains("!"))
+                if (targetType == typeof(TextDecorations) || targetType == typeof(FontWeight))
                 {
-                    var split = s.Split("!");
-                    var result = b ? split[0] : split[1];
+
+
+
                     if (targetType == typeof(FontWeight))
                         return
                             (FontWeight)(typeof(FontWeights).GetProperty(result).GetValue(null));
@@ -50,12 +53,16 @@ public class BoolToStrings : IValueConverter
                         return
                         (TextDecorations)Enum.Parse(typeof(TextDecorations), result);
                 }
-            }
+                if (targetType == typeof(string))
+                {
+                    return result;
+                }
+        }
         }
 
-        Debug.WriteLine("Could not convert bool to font weight. Parameter: " + param);
+        Debug.WriteLine($"Could not convert bool to string. Parameter: {param}, TargetType: {targetType.ToString()})");
         // Return null if the value is not a DateTime
-        return FontWeights.Normal;
+        return null;
     }
 
     public string CustomHandler(bool b, string param)
