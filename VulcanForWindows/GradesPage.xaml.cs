@@ -313,7 +313,8 @@ namespace VulcanForWindows
                     Name = "Hipotetyczna ocena",
                     Weight = weight
                 },
-                Value=grade
+                Value=grade,
+                IsHipothetic = true
             });
             eSgu.DataContext = eSg;
             eSgu.UpdateLayout();

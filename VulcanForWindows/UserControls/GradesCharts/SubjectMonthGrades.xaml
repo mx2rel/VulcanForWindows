@@ -35,7 +35,7 @@
 
         <lvc:CartesianChart x:Name="chart"
         Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxes, Mode=OneWay}" 
-                            Height="400" ZoomMode="X" ZoomingSpeed="0.1" TooltipFindingStrategy="CompareOnlyXTakeClosest" 
+                            Height="400" ZoomMode="X" ZoomingSpeed="0.1"  TooltipFindingStrategy="CompareOnlyX"
 >
         </lvc:CartesianChart>
     </StackPanel>

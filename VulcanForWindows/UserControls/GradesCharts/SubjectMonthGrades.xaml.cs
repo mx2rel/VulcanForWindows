@@ -91,6 +91,8 @@ namespace VulcanForWindows.UserControls.GradesCharts
                 .OrderBy(r => DateTime.ParseExact(/*"01." +*/ r.Key, "dd.MM.yy", CultureInfo.CurrentCulture))));
             List<(string subject, List<(DateTime day, double Value)> data)> ActualValues = new List<(string subject, List<(DateTime day, double Value)> data)>();
 
+            (Subject Subject, Grade[] Grades)[] SubjectGrades = FilteredGrades.OrderBy(r=>r.DateModify).GroupBy(r => r.Column.Subject.Id).Select(r => (r.First().Column.Subject, r.ToArray())).ToArray();
+
             if (TypeBox.SelectedIndex == 1)
             {
 
@@ -140,25 +142,49 @@ namespace VulcanForWindows.UserControls.GradesCharts
                 {
                     Values = r.data.Select(r => new DateTimePoint(
                         r.day, (double)r.Value)).ToArray(),
-                    Fill = null,
                     Name = r.subject,
-                    DataPadding = new LiveChartsCore.Drawing.LvcPoint(0,1),
-                    LineSmoothness = 0.5f,
                     IsVisibleAtLegend = true,
                     XToolTipLabelFormatter = (chartPoint) =>
                     {
                         var selectedDate = r.data.ElementAt(chartPoint.Index).day;
                         var tooltipContent = $"{selectedDate.ToString("dd MMM yy", CultureInfo.CurrentCulture)}{Environment.NewLine}";
                         return tooltipContent;
-                    }
+                    },
+                    Fill = null
+                    //    Fill = new LinearGradientPaint(
+                    //new[] { new SKColor(0, 255, 40, 150), new SKColor(0, 255, 40, 0) },
+                    //new SKPoint(0.5f, 0),
+                    //new SKPoint(0.5f, 1)),
+                    //    DataPadding = new LiveChartsCore.Drawing.LvcPoint(0, 1),
+                    //    LineSmoothness = 0.5f,
+
+                    //    Stroke = new SolidColorPaint(new SKColor(0, 230, 50))
+                    //    {
+                    //        StrokeThickness = 3
+                    //    },
+                    //GeometryFill = new SolidColorPaint(new SKColor(255, 255, 255)),
+                    //GeometryStroke = new SolidColorPaint(new SKColor(0, 230, 50))
+                    //{
+                    //    StrokeThickness = 3
+                    //},
                 }
                 ).ToArray();
+            //Series = Series.Concat(
+
+            //        SubjectGrades.Select(r => new LineSeries<DateTimePoint>
+            //        {
+            //            Values = r.Grades.Where(g => g.Value.HasValue && g.Column.Weight > 0).Select(g => new DateTimePoint(g.DateModify.Date, (double)g.Value.GetValueOrDefault())),
+            //            Fill= null,
+            //            Stroke = null,
+            //            Name = r.Subject.Name
+
+            //        }).ToArray()).ToArray();
 
 
             XAxes = new List<Axis>
-            { 
+            {
                 new DateTimeAxis(TimeSpan.FromDays(1), date => date.ToString("dd MMM yy"))
-                
+
             };
             OnPropertyChanged(nameof(Series));
             OnPropertyChanged(nameof(XAxes));
