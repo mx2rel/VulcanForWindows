@@ -200,7 +200,8 @@
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Border Background="{x:Bind BgColor}" VerticalAlignment="Stretch" 
+                                    <Border Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
+                                        ConverterParameter=Orange!Green}" VerticalAlignment="Stretch" 
                                             HorizontalAlignment="Left" Height="35" CornerRadius="3"
                                             Grid.Column="0">
                                         <TextBlock TextAlignment="Center" Width="35" FontWeight="Medium" FontSize="14" VerticalAlignment="Center" Text="{x:Bind ContentRaw}"/>

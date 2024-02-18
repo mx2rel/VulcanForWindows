@@ -1,4 +1,5 @@
 using System;
+using VulcanForWindows;
 
 namespace Vulcanova.Features.Grades;
 
@@ -16,9 +17,8 @@ public class Grade
     public bool IsModified => DateCreated != DateModify;
     public decimal? Value { get; set; }
     public Column Column { get; set; }
-    public string BgColor => (Column.Name == "Hipotetyczna ocena") ? "#7a420a" : "Green";
     public bool IsHipothetic { get; set; }
-    public bool IsRecent { get => DateModify.Date >= DateTime.Today.AddDays(-2); }
+    public bool IsRecent { get => DateModify.Date >= DateTime.Today.AddDays(-1) || DateModify >= MainWindow.lastLaunch; }
 
     public bool IsHipotheticOrRecent => (IsRecent || IsHipothetic);
 }
