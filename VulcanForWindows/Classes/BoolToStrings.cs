@@ -57,6 +57,26 @@ public class BoolToStrings : IValueConverter
                 {
                     return result;
                 }
+                if (targetType == typeof(int))
+                {
+                    if (Int64.TryParse(result, out var o))
+                        return o;
+                }
+                if (targetType == typeof(double))
+                {
+                    if (double.TryParse(result, out var o))
+                        return o;
+                }
+                if (targetType == typeof(float))
+                {
+                    if (float.TryParse(result, out var o))
+                        return o;
+                }
+                if (targetType == typeof(decimal))
+                {
+                    if (decimal.TryParse(result, out var o))
+                        return o;
+                }
         }
         }
 
