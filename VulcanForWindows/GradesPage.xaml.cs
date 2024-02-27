@@ -26,6 +26,7 @@ using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades.Final;
 using VulcanForWindows.Vulcan.Grades.Final;
 using System.Threading.Tasks;
+using VulcanForWindows.Classes.VulcanGradesDb;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -105,7 +106,8 @@ namespace VulcanForWindows
         {
             grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, await GetFenvelope(selectedPeriodId)));
             LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
-
+            if(!((sender as GradesResponseEnvelope).isLoading))
+            ClassmateGradesUploader.UpsyncGrades((sender as GradesResponseEnvelope).Grades.ToArray(), selectedPeriodId);
             cd = MonthChartData.Generate(grades.SelectMany(r=>r.grades).ToArray());
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
