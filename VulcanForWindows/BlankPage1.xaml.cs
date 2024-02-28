@@ -37,5 +37,10 @@ namespace VulcanForWindows
             Preferences.Clear();
             b1.Content = "Done!";
         }
+
+        private void b2_Click(object sender, RoutedEventArgs e)
+        {
+            LiteDbManager.database.GetCollection<Classes.VulcanGradesDb.ClassmateGradesSyncObject>().DeleteAllAsync();
+        }
     }
 }

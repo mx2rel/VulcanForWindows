@@ -55,7 +55,11 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
         public async static void SyncGrade(Grade grade)
         {
-            string url = $"http://localhost:3205/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";
+            //string url = $"http://localhost:3205/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";
+            var baseUrl = await CredentialsReader.ReadCredentialAsync<string>("ClassmatesGradesServerUrl");
+            Debug.WriteLine(baseUrl);
+
+            string url = $"{baseUrl}/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";
             var succes = await VisitUrlInBackground(url);
             if (succes) await DbEntries.InsertAsync(new ClassmateGradesSyncObject(grade.Column.Id, DateTime.Now));
         }
@@ -80,7 +84,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
             }
             catch (HttpRequestException e)
             {
-                Debug.WriteLine($"Error visiting URL: {e.Message} \n {url}");
+                Console.WriteLine($"Error visiting URL: {e.Message} \n {url}");
                 return false;
             }
         }

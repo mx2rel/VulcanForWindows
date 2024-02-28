@@ -19,6 +19,7 @@
     <Content Remove="Assets\JustifyGranted.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\Credentials.json" />
     <None Remove="AttendanceReportPage.xaml" />
     <None Remove="BlankPage1.xaml" />
     <None Remove="DeadlineablePage.xaml" />
@@ -129,6 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\Credentials.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\Widgets\AttendanceWidget.xaml">
