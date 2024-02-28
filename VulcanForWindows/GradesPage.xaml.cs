@@ -42,9 +42,9 @@ namespace VulcanForWindows
         {
             this.InitializeComponent();
 
+            selectedPeriod = new AccountRepository().GetActiveAccountAsync().Periods.Last();
 
             grades = new ObservableCollection<SubjectGrades>();
-            selectedPeriod = new AccountRepository().GetActiveAccountAsync().Periods.Last();
             PeriodSelector.SelectedIndex = avaiblePeriods.Length - 1;
             PeriodSelector.UpdateLayout();
             AssignGrades();
@@ -103,7 +103,7 @@ namespace VulcanForWindows
 
         async void HandleGradesUpdated(object sender, IEnumerable<Grade> updatedGrades)
         {
-            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, await GetFenvelope(selectedPeriodId)));
+            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, await GetFenvelope(selectedPeriodId), selectedPeriodId));
             LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
 
             cd = MonthChartData.Generate(grades.SelectMany(r=>r.grades).ToArray());

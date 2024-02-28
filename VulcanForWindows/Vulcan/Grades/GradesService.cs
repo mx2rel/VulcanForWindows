@@ -56,17 +56,29 @@ public class GradesService : UonetResourceProvider
 
         return d;
     }
-    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromCurrentLevelAsync(Account account)
+
+
+    public async Task<IDictionary<Period, Grade[]>> FetchLevelGradesWithPeriodAsync(Account account, int periodId)
+    {
+        var v = account.Periods.Where(r => r.Id == periodId);
+        if (v.Count() == 0) return null;
+        return await FetchGradesFromLevelAsync(account, v.First().Level);
+    }
+    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromLevelAsync(Account account, int level)
     {
         IDictionary<Period, Grade[]> d = new Dictionary<Period, Grade[]>();
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
-        int currentLevel = account.CurrentPeriod.Level;
-        foreach (var period in account.Periods.Where(r=>r.Level == currentLevel))
+        foreach (var period in account.Periods.Where(r => r.Level == level))
         {
-            d.Add(period, (await GetPeriodGrades(account, period.Id,true,true)).Grades.ToArray());
+            d.Add(period, (await GetPeriodGrades(account, period.Id, true, true)).Grades.ToArray());
         }
 
         return d;
+    }
+
+    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromCurrentLevelAsync(Account account)
+    {
+        return await FetchGradesFromLevelAsync(account, account.CurrentPeriod.Level);
     }
 
     public async Task<Grade[]> FetchGradesFromCurrentPeriodAsync(Account account)
