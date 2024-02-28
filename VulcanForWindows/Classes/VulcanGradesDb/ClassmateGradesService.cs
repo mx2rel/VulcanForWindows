@@ -26,6 +26,8 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
                 var baseUrl = await CredentialsReader.ReadCredentialAsync<string>("ClassmatesGradesServerUrl");
                 var str = await RetrieveData($"{baseUrl}/Get/{ColumnId}");
 
+                if (str == "null") return null;
+
                 if (JObject.Parse(str).TryGetValue("Data", out var o))
                 {
                     var data = JsonConvert.DeserializeObject<SingleClassmateGrade[]>(o.ToObject<string>());

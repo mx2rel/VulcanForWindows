@@ -29,6 +29,8 @@ namespace VulcanForWindows.Classes
             if (prevPeriod!=null)
             prevPeriodGrades = prevPeriod.Grades.ToArray();
             CalculateYearlyAverage();
+            foreach (var v in grades) v.CalculateClassAverage();
+
 
         }
         public SubjectGrades(Subject subject, Grade[] g, int periodId, string fGrade = "", int trim = 0)

@@ -97,6 +97,7 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
             await Task.Delay(10);
             if (ColumnId == 0) return;
             var classmatesGrades = await Classes.VulcanGradesDb.ClassmateGradesService.GetSingleClassmateColumn(columnId);
+            if (classmatesGrades == null) return;
 
             foreach (var v in classmatesGrades.Grades)
                 if (v.Value > highestGrade) highestGrade = v.Value;

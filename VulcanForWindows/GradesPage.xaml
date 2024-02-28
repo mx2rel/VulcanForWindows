@@ -60,7 +60,6 @@
         </DataTemplate>
 
         <DataTemplate x:Key="GradeFullInfo" x:DataType="grade:Grade">
-            <!-- Define the content of your Flyout here -->
             <controls:GradeFullInfo Grade="{x:Bind}"/>
         </DataTemplate>
         <DataTemplate x:Key="SubjectGradesInfoFlyout" x:Name="SubjectGradesInfoFlyout" x:DataType="classes:SubjectGrades">
@@ -188,13 +187,19 @@
 
 
                                         <TextBlock Text="{x:Bind Column.Name}" FontWeight="Medium"/>
-                                        <TextBlock Grid.Row="1" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
-                                    <Run Text="{x:Bind Column.Weight}"/>
-                                    <Run Text=" | "/>
-                                    <Run Text="{x:Bind DateCreated}"/>
-                                    <Run Text=" | "/>
-                                    <Run Text="{x:Bind CreatorName}"/>
-                                        </TextBlock>
+                                        <StackPanel Orientation="Horizontal" Spacing="3" Grid.Row="1">
+                                            <TextBlock  FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
+                                                <Run Text="{x:Bind Column.Weight}"/>
+                                                <Run Text=" | "/>
+                                                <Run Text="{x:Bind DateCreated}"/>
+                                                <Run Text=" | "/>
+                                                <Run Text="{x:Bind CreatorName}"/>
+                                            </TextBlock>
+                                            <TextBlock  Visibility="{x:Bind ClassAverageVibility, Mode=OneWay}" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
+                                                <Run Text="|"/>
+                                                <Run Text="{x:Bind ClassAverageDisplay, Mode=OneWay}"/>
+                                            </TextBlock>
+                                        </StackPanel>
 
                                     </Grid>
                                     <Border Grid.Column="2" Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
@@ -335,10 +340,10 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Background="#66000000" Visibility="Collapsed">
-        <Grid x:Name="ModalDialog"  Height="300" Width="800" 
+            <Grid x:Name="ModalDialog"  Height="300" Width="800" 
               Background="#2b2b2b" CornerRadius="8" BorderBrush="#3d3d3d" BorderThickness="1"
               >
-        </Grid>
+            </Grid>
         </Grid>
 
 

@@ -21,7 +21,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Spacing="5">
                     <TextBlock Text="Oceny w klasie" FontWeight="SemiBold" FontSize="18"/>
-                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="Gray" x:Name="InfoIcon2"
+                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="LightGray" x:Name="InfoIcon2"
                           FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,0" PointerEntered="FontIcon_PointerEntered2" PointerExited="FontIcon_PointerExited2"
                           />
                 </StackPanel>
@@ -40,7 +40,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
                     <TextBlock Text="Brak wystarczającej ilości danych!" FontWeight="SemiBold" FontSize="24" Foreground="LightGray" TextAlignment="Center"/>
 
-                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="Gray" x:Name="InfoIcon"
+                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="LightGray" x:Name="InfoIcon"
                           FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" PointerEntered="FontIcon_PointerEntered" PointerExited="FontIcon_PointerExited"
                           />
                 </StackPanel>
