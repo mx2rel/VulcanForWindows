@@ -12,6 +12,7 @@
         <MicaBackdrop/>
     </Window.SystemBackdrop>
 
+    <Grid>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -71,5 +72,10 @@
             <Frame x:Name="rootFrame" Grid.Row="1"/>
 
         </Grid>
+
     </Grid>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{x:Bind IsOtherWindowOpenVisibility, Mode=OneWay}" Background="#88000000"/>
+
+    </Grid>
+
 </Window>

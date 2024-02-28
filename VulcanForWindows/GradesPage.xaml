@@ -334,5 +334,13 @@
                 </ItemsRepeater>
             </Grid>
         </Grid>
+        <Grid Grid.Row="1" Background="#66000000" Visibility="Collapsed">
+        <Grid x:Name="ModalDialog"  Height="300" Width="800" 
+              Background="#2b2b2b" CornerRadius="8" BorderBrush="#3d3d3d" BorderThickness="1"
+              >
+        </Grid>
+        </Grid>
+
+
     </Grid>
 </Page>

@@ -5,41 +5,55 @@
     xmlns:local="using:VulcanForWindows.UserControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ClassmatesGrades="using:VulcanForWindows.UserControls.ClassmatesGrades"
     mc:Ignorable="d">
 
-    <StackPanel Width="200">
-        <ListView HorizontalContentAlignment="Center" Padding="0,0,0,15" SelectionMode="None">
-            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="60" Width="60" CornerRadius="3">
-                <TextBlock TextAlignment="Center" Width="35"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="32" FontWeight="Bold"/>
-            </Border>
-        </ListView>
-        <TextBlock FontWeight="Bold" FontSize="16" TextWrapping="WrapWholeWords">
+    <Grid VerticalAlignment="Stretch" Width="780">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Padding="15,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock FontWeight="Bold" FontSize="22" TextWrapping="WrapWholeWords">
                     <Run Text="{x:Bind Grade.Column.Name}"/>
                     <Run Text="("/>
                     <Run Text="{x:Bind Grade.Column.Code}"/>
                     <Run Text=")"/>
-        </TextBlock>
-        <Rectangle Height="10"/>
-        <TextBlock>
-                    <Run Text="Wpisano:"/>
-                    <Run Text="{x:Bind Grade.DateCreated}"/>
-        </TextBlock>
-        <TextBlock>
-                    <Run Text="Autor:"/>
+                </TextBlock>
+                <TextBlock Foreground="LightGray">
+                    <Run Text="{x:Bind Grade.Column.Subject.Name}"/>
+                    <Run Text="|"/>
                     <Run Text="{x:Bind Grade.CreatorName}"/>
-        </TextBlock>
-
-        <TextBlock>
-                    <Run Text="Edytowano:"/>
-                    <Run Text="{x:Bind Grade.DateModify}"/>
-        </TextBlock>
-        <TextBlock>
-                    <Run Text="Komentarz:"/>
-                    <Run Text="{x:Bind Grade.Comment}"/>
-        </TextBlock>
-        <TextBlock Visibility="{x:Bind Grade.IsModified}">
+                    <Run Text="|"/>
                     <Run Text="Waga:"/>
                     <Run Text="{x:Bind Grade.Column.Weight}"/>
-        </TextBlock>
-    </StackPanel>
+                </TextBlock>
+                <TextBlock Foreground="LightGray">
+                    <Run Text="Wpisano:"/>
+                    <Run Text="{x:Bind Grade.DateCreated}"/>
+                </TextBlock>
+                <TextBlock Visibility="{x:Bind Grade.IsModified}" Foreground="LightGray">
+                    <Run Text="Edytowano:"/>
+                    <Run Text="{x:Bind Grade.DateModify}"/>
+                </TextBlock>
+                <TextBlock Foreground="LightGray">
+                    <Run Text="Komentarz:"/>
+                    <Run Text="{x:Bind Grade.Comment}"/>
+                </TextBlock>
+            </StackPanel>
+            <ListView HorizontalContentAlignment="Center" Padding="20,0,0,15" SelectionMode="None" Grid.Column="1">
+                <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
+                    <TextBlock TextAlignment="Center" Width="55"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="55" FontWeight="Bold" Padding="0,0,0,5"/>
+                </Border>
+            </ListView>
+        </Grid>
+        <Grid Grid.Row="1" Padding="20,0,20,20">
+            <ClassmatesGrades:SingleClassmateGrades ColumnId="{x:Bind Grade.Column.Id}" UserGrade="{x:Bind Grade}"/>
+        </Grid>
+    </Grid>
 </UserControl>
