@@ -5,6 +5,7 @@
 	+ Sprawdzaj oceny cząstkowe
 	+ Sprawdzaj oceny końcowe
 	+ **Sprawdzaj historyczne oceny cząstkowe i końcowe**
+ 	+ **Sprawdzaj oceny z danego sprawdzianiu/kartkówki na tle klasy**
 	+ **Dodaj hipotetyczne oceny i sprawdź swoją średnią**
  	+ **Zobacz swoje oceny na przestrzeni czasu jako wykresy**
 + Plan lekcji 📅
@@ -19,7 +20,6 @@
 	+ Sprawdzaj uwagi i pochwały 
 
 ## Bezpieczeństwo 🔒
-
 Vulcan dla Windows działa na zasadzie klienta mobilnego, co oznacza, że wszystkie dane są pobierane przez oficjalne endpointy (API) zapewnione przez Vulcana, gwarantując pełne bezpieczeństwo użytkownika.
 
 ## Roadmap 🗺️
