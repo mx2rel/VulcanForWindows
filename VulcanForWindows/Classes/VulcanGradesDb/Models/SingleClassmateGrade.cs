@@ -8,9 +8,9 @@ namespace VulcanForWindows.Classes.VulcanGradesDb.Models
 {
     public class SingleClassmateGrade
     {
-        public int UID { get; set; }
-        public float value { get; set; }
-        public DateTime date { get; set; }
+        public int User { get; set; }
+        public float Value { get; set; }
+        public DateTime Date { get; set; }
 
     }
 }

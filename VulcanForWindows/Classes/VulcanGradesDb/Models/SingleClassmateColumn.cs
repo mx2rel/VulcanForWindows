@@ -8,6 +8,12 @@ namespace VulcanForWindows.Classes.VulcanGradesDb.Models
 {
     public class SingleClassmateColumn
     {
+        public SingleClassmateColumn(int ColumnId, SingleClassmateGrade[] Grades)
+        {
+            this.ColumnId = ColumnId;
+            this.Grades = Grades;
+        }
+
         public int ColumnId { get; set; }
         public SingleClassmateGrade[] Grades { get; set; }
     }

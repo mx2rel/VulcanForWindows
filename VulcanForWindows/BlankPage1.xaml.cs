@@ -14,6 +14,8 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using VulcanTest.Vulcan;
 using System.Diagnostics;
+using VulcanForWindows.Classes.VulcanGradesDb;
+using Newtonsoft.Json;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -41,6 +43,10 @@ namespace VulcanForWindows
         private void b2_Click(object sender, RoutedEventArgs e)
         {
             LiteDbManager.database.GetCollection<Classes.VulcanGradesDb.ClassmateGradesSyncObject>().DeleteAllAsync();
+        }
+        private async void GetColumn(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine(JsonConvert.SerializeObject(await ClassmateGradesService.GetSingleClassmateColumn(2361146)));
         }
     }
 }
