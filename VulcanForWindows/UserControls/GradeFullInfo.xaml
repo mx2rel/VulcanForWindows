@@ -6,25 +6,38 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ClassmatesGrades="using:VulcanForWindows.UserControls.ClassmatesGrades"
+    xmlns:converters="using:Converters"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+    </UserControl.Resources>
 
     <Grid VerticalAlignment="Stretch" Width="780">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Padding="15,5,5,5">
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5" ColumnSpacing="8">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel>
+            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
+                <TextBlock TextAlignment="Center" Width="55"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="55" FontWeight="Bold" Padding="0,0,0,5"/>
+            </Border>
+            <StackPanel Grid.Column="1">
+                <StackPanel Orientation="Horizontal" Spacing="5"> 
                 <TextBlock FontWeight="Bold" FontSize="22" TextWrapping="WrapWholeWords">
                     <Run Text="{x:Bind Grade.Column.Name}"/>
                     <Run Text="("/>
                     <Run Text="{x:Bind Grade.Column.Code}"/>
                     <Run Text=")"/>
                 </TextBlock>
+                    <Border Grid.Column="2" Background="Red" HorizontalAlignment="Right" CornerRadius="4" Padding="3" VerticalAlignment="Center"
+                                            Visibility="{x:Bind Grade.IsHipotheticOrRecent, Converter={StaticResource VisibilityConverter}}">
+                        <TextBlock Text="Nowa" FontWeight="Bold" FontSize="14"/>
+                    </Border>
+                </StackPanel>
                 <TextBlock Foreground="LightGray">
                     <Run Text="{x:Bind Grade.Column.Subject.Name}"/>
                     <Run Text="|"/>
@@ -46,11 +59,6 @@
                     <Run Text="{x:Bind Grade.Comment}"/>
                 </TextBlock>
             </StackPanel>
-            <ListView HorizontalContentAlignment="Center" Padding="20,0,0,15" SelectionMode="None" Grid.Column="1">
-                <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
-                    <TextBlock TextAlignment="Center" Width="55"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="55" FontWeight="Bold" Padding="0,0,0,5"/>
-                </Border>
-            </ListView>
         </Grid>
         <Grid Grid.Row="1" Padding="20,0,20,20">
             <ClassmatesGrades:SingleClassmateGrades ColumnId="{x:Bind Grade.Column.Id}" UserGrade="{x:Bind Grade}"/>

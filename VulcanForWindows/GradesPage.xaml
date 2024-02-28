@@ -200,7 +200,7 @@
                                     <Border Grid.Column="2" Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
                                         ConverterParameter=Orange!Red}" HorizontalAlignment="Right" CornerRadius="4" Padding="3" VerticalAlignment="Center"
                                             Visibility="{x:Bind IsHipotheticOrRecent, Converter={StaticResource VisibilityConverter}}">
-                                        <TextBlock Text="{x:Bind IsHipothetic, Converter={StaticResource BoolToStrings}, ConverterParameter=Hipotetyczna!Nowa}" FontWeight="Black" FontSize="12"/>
+                                        <TextBlock Text="{x:Bind IsHipothetic, Converter={StaticResource BoolToStrings}, ConverterParameter=Hipotetyczna!Nowa}" FontWeight="Bold" FontSize="12"/>
                                     </Border>
                                 </Grid>
 

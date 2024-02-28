@@ -350,6 +350,9 @@ namespace VulcanForWindows
 
         private async void ViewGradeDetails(object sender, TappedRoutedEventArgs e)
         {
+
+            if (((sender as ListView).DataContext as Grade).IsHipothetic) return;
+
             //    ContentDialog dialog = new ContentDialog();
             //dialog.XamlRoot = this.XamlRoot;
             //var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as GradeFullInfo;

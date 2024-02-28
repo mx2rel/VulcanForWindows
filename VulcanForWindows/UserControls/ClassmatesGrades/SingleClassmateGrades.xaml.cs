@@ -95,9 +95,12 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         public async void GenerateChart(int columnId, double userGrade = 0)
         {
             await Task.Delay(10);
-            //if (ColumnId == 0) return;
+            if (ColumnId == 0) return;
             var classmatesGrades = await Classes.VulcanGradesDb.ClassmateGradesService.GetSingleClassmateColumn(columnId);
-            Debug.WriteLine(JsonConvert.SerializeObject(classmatesGrades));
+
+            foreach (var v in classmatesGrades.Grades)
+                if (v.Value > highestGrade) highestGrade = v.Value;
+
             GradesAvaible = classmatesGrades.Grades.Length;
             var groupped = classmatesGrades.Grades
     .GroupBy(r => Math.Round(r.Value - 0.01))
@@ -115,7 +118,6 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
             foreach (var grade in groupped)
             {
                 if (grade.Key > maxgrade) maxgrade = Math.Ceiling(grade.Key);
-                if (grade.Key > highestGrade) highestGrade = grade.Key;
 
                 if (grade.Key > userGrade)
                     betterGradesCount += grade.Value.Length;
