@@ -26,6 +26,9 @@ using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades.Final;
 using VulcanForWindows.Vulcan.Grades.Final;
 using System.Threading.Tasks;
+using VulcanForWindows.Classes.VulcanGradesDb;
+using VulcanForWindows.UserControls;
+using Windows.UI.Popups;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -105,7 +108,8 @@ namespace VulcanForWindows
         {
             grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, await GetFenvelope(selectedPeriodId), selectedPeriodId));
             LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
-
+            if(!((sender as GradesResponseEnvelope).isLoading))
+            ClassmateGradesUploader.UpsyncGrades((sender as GradesResponseEnvelope).Grades.ToArray(), selectedPeriodId);
             cd = MonthChartData.Generate(grades.SelectMany(r=>r.grades).ToArray());
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
@@ -346,13 +350,63 @@ namespace VulcanForWindows
 
         private async void ViewGradeDetails(object sender, TappedRoutedEventArgs e)
         {
-                ContentDialog dialog = new ContentDialog();
-            dialog.XamlRoot = this.XamlRoot;
-            var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as StackPanel;
+            //    ContentDialog dialog = new ContentDialog();
+            //dialog.XamlRoot = this.XamlRoot;
+            //var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as GradeFullInfo;
+            //v.DataContext = (sender as ListView).DataContext;
+            //dialog.Content = v;
+            //dialog.MinWidth = 800;
+            //dialog.MaxHeight = 800;
+            //dialog.Width = 800;
+            //dialog.FullSizeDesired = true;
+            //dialog.Padding= new Thickness(-100);
+            //dialog.CloseButtonText = "Ok";
+            //var result = await dialog.ShowAsync();
+
+            MainWindow.Instance.IsOtherWindowOpen = true;
+
+            w = new Window();
+            var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as GradeFullInfo;
             v.DataContext = (sender as ListView).DataContext;
-            dialog.Content = v;
-            dialog.CloseButtonText = "Ok";
-            var result = await dialog.ShowAsync();
+            w.Content = v;
+            w.SystemBackdrop = new MicaBackdrop();
+            int newX = (MainWindow.Instance.AppWindow.Size.Width - 800) /2  + MainWindow.Instance.AppWindow.Position.X;
+            int newY =( MainWindow.Instance.AppWindow.Size.Height- 450) /2 + MainWindow.Instance.AppWindow.Position.Y;
+            w.AppWindow.MoveAndResize(new Windows.Graphics.RectInt32(newX, newY, 800, 450));
+            w.ExtendsContentIntoTitleBar = true;
+            w.Activated += W_Activated;
+            w.SizeChanged += W_SizeChanged;
+            w.Closed += W_Closed;
+            w.Activate();
+        }
+
+        private void W_Closed(object sender, WindowEventArgs args)
+        {
+            MainWindow.Instance.IsOtherWindowOpen = false;
+        }
+
+        private void W_SizeChanged(object sender, Microsoft.UI.Xaml.WindowSizeChangedEventArgs args)
+        {
+            w.Close();
+            MainWindow.Instance.IsOtherWindowOpen = false;
+
+        }
+
+        Window w;
+
+        private void W_Activated(object sender, Microsoft.UI.Xaml.WindowActivatedEventArgs e)
+        {
+            if (e.WindowActivationState == WindowActivationState.Deactivated)
+            {
+                w.Close();
+                MainWindow.Instance.IsOtherWindowOpen = false;
+
+                // do stuff
+            }
+            else
+            {
+                // do different stuff
+            }
         }
     }
 }

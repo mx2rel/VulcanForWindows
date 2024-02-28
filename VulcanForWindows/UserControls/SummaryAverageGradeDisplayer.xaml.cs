@@ -33,7 +33,7 @@ namespace VulcanForWindows.UserControls
         DependencyProperty.Register("Average", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, AverageChanged));
 
         public static readonly DependencyProperty IsLoadingProperty =
-        DependencyProperty.Register("IsLoading", typeof(bool), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, LoadingChanged));
+        DependencyProperty.Register("DisplayLoadingIndicator", typeof(bool), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, LoadingChanged));
 
         public string Title
         {

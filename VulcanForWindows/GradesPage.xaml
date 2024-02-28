@@ -8,6 +8,7 @@
     mc:Ignorable="d"
     xmlns:classes="using:VulcanForWindows.Classes" 
     xmlns:grade="using:Vulcanova.Features.Grades" 
+    xmlns:controls="using:VulcanForWindows.UserControls" 
     xmlns:main="using:VulcanForWindows" 
     xmlns:converters="using:Converters"
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
@@ -60,41 +61,7 @@
 
         <DataTemplate x:Key="GradeFullInfo" x:DataType="grade:Grade">
             <!-- Define the content of your Flyout here -->
-            <StackPanel Width="200">
-                <ListView HorizontalContentAlignment="Center" Padding="0,0,0,15" SelectionMode="None">
-                    <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="60" Width="60" CornerRadius="3">
-                        <TextBlock TextAlignment="Center" Width="35"  VerticalAlignment="Center" Text="{x:Bind ContentRaw}" FontSize="32" FontWeight="Bold"/>
-                    </Border>
-                </ListView>
-                <TextBlock FontWeight="Bold" FontSize="16" TextWrapping="WrapWholeWords">
-                    <Run Text="{x:Bind Column.Name}"/>
-                    <Run Text="("/>
-                    <Run Text="{x:Bind Column.Code}"/>
-                    <Run Text=")"/>
-                </TextBlock>
-                <Rectangle Height="10"/>
-                <TextBlock>
-                    <Run Text="Wpisano:"/>
-                    <Run Text="{x:Bind DateCreated}"/>
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="Autor:"/>
-                    <Run Text="{x:Bind CreatorName}"/>
-                </TextBlock>
-
-                <TextBlock>
-                    <Run Text="Edytowano:"/>
-                    <Run Text="{x:Bind DateModify}"/>
-                </TextBlock>
-                <TextBlock>
-                    <Run Text="Komentarz:"/>
-                    <Run Text="{x:Bind Comment}"/>
-                </TextBlock>
-                <TextBlock Visibility="{x:Bind IsModified}">
-                    <Run Text="Waga:"/>
-                    <Run Text="{x:Bind Column.Weight}"/>
-                </TextBlock>
-            </StackPanel>
+            <controls:GradeFullInfo Grade="{x:Bind}"/>
         </DataTemplate>
         <DataTemplate x:Key="SubjectGradesInfoFlyout" x:Name="SubjectGradesInfoFlyout" x:DataType="classes:SubjectGrades">
             <!-- Define the content of your Flyout here -->
@@ -367,5 +334,13 @@
                 </ItemsRepeater>
             </Grid>
         </Grid>
+        <Grid Grid.Row="1" Background="#66000000" Visibility="Collapsed">
+        <Grid x:Name="ModalDialog"  Height="300" Width="800" 
+              Background="#2b2b2b" CornerRadius="8" BorderBrush="#3d3d3d" BorderThickness="1"
+              >
+        </Grid>
+        </Grid>
+
+
     </Grid>
 </Page>

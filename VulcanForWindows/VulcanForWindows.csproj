@@ -17,8 +17,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Assets\JustifyGranted.png" />
+    <Content Remove="Assets\LargeTile.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\Credentials.json" />
+    <None Remove="Assets\JustifyGranted.png" />
     <None Remove="AttendanceReportPage.xaml" />
     <None Remove="BlankPage1.xaml" />
     <None Remove="DeadlineablePage.xaml" />
@@ -32,9 +35,11 @@
     <None Remove="TimetablePage.xaml" />
     <None Remove="UserControls\AttachmentsIndicator.xaml" />
     <None Remove="UserControls\AttendanceLessonItem.xaml" />
+    <None Remove="UserControls\ClassmatesGrades\SingleClassmateGrades.xaml" />
     <None Remove="UserControls\Deadlinables\DeadlineablesWidget.xaml" />
     <None Remove="UserControls\Deadlinables\ExamPopup.xaml" />
     <None Remove="UserControls\DeadlineDisplayer.xaml" />
+    <None Remove="UserControls\GradeFullInfo.xaml" />
     <None Remove="UserControls\GradesCharts\SubjectMonthGrades.xaml" />
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
@@ -55,11 +60,9 @@
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
-    <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -129,6 +132,24 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Viewmodels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\JustifyGranted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Assets\Credentials.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\ClassmatesGrades\SingleClassmateGrades.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\GradeFullInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\Widgets\AttendanceWidget.xaml">

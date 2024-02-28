@@ -2,6 +2,7 @@
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Vulcanova.Features.Auth;
 using VulcanTest.Vulcan;
@@ -14,11 +15,29 @@ namespace VulcanForWindows
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow : Window, INotifyPropertyChanged
     {
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 
         public static MainWindow Instance;
         public static DateTime lastLaunch;
+        public bool IsOtherWindowOpen
+        {
+            get => IsOtherWindowOpenVisibility == Visibility.Visible;
+            set
+            {
+                IsOtherWindowOpenVisibility = value ? Visibility.Visible : Visibility.Collapsed;
+                OnPropertyChanged(nameof(IsOtherWindowOpenVisibility));
+            }
+        }
+        public Visibility IsOtherWindowOpenVisibility = Visibility.Collapsed;
         public MainWindow()
         {
             this.InitializeComponent();

@@ -8,15 +8,12 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <ListView>
 
         <Button Content="Clear" HorizontalAlignment="Stretch" Click="Button_Click" x:Name="b1"/>
-        <Button Content="Open files" HorizontalAlignment="Stretch" Grid.Column="1"/>
-        <Button Content="Button 3" HorizontalAlignment="Stretch" Grid.Column="2"/>
-    </Grid>
+        <Button Content="Remove ClassmateGradesSyncFiles" HorizontalAlignment="Stretch" Click="b2_Click" x:Name="b2" />
+        <Button Content="Get example column from Classmates" HorizontalAlignment="Stretch" Click="GetColumn" x:Name="b3" />
+        <Button Content="Open files" HorizontalAlignment="Stretch" />
+        <Button Content="Button 3" HorizontalAlignment="Stretch" />
+    </ListView>
 </Page>

@@ -1,0 +1,74 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.ClassmatesGrades.SingleClassmateGrades"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls.ClassmatesGrades"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    xmlns:converters ="using:Converters"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid Visibility="{x:Bind DisplayLoadingIndicator, Converter={StaticResource VisibilityConverter}, ConverterParameter=true, Mode=OneWay}">
+            <Grid DataContext="{x:Bind}" x:Name="grid" Visibility="{x:Bind ShouldDisplayChart, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="Oceny w klasie" FontWeight="SemiBold" FontSize="18"/>
+                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="Gray" x:Name="InfoIcon2"
+                          FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,2,0,0" PointerEntered="FontIcon_PointerEntered2" PointerExited="FontIcon_PointerExited2"
+                          />
+                </StackPanel>
+                <lvc:CartesianChart x:Name="chart" Grid.Row="1"
+        Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxes, Mode=OneWay}" VerticalAlignment="Stretch"/>
+                <StackPanel Grid.Row="2">
+                    <TextBlock Text="{x:Bind betterThanDisplay, Mode=OneWay}"/>
+                    <TextBlock Text="{x:Bind highestGradeDisplay, Mode=OneWay}"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Visibility="{x:Bind ShouldDisplayChart, Converter={StaticResource VisibilityConverter}, ConverterParameter=True, Mode=OneWay}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="5" Width="540">
+
+                <ImageIcon Source="ms-appx:///Assets/SadGrade.png" VerticalAlignment="Stretch" MaxWidth="64" Foreground="LightGray"/>
+
+                <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+                    <TextBlock Text="Brak wystarczającej ilości danych!" FontWeight="SemiBold" FontSize="24" Foreground="LightGray" TextAlignment="Center"/>
+
+                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="Gray" x:Name="InfoIcon"
+                          FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" PointerEntered="FontIcon_PointerEntered" PointerExited="FontIcon_PointerExited"
+                          />
+                </StackPanel>
+                <TextBlock Foreground="LightGray" TextAlignment="Center" TextWrapping="WrapWholeWords">
+                
+                <Run Text="Aby wyświetlić dane dotyczące ocen w klasie wymagane jest min."/>
+                <Run Text="{x:Bind MinGradesAvaibleToShowChart}"/> 
+                <Run Text="(obecnie: "/>
+                <Run Text="{x:Bind GradesAvaible, Mode=OneWay}"/>
+                <Run Text=")"/>
+                <Run Text="udostępnionych wyników w klasie. Poczekaj, aż osoby z twojej klasy uruchomią"/>
+                <Run FontWeight="Bold" Text="VulcanForWindows"/>
+                <Run Text=", a jeśli jeszcze z niego nie korzystają to"/>
+                <Run FontWeight="Bold" Text="zachęć ich do pobrania!"/>
+
+                </TextBlock>
+            </StackPanel>
+            <TeachingTip x:Name="TeachingTipClassmateGrades"
+    Target="{x:Bind InfoIcon}"
+    Title="Oceny na tle klasy"
+    Subtitle="VulcanForWindows zbiera anonimowe dane na temat ocen z każdego sprawdzianiu/kartkówki, aby móc zaprezentować jak wypadłeś/aś na tle klasy.">
+            </TeachingTip>
+            <TeachingTip x:Name="TeachingTipClassmateGrades2"
+    Target="{x:Bind InfoIcon2}"
+    Title="Oceny na tle klasy"
+    Subtitle="VulcanForWindows zbiera anonimowe dane na temat ocen z każdego sprawdzianiu/kartkówki, aby móc zaprezentować jak wypadłeś/aś na tle klasy.">
+            </TeachingTip>
+        </Grid>
+        <ProgressRing IsActive="True" Visibility="{x:Bind DisplayLoadingIndicator, Converter={StaticResource VisibilityConverter}, Mode=OneWay}" />
+    </Grid>
+</UserControl>
