@@ -137,12 +137,18 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
                 else
                     list.Add(0);
             }
-
+            var lArray = list.ToArray();
+            var labels = avaibleGrades.Select(r => r.ToString()).Where(r => !string.IsNullOrEmpty(r)).ToArray();
             Series = new ISeries[]
             {
                 new LineSeries<int>
                 {
-                Values = list.ToArray(),
+                Values = lArray,
+                XToolTipLabelFormatter = (chartPoint) =>
+                    {
+                        var tooltipContent = $"Ocena {labels[chartPoint.Index]}";
+                        return tooltipContent;
+                    },
                 }
             };
 
@@ -150,7 +156,8 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
             {
                 new Axis()
                 {
-                    Labels =avaibleGrades.Select(r=>r.ToString()).Where(r=> !string.IsNullOrEmpty(r)).ToArray()
+                    Labels =labels,
+
                 }
 
             };

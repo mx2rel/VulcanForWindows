@@ -84,7 +84,7 @@ namespace VulcanForWindows.Classes
             CalculateYearlyAverage();
         }
 
-        public Grade[] recentGrades => grades.OrderByDescending(r => r.DateCreated).ToList().Take(10).ToArray();
+        public Grade[] recentGrades => grades.OrderBy(r => r.DateCreated).ToList().Take(10).ToArray();
         public string finalGrade { get; set; }
         public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
         public Visibility desiredVisibility => hasFinalGrade ? Visibility.Visible : Visibility.Collapsed;
