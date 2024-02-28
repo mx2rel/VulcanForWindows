@@ -84,7 +84,8 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         }
         double highestGrade = 0;
         float betterThanPercentile = 0;
-        string betterThanDisplay => $"Lepszy niż {betterThanPercentile.ToString("0.00")}% klasy";
+        public bool DisplayLoadingIndicator { get; set; } = true;
+        string betterThanDisplay => $"Lepiej niż {betterThanPercentile.ToString("0.00")}% klasy";
         string highestGradeDisplay => $"Najwyższa ocena w klasie to {highestGrade}";
 
         public bool ShouldDisplayChart => GradesAvaible >= MinGradesAvaibleToShowChart;
@@ -159,6 +160,9 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
             OnPropertyChanged(nameof(highestGradeDisplay));
             OnPropertyChanged(nameof(GradesAvaible));
             OnPropertyChanged(nameof(ShouldDisplayChart));
+            DisplayLoadingIndicator = false;
+            OnPropertyChanged(nameof(DisplayLoadingIndicator));
+
         }
         public ISeries[] Series { get; set; } = new ISeries[0];
 
