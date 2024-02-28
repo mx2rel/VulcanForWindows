@@ -1,0 +1,45 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.GradeFullInfo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Width="200">
+        <ListView HorizontalContentAlignment="Center" Padding="0,0,0,15" SelectionMode="None">
+            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="60" Width="60" CornerRadius="3">
+                <TextBlock TextAlignment="Center" Width="35"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="32" FontWeight="Bold"/>
+            </Border>
+        </ListView>
+        <TextBlock FontWeight="Bold" FontSize="16" TextWrapping="WrapWholeWords">
+                    <Run Text="{x:Bind Grade.Column.Name}"/>
+                    <Run Text="("/>
+                    <Run Text="{x:Bind Grade.Column.Code}"/>
+                    <Run Text=")"/>
+        </TextBlock>
+        <Rectangle Height="10"/>
+        <TextBlock>
+                    <Run Text="Wpisano:"/>
+                    <Run Text="{x:Bind Grade.DateCreated}"/>
+        </TextBlock>
+        <TextBlock>
+                    <Run Text="Autor:"/>
+                    <Run Text="{x:Bind Grade.CreatorName}"/>
+        </TextBlock>
+
+        <TextBlock>
+                    <Run Text="Edytowano:"/>
+                    <Run Text="{x:Bind Grade.DateModify}"/>
+        </TextBlock>
+        <TextBlock>
+                    <Run Text="Komentarz:"/>
+                    <Run Text="{x:Bind Grade.Comment}"/>
+        </TextBlock>
+        <TextBlock Visibility="{x:Bind Grade.IsModified}">
+                    <Run Text="Waga:"/>
+                    <Run Text="{x:Bind Grade.Column.Weight}"/>
+        </TextBlock>
+    </StackPanel>
+</UserControl>

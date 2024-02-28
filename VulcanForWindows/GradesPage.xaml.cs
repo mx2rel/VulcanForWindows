@@ -27,6 +27,7 @@ using Vulcanova.Features.Grades.Final;
 using VulcanForWindows.Vulcan.Grades.Final;
 using System.Threading.Tasks;
 using VulcanForWindows.Classes.VulcanGradesDb;
+using VulcanForWindows.UserControls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -350,7 +351,7 @@ namespace VulcanForWindows
         {
                 ContentDialog dialog = new ContentDialog();
             dialog.XamlRoot = this.XamlRoot;
-            var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as StackPanel;
+            var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as GradeFullInfo;
             v.DataContext = (sender as ListView).DataContext;
             dialog.Content = v;
             dialog.CloseButtonText = "Ok";
