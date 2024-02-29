@@ -50,7 +50,7 @@
 
                     </NavigationViewItem>
                     <NavigationViewItem Icon="Save" Content="Plan Lekcji" Tag="TimetablePage" />
-                    <NavigationViewItem Icon="Save" Content="Obecność" Tag="AttendancePage">
+                    <NavigationViewItem Icon="Save" Content="Frekwencja" Tag="AttendancePage">
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Ostatnie" ToolTipService.ToolTip="Wyświetl ostatnie obecności" Tag="AttendancePage"/>
                             <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl podsumowanie frekwencji" Tag="AttendanceReportPage"/>

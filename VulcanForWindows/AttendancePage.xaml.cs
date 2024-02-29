@@ -116,6 +116,7 @@ namespace VulcanForWindows
             sel.Text = GetStartOfTheWeek(week).ToString("dd/MM") + " - " + GetStartOfTheWeek(week).AddDays(6).ToString("dd/MM");
 
 
+            St.Children.Remove(r);
             gr.Children.Clear();
 
             for (int i = 0; i < filteredEntries.Length; i++)
@@ -129,14 +130,16 @@ namespace VulcanForWindows
             }
             if (filteredEntries.Length == 0)
             {
-                var r = new TextBlock();
-                r.Text = "Brak wpisów na ten okres.";
-                r.TextAlignment = TextAlignment.Center;
-                r.HorizontalAlignment = HorizontalAlignment.Center;
-                r.VerticalAlignment = VerticalAlignment.Center;
-                gr.Children.Add(r);
+                var t = new TextBlock();
+                t.Text = "Brak wpisów na ten okres.";
+                t.TextAlignment = TextAlignment.Center;
+                t.HorizontalAlignment = HorizontalAlignment.Center;
+                t.VerticalAlignment = VerticalAlignment.Center;
+                St.Children.Add(t);
+                r = t;
             }
         }
+        FrameworkElement r;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

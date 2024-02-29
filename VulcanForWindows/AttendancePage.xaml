@@ -52,6 +52,7 @@
             <Button Click="CurrentWeek" IsEnabled="{x:Bind IsCurrentWeekButtonActive, Mode=OneWay}">Obecny tydzień</Button>
         </StackPanel>
         <ScrollView Grid.Row="1">
+            <Grid x:Name="St">
             <Grid DataContext="{x:Bind entries}" x:Name="gr" Padding="3" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -62,6 +63,7 @@
                 </Grid.ColumnDefinitions>
 
 
+            </Grid>
             </Grid>
         </ScrollView>
     </Grid>
