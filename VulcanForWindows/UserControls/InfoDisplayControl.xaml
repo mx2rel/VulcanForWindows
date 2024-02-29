@@ -1,0 +1,21 @@
+﻿<UserControl
+    x:Class="VulcanForWindows.UserControls.InfoDisplayControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,50" MaxWidth="600">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Image x:Name="MoodImage" MaxWidth="100" />
+        <TextBlock x:Name="HeaderText" Text="Header" FontWeight="SemiBold" FontSize="24" Grid.Row="2" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+        <TextBlock x:Name="BodyText" Text="Body" Grid.Row="3" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+    </Grid>
+</UserControl>

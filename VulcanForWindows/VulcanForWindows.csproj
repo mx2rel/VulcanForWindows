@@ -41,6 +41,7 @@
     <None Remove="UserControls\DeadlineDisplayer.xaml" />
     <None Remove="UserControls\GradeFullInfo.xaml" />
     <None Remove="UserControls\GradesCharts\SubjectMonthGrades.xaml" />
+    <None Remove="UserControls\InfoDisplayControl.xaml" />
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
@@ -140,6 +141,20 @@
     <Content Update="Assets\Credentials.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="Assets\Pupil\Bored.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Pupil\Happy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Assets\Pupil\Sad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\InfoDisplayControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\ClassmatesGrades\SingleClassmateGrades.xaml">

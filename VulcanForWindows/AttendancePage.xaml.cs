@@ -21,6 +21,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.ComponentModel;
+using VulcanForWindows.UserControls;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -130,11 +131,23 @@ namespace VulcanForWindows
             }
             if (filteredEntries.Length == 0)
             {
-                var t = new TextBlock();
-                t.Text = "Brak wpisów na ten okres.";
-                t.TextAlignment = TextAlignment.Center;
-                t.HorizontalAlignment = HorizontalAlignment.Center;
-                t.VerticalAlignment = VerticalAlignment.Center;
+                var t = new InfoDisplayControl();
+                //t.Text = "Brak wpisów na ten okres.";
+                //t.TextAlignment = TextAlignment.Center;
+                //t.HorizontalAlignment = HorizontalAlignment.Center;
+                //t.VerticalAlignment = VerticalAlignment.Center;
+                if (week > DateTime.Now)
+                {
+                    t.Mood = InfoDisplayControl.Moods.Bored;
+                    t.Header = "Okres jest w przyszłości";
+                    t.Body = "Spróbuj ponownie, gdy lekcje faktycznie nastąpią...";
+                }
+                else
+                {
+                    t.Mood = InfoDisplayControl.Moods.Sad;
+                    t.Header = "Brak wpisów na ten okres";
+                    t.Body = "Spróbuj ponownie później lub wybierz inny okres";
+                }
                 St.Children.Add(t);
                 r = t;
             }
