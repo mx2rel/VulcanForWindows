@@ -260,12 +260,12 @@
 
                                         </GridView>
                                         <Border 
-                                        Visibility="{x:Bind desiredVisibility}"
+                                        Visibility="{x:Bind hasFinalGrade, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
                                         Background="{StaticResource LayerFillColorAlt}" 
                                             Width="35" Height="35px" Grid.Column="3" 
                                             HorizontalAlignment="Right" CornerRadius="3">
 
-                                            <TextBlock Text="{x:Bind finalGrade}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{x:Bind finalGrade, Mode=OneWay}" FontSize="18" Foreground="White" TextAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
                                         </Border>
 
 

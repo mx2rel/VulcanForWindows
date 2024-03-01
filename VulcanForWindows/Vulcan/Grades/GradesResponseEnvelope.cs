@@ -13,6 +13,7 @@ namespace VulcanForWindows.Vulcan.Grades
     public class GradesResponseEnvelope : IResponseEnvelope<Grade>
     {
         public bool isLoading;
+        public bool isLoaded;
         public event EventHandler<IEnumerable<Grade>> Updated;
 
         private ObservableCollection<Grade> grades;
@@ -50,6 +51,7 @@ namespace VulcanForWindows.Vulcan.Grades
                 periodId));
             isLoading = false;
 
+            isLoaded = true;
             Updated?.Invoke(this, grades);
 
         }

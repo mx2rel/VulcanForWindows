@@ -26,11 +26,12 @@ namespace VulcanForWindows.Classes
             grades = new ObservableCollection<Grade>(env.Grades.Where(r => r.Column.Subject.Id == subject.Id));
             this.periodId = periodId;
             finalGrade = fGrade;
-            if (prevPeriod!=null)
-            prevPeriodGrades = prevPeriod.Grades.ToArray();
+            if (prevPeriod != null)
+                prevPeriodGrades = prevPeriod.Grades.ToArray();
             CalculateYearlyAverage();
             foreach (var v in grades) v.CalculateClassAverage();
 
+            GetFinalGrade();
 
         }
         public SubjectGrades(Subject subject, Grade[] g, int periodId, string fGrade = "", int trim = 0)
@@ -41,9 +42,24 @@ namespace VulcanForWindows.Classes
             this.periodId = periodId;
             CalculateYearlyAverage();
             if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
+            GetFinalGrade();
         }
 
-        public FinalGradesResponseEnvelope finalEnvelope;
+        async void GetFinalGrade()
+        {
+            var finalGrades =
+                await new FinalGrades().GetPeriodGrades(new AccountRepository().GetActiveAccountAsync(),
+                periodId, false, true);
+            var g = finalGrades.Grades.Where(r => r.Subject.Id == subject.Id);
+            if (g.Count() > 0)
+            {
+                finalGrade = g.First().FinalGrade;
+                //if (string.IsNullOrEmpty(finalGrade)) finalGrade = g.First().PredictedGrade;
+                OnPropertyChanged(nameof(finalGrade));
+                OnPropertyChanged(nameof(hasFinalGrade));
+            }
+        }
+
         int periodId;
         public Subject subject { get; set; }
         public GradesResponseEnvelope env;
@@ -89,15 +105,29 @@ namespace VulcanForWindows.Classes
         public Grade[] recentGrades => grades.OrderBy(r => r.DateCreated).ToList().Take(10).ToArray();
         public string finalGrade { get; set; }
         public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
-        public Visibility desiredVisibility => hasFinalGrade ? Visibility.Visible : Visibility.Collapsed;
         [JsonIgnore]
         public GradesCountChartData gradesCountChart => GradesCountChartData.Generate(grades.ToArray());
 
         IDictionary<Period, Grade[]> _yearGrades;
+        public static IDictionary<string, ((double average, int count) data, DateTime generatedAt)> YearlyAverages = new Dictionary<string, ((double average, int count) data, DateTime generatedAt)>();
         public async void CalculateYearlyAverage()
         {
+            if (YearlyAverages.TryGetValue($"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}", out var o))
+            {
+                if (DateTime.Now - o.generatedAt < new TimeSpan(0, 10, 0))
+                {
+
+                    yearlyAverage = o.data.average;
+                    yearGradesCount = $"{o.data.count}";
+
+                    OnPropertyChanged(nameof(yearlyAverage));
+                    OnPropertyChanged(nameof(averageDisplay));
+                    OnPropertyChanged(nameof(yearGradesCount));
+                    return;
+                }
+            }
             if (_yearGrades == null) _yearGrades =
-                    (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccountAsync(), periodId));
+                (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccountAsync(), periodId));
 
             if (_yearGrades != null)
             {
@@ -110,6 +140,7 @@ namespace VulcanForWindows.Classes
                 OnPropertyChanged(nameof(yearlyAverage));
                 OnPropertyChanged(nameof(averageDisplay));
                 OnPropertyChanged(nameof(yearGradesCount));
+                YearlyAverages[$"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}"] = ((yearlyAverage, yearlyGrades.Count()), DateTime.Now);
             }
         }
 
@@ -117,19 +148,19 @@ namespace VulcanForWindows.Classes
 
         public double yearlyAverage { get; set; }
         public string yearGradesCount { get; set; }
-        
+
         public string averageDisplay => yearlyAverage.ToString("0.00");
 
         public static SubjectGrades[] GetSubjectsGrades(Grade[] g, int periodId, int trim = 0)
         {
-            var r = g.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, g, periodId, "", trim)).ToArray();
+            var r = g.GroupBy(r => r.Column.Subject.Id).Select(r => new SubjectGrades(r.First().Column.Subject, r.ToArray(), periodId, "", trim)).ToArray();
 
             return r;
         }
-        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env, FinalGradesResponseEnvelope fenv, int periodId, GradesResponseEnvelope otherPeriod=null)
+        public static SubjectGrades[] GetSubjectsGrades(GradesResponseEnvelope env, FinalGradesResponseEnvelope fenv, int periodId, GradesResponseEnvelope otherPeriod = null)
         {
             var r = env.Grades.Select(r => r.Column.Subject).GroupBy(r => r.Name).Select(r => r.First()).Select(r => new SubjectGrades(r, env, periodId,
-                ((fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray().Length > 0) ? 
+                ((fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray().Length > 0) ?
                 (fenv.Grades.Where(g => g.Subject.Id == r.Id).ToArray()[0].FastDisplayGrade) : ""), otherPeriod
             )).ToArray();
 
@@ -138,25 +169,25 @@ namespace VulcanForWindows.Classes
 
         public static SubjectGrades[] CreateRecent(GradesResponseEnvelope e)
         {
-            var gradesDates = e.Grades.GroupBy(r=>r.Column.Subject.Name).Select(r => r.OrderByDescending(d=>d.DateCreated).Take(5)).OrderByDescending(r => r.FirstOrDefault().DateCreated).SelectMany(r=>r).ToList();
+            var gradesDates = e.Grades.GroupBy(r => r.Column.Subject.Name).Select(r => r.OrderByDescending(d => d.DateCreated).Take(5)).OrderByDescending(r => r.FirstOrDefault().DateCreated).SelectMany(r => r).ToList();
 
             var limit = (gradesDates[(gradesDates.Count > 25) ? 25 : (gradesDates.Count - 1)]).DateCreated;
 
             var grades = e.Grades.Where(r => r.DateCreated.GetValueOrDefault() >= limit).ToArray();
 
 
-            return GetSubjectsGrades(grades,0, 5).OrderByDescending(r => r.grades.Last().DateCreated).Take(5).ToArray();
+            return GetSubjectsGrades(grades, 0, 5).OrderByDescending(r => r.grades.Last().DateCreated).Take(5).ToArray();
         }
         public static SubjectGrades[] CreateRecent(Grade[] e)
         {
-            var gradesDates = e.GroupBy(r=>r.Column.Subject.Name).Select(r => r.OrderByDescending(d=>d.DateCreated).Take(5)).OrderByDescending(r => r.FirstOrDefault().DateCreated).SelectMany(r=>r).ToList();
+            var gradesDates = e.GroupBy(r => r.Column.Subject.Name).Select(r => r.OrderByDescending(d => d.DateCreated).Take(5)).OrderByDescending(r => r.FirstOrDefault().DateCreated).SelectMany(r => r).ToList();
 
             var limit = (gradesDates[(gradesDates.Count > 25) ? 25 : (gradesDates.Count - 1)]).DateCreated;
 
             var grades = e.Where(r => r.DateCreated.GetValueOrDefault() >= limit).ToArray();
 
 
-            return GetSubjectsGrades(grades,0, 5).OrderByDescending(r => r.grades.Last().DateCreated).Take(5).ToArray();
+            return GetSubjectsGrades(grades, 0, 5).OrderByDescending(r => r.grades.Last().DateCreated).Take(5).ToArray();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

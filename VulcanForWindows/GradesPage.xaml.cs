@@ -50,14 +50,20 @@ namespace VulcanForWindows
             grades = new ObservableCollection<SubjectGrades>();
             PeriodSelector.SelectedIndex = avaiblePeriods.Length - 1;
             PeriodSelector.UpdateLayout();
+            Loaded += GradesPage_Loaded;
+
+        }
+
+        private void GradesPage_Loaded(object sender, RoutedEventArgs e)
+        {
             AssignGrades();
             cd = new MonthChartData();
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             timer.Interval = TimeSpan.FromSeconds(0.7);
         }
+
         IDictionary<int, GradesResponseEnvelope> envelopes = new Dictionary<int, GradesResponseEnvelope>();
-        IDictionary<int, FinalGradesResponseEnvelope> fEnvelopes = new Dictionary<int, FinalGradesResponseEnvelope>();
         public Vulcanova.Features.Shared.Period selectedPeriod;
         public int selectedPeriodId => selectedPeriod.Id;
         public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccountAsync().Periods/*.Select(r => r.Id)*/.ToArray();
@@ -81,13 +87,12 @@ namespace VulcanForWindows
         {
             var acc = new AccountRepository().GetActiveAccountAsync();
 
-            if (!fEnvelopes.ContainsKey(selectedPeriodId))
-                fEnvelopes[selectedPeriodId] = await new FinalGrades().GetPeriodGrades(acc, selectedPeriodId,false,true);
 
             if (!envelopes.ContainsKey(selectedPeriodId))
             {
-                env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, true, false);
+                env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, false, false);
                 env.Updated += HandleGradesUpdated;
+                if (env.isLoaded) HandleGradesUpdated(env, null);
             }
             else
             {
@@ -97,20 +102,27 @@ namespace VulcanForWindows
             //TopLevel.UpdateLayout();
         }
 
-        async Task<FinalGradesResponseEnvelope> GetFenvelope(int id)
+        IDictionary<int, (SubjectGrades[] grades, DateTime GeneratedAt)> buffer = new Dictionary<int, (SubjectGrades[], DateTime)>();
+
+        public SubjectGrades[] GetSubjectGrades(int periodId)
         {
-            if (!fEnvelopes.ContainsKey(id))
-                fEnvelopes[id] = await new FinalGrades().GetPeriodGrades(new AccountRepository().GetActiveAccountAsync(), selectedPeriodId, false, true);
-            return fEnvelopes[id];
+            if (buffer.TryGetValue(periodId, out var v))
+            {
+                if (DateTime.Now - v.GeneratedAt <= new TimeSpan(0,10,0))
+                    return v.grades;
+            }
+            buffer[periodId] = (
+            SubjectGrades.GetSubjectsGrades(envelopes[periodId].Grades.ToArray(), periodId), DateTime.Now);
+            return buffer[periodId].grades;
         }
 
         async void HandleGradesUpdated(object sender, IEnumerable<Grade> updatedGrades)
         {
-            grades.ReplaceAll(SubjectGrades.GetSubjectsGrades(sender as GradesResponseEnvelope, await GetFenvelope(selectedPeriodId), selectedPeriodId));
+            grades.ReplaceAll(GetSubjectGrades(selectedPeriodId));
             LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
-            if(!((sender as GradesResponseEnvelope).isLoading))
-            ClassmateGradesUploader.UpsyncGrades((sender as GradesResponseEnvelope).Grades.ToArray(), selectedPeriodId);
-            cd = MonthChartData.Generate(grades.SelectMany(r=>r.grades).ToArray());
+            if (!((sender as GradesResponseEnvelope).isLoading))
+                ClassmateGradesUploader.UpsyncGrades((sender as GradesResponseEnvelope).Grades.ToArray(), selectedPeriodId);
+            cd = MonthChartData.Generate(grades.SelectMany(r => r.grades).ToArray());
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
         }
@@ -317,7 +329,7 @@ namespace VulcanForWindows
                     Name = "Hipotetyczna ocena",
                     Weight = weight
                 },
-                Value=grade,
+                Value = grade,
                 IsHipothetic = true
             });
             eSgu.DataContext = eSg;
@@ -373,8 +385,8 @@ namespace VulcanForWindows
             v.DataContext = (sender as ListView).DataContext;
             w.Content = v;
             w.SystemBackdrop = new MicaBackdrop();
-            int newX = (MainWindow.Instance.AppWindow.Size.Width - 800) /2  + MainWindow.Instance.AppWindow.Position.X;
-            int newY =( MainWindow.Instance.AppWindow.Size.Height- 450) /2 + MainWindow.Instance.AppWindow.Position.Y;
+            int newX = (MainWindow.Instance.AppWindow.Size.Width - 800) / 2 + MainWindow.Instance.AppWindow.Position.X;
+            int newY = (MainWindow.Instance.AppWindow.Size.Height - 450) / 2 + MainWindow.Instance.AppWindow.Position.Y;
             w.AppWindow.MoveAndResize(new Windows.Graphics.RectInt32(newX, newY, 800, 450));
             w.ExtendsContentIntoTitleBar = true;
             w.Activated += W_Activated;

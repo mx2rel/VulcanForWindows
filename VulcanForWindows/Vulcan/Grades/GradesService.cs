@@ -42,6 +42,10 @@ public class GradesService : UonetResourceProvider
                 v.SyncAsync();
 
         }
+        else
+        {
+            v.isLoaded = true;
+        }
         return v;
     }
 
@@ -70,7 +74,7 @@ public class GradesService : UonetResourceProvider
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
         foreach (var period in account.Periods.Where(r => r.Level == level))
         {
-            d.Add(period, (await GetPeriodGrades(account, period.Id, true, true)).Grades.ToArray());
+            d.Add(period, (await GetPeriodGrades(account, period.Id, false, true)).Grades.ToArray());
         }
 
         return d;
