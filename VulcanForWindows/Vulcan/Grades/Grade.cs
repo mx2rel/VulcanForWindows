@@ -30,15 +30,22 @@ public class Grade : INotifyPropertyChanged
 
     public async void CalculateClassAverage()
     {
-        var classRequest = (await ClassmateGradesService.GetSingleClassmateColumn(Column.Id));
-        if (classRequest == null) return;
-        var classGrades = classRequest.Grades.Select(r => r.Value);
-        if (classGrades.Count() > 4)
-            ClassAverage = classGrades.Sum() / classGrades.Count();
+        try
+        {
 
-        OnPropertyChanged(nameof(ClassAverageDisplay));
-        OnPropertyChanged(nameof(ClassAverageVibility));
+            var classRequest = (await ClassmateGradesService.GetSingleClassmateColumn(Column.Id));
+            if (classRequest == null) return;
+            var classGrades = classRequest.Grades.Select(r => r.Value);
+            if (classGrades.Count() > 4)
+                ClassAverage = classGrades.Sum() / classGrades.Count();
 
+            OnPropertyChanged(nameof(ClassAverageDisplay));
+            OnPropertyChanged(nameof(ClassAverageVibility));
+        }
+        catch (System.Net.Http.HttpRequestException e)
+        {
+            return;
+        }
     }
 
 

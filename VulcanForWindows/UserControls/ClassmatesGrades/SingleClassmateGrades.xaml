@@ -33,11 +33,11 @@
                     <TextBlock Text="{x:Bind highestGradeDisplay, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
-            <controls:InfoDisplayControl Mood="Sad" 
+            <controls:InfoDisplayControl Mood="Bored" 
                                          Header="Brak wystarczającej ilości danych!" 
                                          TeachingTipTitle="Oceny na tle klasy"
                                          TeachingTipText="VulcanForWindows zbiera anonimowe dane na temat ocen z każdego sprawdzianiu/kartkówki, aby móc zaprezentować jak wypadłeś/aś na tle klasy."
-                                         Visibility="{x:Bind ShouldDisplayChart, Converter={StaticResource VisibilityConverter}, ConverterParameter=True, Mode=OneWay}">
+                                         Visibility="{x:Bind TooLittleGrades, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
                 <controls:InfoDisplayControl.FrameworkBody>
                     <TextBlock>
                     <Run Text="Aby wyświetlić dane dotyczące ocen w klasie wymagane jest min."/>
@@ -52,7 +52,18 @@
                     </TextBlock>
                 </controls:InfoDisplayControl.FrameworkBody>
             </controls:InfoDisplayControl>
-            
+
+            <controls:InfoDisplayControl Mood="Sad" 
+                                         Header="Brak połączenia" 
+                                         Visibility="{x:Bind FailedToLoad, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                <controls:InfoDisplayControl.FrameworkBody>
+                    <StackPanel HorizontalAlignment="Center" Spacing="40">
+                        <TextBlock Text="Nie udało się połączyć z serwerem, aby wczytać ocenę na tle klasy."/>
+                        <Button Content="Spróbuj ponownie" Click="TryAgain" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </controls:InfoDisplayControl.FrameworkBody>
+            </controls:InfoDisplayControl>
+
             <TeachingTip x:Name="TeachingTipClassmateGrades2"
     Target="{x:Bind InfoIcon2}"
     Title="Oceny na tle klasy"

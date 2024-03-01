@@ -51,8 +51,6 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
         static async Task<string> RetrieveData(string url)
         {
-            try
-            {
                 using (HttpClient client = new HttpClient())
                 {
                     // Make an HTTP GET request to the specified URL
@@ -65,12 +63,6 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
                     // string responseBody = await response.Content.ReadAsStringAsync();
                     return await response.Content.ReadAsStringAsync();
                 }
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"Error visiting URL: {e.Message} \n {url}");
-                return "";
-            }
         }
     }
 }

@@ -84,64 +84,82 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         }
         double highestGrade = 0;
         float betterThanPercentile = 0;
+        public bool FailedToLoad { get; set; }
         public bool DisplayLoadingIndicator { get; set; } = true;
-        string betterThanDisplay => $"Lepiej niż {betterThanPercentile.ToString("0.00")}% klasy";
+        string betterThanDisplay => (betterThanPercentile == -1) ? "" : $"Lepiej niż {betterThanPercentile.ToString("0.00")}% klasy";
         string highestGradeDisplay => $"Najwyższa ocena w klasie to {highestGrade}";
 
         public bool ShouldDisplayChart => GradesAvaible >= MinGradesAvaibleToShowChart;
+        public bool TooLittleGrades => GradesAvaible < MinGradesAvaibleToShowChart && !FailedToLoad;
 
         int GradesAvaible { get; set; }
         int MinGradesAvaibleToShowChart { get; set; } = 4;
+        public async void GenerateChart(int columnId, decimal? userGrade)
+        {
+            GenerateChart(columnId, userGrade.HasValue? (double)userGrade.Value : -1);
+        }
+
         public async void GenerateChart(int columnId, double userGrade = 0)
         {
+            FailedToLoad = false;
+            DisplayLoadingIndicator = true;
+            OnPropertyChanged(nameof(DisplayLoadingIndicator));
+
+
             await Task.Delay(10);
             if (ColumnId == 0) return;
-            var classmatesGrades = await Classes.VulcanGradesDb.ClassmateGradesService.GetSingleClassmateColumn(columnId);
-            if (classmatesGrades == null) return;
-
-            foreach (var v in classmatesGrades.Grades)
-                if (v.Value > highestGrade) highestGrade = v.Value;
-
-            GradesAvaible = classmatesGrades.Grades.Length;
-            var groupped = classmatesGrades.Grades
-    .GroupBy(r => Math.Round(r.Value - 0.01))
-    .ToDictionary(
-        r => r.Key,
-        r => r.ToArray()
-    );
-            var list = new List<int>();
-
-            double maxgrade = 6;
-
-            int betterGradesCount = 0;
-            int worseOrEqalGradesCount = 0;
-
-            foreach (var grade in groupped)
+            try
             {
-                if (grade.Key > maxgrade) maxgrade = Math.Ceiling(grade.Key);
+                var classmatesGrades = await Classes.VulcanGradesDb.ClassmateGradesService.GetSingleClassmateColumn(columnId);
+                if (classmatesGrades == null) return;
 
-                if (grade.Key > userGrade)
-                    betterGradesCount += grade.Value.Length;
-                if (grade.Key <= userGrade) worseOrEqalGradesCount += grade.Value.Length;
-            }
+                foreach (var v in classmatesGrades.Grades)
+                    if (v.Value > highestGrade) highestGrade = v.Value;
 
-            betterThanPercentile = (float)worseOrEqalGradesCount / (float)(betterGradesCount + worseOrEqalGradesCount) * 100f;
+                GradesAvaible = classmatesGrades.Grades.Length;
+                var groupped = classmatesGrades.Grades
+        .GroupBy(r => Math.Round(r.Value - 0.01))
+        .ToDictionary(
+            r => r.Key,
+            r => r.ToArray()
+        );
+                var list = new List<int>();
 
-            List<float> avaibleGrades = new List<float>();
-            for (int i = 1; i <= maxgrade; i++) avaibleGrades.Add(i);
+                double maxgrade = 6;
+
+                int betterGradesCount = 0;
+                int worseOrEqalGradesCount = 0;
+
+                foreach (var grade in groupped)
+                {
+                    if (grade.Key > maxgrade) maxgrade = Math.Ceiling(grade.Key);
+
+                    if (userGrade != -1)
+                    {
+                        if (grade.Key > userGrade)
+                            betterGradesCount += grade.Value.Length;
+                        if (grade.Key <= userGrade) worseOrEqalGradesCount += grade.Value.Length;
+                    }
+                }
+                if (userGrade != -1)
+                    betterThanPercentile = (float)worseOrEqalGradesCount / (float)(betterGradesCount + worseOrEqalGradesCount) * 100f;
+                else betterThanPercentile = -1;
+
+                List<float> avaibleGrades = new List<float>();
+                for (int i = 1; i <= maxgrade; i++) avaibleGrades.Add(i);
 
 
-            for (int i = 1; i <= maxgrade; i++)
-            {
-                if (groupped.TryGetValue(i, out var value))
-                    list.Add(value.Length);
-                else
-                    list.Add(0);
-            }
-            var lArray = list.ToArray();
-            var labels = avaibleGrades.Select(r => r.ToString()).Where(r => !string.IsNullOrEmpty(r)).ToArray();
-            Series = new ISeries[]
-            {
+                for (int i = 1; i <= maxgrade; i++)
+                {
+                    if (groupped.TryGetValue(i, out var value))
+                        list.Add(value.Length);
+                    else
+                        list.Add(0);
+                }
+                var lArray = list.ToArray();
+                var labels = avaibleGrades.Select(r => r.ToString()).Where(r => !string.IsNullOrEmpty(r)).ToArray();
+                Series = new ISeries[]
+                {
                 new LineSeries<int>
                 {
                 Values = lArray,
@@ -151,9 +169,9 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
                         return tooltipContent;
                     },
                 }
-            };
+                };
 
-            XAxes = new List<Axis>
+                XAxes = new List<Axis>
             {
                 new Axis()
                 {
@@ -162,17 +180,25 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
                 }
 
             };
-            
-            grid.DataContext = this;
-            OnPropertyChanged(nameof(Series));
-            OnPropertyChanged(nameof(XAxes));
-            OnPropertyChanged(nameof(betterThanDisplay));
-            OnPropertyChanged(nameof(highestGradeDisplay));
-            OnPropertyChanged(nameof(GradesAvaible));
-            OnPropertyChanged(nameof(ShouldDisplayChart));
-            DisplayLoadingIndicator = false;
-            OnPropertyChanged(nameof(DisplayLoadingIndicator));
 
+                grid.DataContext = this;
+                OnPropertyChanged(nameof(Series));
+                OnPropertyChanged(nameof(XAxes));
+                OnPropertyChanged(nameof(betterThanDisplay));
+                OnPropertyChanged(nameof(highestGradeDisplay));
+                OnPropertyChanged(nameof(GradesAvaible));
+                OnPropertyChanged(nameof(ShouldDisplayChart));
+            }
+            catch (System.Net.Http.HttpRequestException e)
+            {
+                FailedToLoad = true;
+            }
+
+
+            DisplayLoadingIndicator = false;
+            OnPropertyChanged(nameof(FailedToLoad));
+            OnPropertyChanged(nameof(DisplayLoadingIndicator));
+            OnPropertyChanged(nameof(TooLittleGrades));
         }
         public ISeries[] Series { get; set; } = new ISeries[0];
 
@@ -187,6 +213,11 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         {
             TeachingTipClassmateGrades2.IsOpen = false;
 
+        }
+
+        private void TryAgain(object sender, RoutedEventArgs e)
+        {
+            GenerateChart(UserGrade.Column.Id, UserGrade.Value);
         }
     }
 }
