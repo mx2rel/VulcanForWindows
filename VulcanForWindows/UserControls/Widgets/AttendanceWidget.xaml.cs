@@ -57,6 +57,7 @@ namespace VulcanForWindows.UserControls.Widgets
 
         public float PresentPercent { get; set; }
         public string PresentPercentDisplay { get => PresentPercent.ToString("0.00") + "%"; }
+        public bool IsLoading { get; set; } = true;
         public AttendanceWidget()
         {
             this.InitializeComponent();
@@ -72,9 +73,12 @@ namespace VulcanForWindows.UserControls.Widgets
             att.Updated += Att_Updated;
             await new LessonsService().GetLessonsForSchoolYear(acc, att);
             Att_Updated(null, null);
+            IsLoading = false;
+            OnPropertyChanged(nameof(IsLoading));
+
         }
 
-        private async void GenerateChart()
+        private void GenerateChart()
         {
             var wCalc = att.entries.Where(r => r.CalculatePresence).Where(r=>r.PresenceType!=null);
             int present = wCalc.Where(r => r.PresenceType.Presence).Count();
@@ -103,7 +107,7 @@ namespace VulcanForWindows.UserControls.Widgets
                 att.Entries
                 .Where(r => r.Date >= TimetableDayGrouper.GetStartOfWeek(DateTime.Now.AddDays(-7), false))
                 .Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).
-                GroupBy(r => r.CanBeJustified).OrderBy(r => r.Key ? 0 : 1).Select(r => r.OrderByDescending(h => h.Date))
+                GroupBy(r => r.CanBeJustified).OrderBy(r => r.Key ? 0 : 1).Select(r => r.OrderByDescending(h => h.Date.AddMinutes(-h.No)))
                 .SelectMany(r => r));
 
             OnPropertyChanged(nameof(seriesRadial));

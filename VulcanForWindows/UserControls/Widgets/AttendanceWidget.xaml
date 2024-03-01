@@ -17,7 +17,7 @@
     </UserControl.Resources>
     <FlipView Background="Transparent" DataContext="{x:Bind}">
         <Grid>
-            <Grid Visibility="{x:Bind att.isLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+            <Grid Visibility="{x:Bind IsLoading, Converter={StaticResource VisibilityConverter}, ConverterParameter=true, Mode=OneWay}"
                 Grid.Row="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
@@ -36,7 +36,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock FontSize="15" FontWeight="Medium" Text="Ostatnie nieobecności"/>
-                    <ListView ItemsSource="{x:Bind lastNieusprawiedliwione}"
+                    <ListView ItemsSource="{x:Bind lastNieusprawiedliwione, Mode=OneWay}"
                           HorizontalContentAlignment="Stretch" Grid.Row="1" Visibility="{x:Bind lastNieusprawiedliwione, Converter={StaticResource ListToVisibility}, Mode=OneWay}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -62,7 +62,7 @@
                 </Grid>
             </Grid>
             <ProgressRing Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          IsActive="{x:Bind att.isLoading, Mode=OneWay}"/>
+                          IsActive="{x:Bind IsLoading, Mode=OneWay}"/>
         </Grid>
         <lvc:PieChart Series="{Binding seriesRadial}" InitialRotation="270" LegendPosition="Right" LegendTextSize="12" LegendTextPaint="{x:Bind LegendTextPaint}" />
     </FlipView>

@@ -40,8 +40,8 @@ namespace VulcanForWindows
     public sealed partial class MainPanelPage : Page, INotifyPropertyChanged
     {
         public GradesResponseEnvelope env { get; set; }
-        public float PresentPercent { get; set; }
-        public string PresentPercentDisplay { get => PresentPercent.ToString("0.00") + "%"; }
+        public float PresentPercent { get; set; } = -1;
+        public string PresentPercentDisplay { get => (PresentPercent == -1) ? "" : ($"{PresentPercent.ToString("0.00")}%"); }
 
         public ObservableCollection<SubjectGrades> sg { get; set; }
         public NewResponseEnvelope<Lesson> att { get; set; }
