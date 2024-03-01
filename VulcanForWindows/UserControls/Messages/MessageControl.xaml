@@ -41,13 +41,13 @@
                                TextWrapping="WrapWholeWords" IsTextSelectionEnabled="True"
                                HorizontalAlignment="Stretch"/>
 
-            <GridView ItemsSource="{x:Bind Message.message.Attachments}" SelectionMode="None" HorizontalAlignment="Left">
-                <GridView.ItemTemplate>
+            <ListView ItemsSource="{x:Bind Message.message.Attachments}" SelectionMode="None" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                <ListView.ItemTemplate>
                     <DataTemplate x:DataType="attachments:Attachment">
-                        <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Link}" Padding="2"/>
+                        <HyperlinkButton Content="{x:Bind Name}" NavigateUri="{x:Bind Link}" Padding="2" HorizontalAlignment="Left"/>
                     </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
+                </ListView.ItemTemplate>
+            </ListView>
         </ListView>
 
     </Grid>

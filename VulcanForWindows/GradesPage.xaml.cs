@@ -415,12 +415,6 @@ namespace VulcanForWindows
             {
                 w.Close();
                 MainWindow.Instance.IsOtherWindowOpen = false;
-
-                // do stuff
-            }
-            else
-            {
-                // do different stuff
             }
         }
     }

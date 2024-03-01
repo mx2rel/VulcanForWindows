@@ -42,6 +42,8 @@ namespace VulcanForWindows.Classes
             this.periodId = periodId;
             CalculateYearlyAverage();
             if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
+            foreach (var v in grades) v.CalculateClassAverage();
+
             GetFinalGrade();
         }
 
