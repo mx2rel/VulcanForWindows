@@ -178,16 +178,6 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
 
         public List<Axis> XAxes { get; set; } = new List<Axis>();
 
-        private void FontIcon_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            TeachingTipClassmateGrades.IsOpen = true;
-        }
-
-        private void FontIcon_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            TeachingTipClassmateGrades.IsOpen = false;
-
-        }
         private void FontIcon_PointerEntered2(object sender, PointerRoutedEventArgs e)
         {
             TeachingTipClassmateGrades2.IsOpen = true;

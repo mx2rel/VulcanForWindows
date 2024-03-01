@@ -5,7 +5,11 @@
     xmlns:local="using:VulcanForWindows.UserControls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Converters"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Name="VisibilityConverter"/>
+    </UserControl.Resources>
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,50" MaxWidth="600">
         <Grid.RowDefinitions>
@@ -15,7 +19,19 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Image x:Name="MoodImage" MaxWidth="100" />
-        <TextBlock x:Name="HeaderText" Text="Header" FontWeight="SemiBold" FontSize="24" Grid.Row="2" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
-        <TextBlock x:Name="BodyText" Text="Body" Grid.Row="3" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center" Grid.Row="2">
+            <TextBlock x:Name="HeaderText" Text="Header" FontWeight="SemiBold" FontSize="24" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+
+            <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="LightGray" x:Name="InfoIcon"
+                          FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" PointerEntered="FontIcon_PointerEntered"
+                      PointerExited="FontIcon_PointerExited" Visibility="{x:Bind DisplayInfoButton, Converter={StaticResource VisibilityConverter}}"
+                          />
+        </StackPanel>
+        <StackPanel x:Name="bodyContainer" Grid.Row="3">
+        <TextBlock x:Name="BodyText" Text="Body"  TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+        </StackPanel>
+        <TeachingTip x:Name="TeachingTip"
+    Target="{x:Bind InfoIcon}">
+        </TeachingTip>
     </Grid>
 </UserControl>

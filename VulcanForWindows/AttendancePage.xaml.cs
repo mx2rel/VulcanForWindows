@@ -139,7 +139,7 @@ namespace VulcanForWindows
                 if (week > DateTime.Now)
                 {
                     t.Mood = InfoDisplayControl.Moods.Bored;
-                    t.Header = "Okres jest w przyszłości";
+                    t.Header = "Wybrany okres jest w przyszłości";
                     t.Body = "Spróbuj ponownie, gdy lekcje faktycznie nastąpią...";
                 }
                 else
