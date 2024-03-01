@@ -30,6 +30,7 @@
     <None Remove="LoginPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
     <None Remove="MessagesPage.xaml" />
+    <None Remove="MonthsAttendancePage.xaml" />
     <None Remove="NotesPage.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="TimetablePage.xaml" />
@@ -45,6 +46,7 @@
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
+    <None Remove="UserControls\MonthsAttendanceControl.xaml" />
     <None Remove="UserControls\Settings\ReminderSettings.xaml" />
     <None Remove="UserControls\SingleDeadlineable.xaml" />
     <None Remove="UserControls\SingleMessageBig.xaml" />
@@ -150,6 +152,16 @@
     <Content Update="Assets\Pupil\Sad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\MonthsAttendanceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MonthsAttendancePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\InfoDisplayControl.xaml">

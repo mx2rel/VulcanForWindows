@@ -54,6 +54,7 @@
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Ostatnie" ToolTipService.ToolTip="Wyświetl ostatnie obecności" Tag="AttendancePage"/>
                             <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl podsumowanie frekwencji" Tag="AttendanceReportPage"/>
+                                <NavigationViewItem Content="Kalendarz" ToolTipService.ToolTip="Wyświetl frekwencje w widoku kalendarza" Tag="MonthsAttendancePage"/>
                         </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
                     <NavigationViewItem Icon="Mail" Content="Wiadomości" Tag="MessagesPage" />
