@@ -46,7 +46,7 @@
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
-    <None Remove="UserControls\MonthsAttendanceControl.xaml" />
+    <None Remove="UserControls\MonthAttendanceControl.xaml" />
     <None Remove="UserControls\Settings\ReminderSettings.xaml" />
     <None Remove="UserControls\SingleDeadlineable.xaml" />
     <None Remove="UserControls\SingleMessageBig.xaml" />
@@ -154,7 +154,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="UserControls\MonthsAttendanceControl.xaml">
+    <Page Update="UserControls\MonthAttendanceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

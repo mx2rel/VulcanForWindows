@@ -65,5 +65,6 @@
                           IsActive="{x:Bind IsLoading, Mode=OneWay}"/>
         </Grid>
         <lvc:PieChart Series="{Binding seriesRadial}" InitialRotation="270" LegendPosition="Right" LegendTextSize="12" LegendTextPaint="{x:Bind LegendTextPaint}" />
+        <controls:MonthAttendanceControl x:Name="MonthsAttendance" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </FlipView>
 </UserControl>

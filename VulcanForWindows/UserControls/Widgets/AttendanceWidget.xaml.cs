@@ -62,6 +62,7 @@ namespace VulcanForWindows.UserControls.Widgets
         {
             this.InitializeComponent();
             FetchAttendance(new AccountRepository().GetActiveAccountAsync());
+            MonthsAttendance.Month = (DateTime.Now.AddDays(-3));
         }
 
         private async void FetchAttendance(Account acc)
