@@ -56,17 +56,63 @@ namespace VulcanForWindows.UserControls
 
 
         Grid myGrid;
-        public void SpawnMonth(DateTime month)
+        public void SpawnMonth(DateTime month, bool withLegend = false)
         {
             month = month.Date.AddDays(-month.Date.Day + 1);
             this.month = month;
-            myGrid = RenderCalendar(month.Month, month.Year);
-            SpawnEntries();
+            (myGrid, var sp, var monthT) = RenderCalendar(month.Month, month.Year);
+            SpawnLegend(sp);
+            SpawnEntries(monthT);
         }
 
         DateTime month;
 
-        Grid RenderCalendar(int month, int year = 2024)
+        void SpawnLegend(StackPanel sp)
+        {
+            Container.Children.Remove(sp);
+            var n = new StackPanel();
+            n.Spacing = 6;
+            n.Orientation = Orientation.Horizontal;
+            n.VerticalAlignment = VerticalAlignment.Center;
+            n.Children.Add(sp);
+
+            var legend = new StackPanel();
+            legend.Spacing = 4;
+            //legend.Orientation = Orientation.Horizontal;
+            legend.VerticalAlignment = VerticalAlignment.Center;
+            var legendDefinitions = new (Windows.UI.Color color, string name)[] {
+                (Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)255, (byte)145, (byte)0), "Sp"),
+                (Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)165, (byte)0, (byte)0), "Nb"),
+                (Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)255, (byte)171, (byte)62), "Sp uspr."),
+                (Microsoft.UI.ColorHelper.FromArgb((byte)255,(byte)210, (byte)73, (byte)0), "Nb uspr.")
+            };
+
+            foreach (var lgDef in legendDefinitions)
+            {
+                var legendEntry = new StackPanel();
+                legendEntry.Spacing = 3;
+                legendEntry.Orientation = Orientation.Horizontal;
+                var b = new Border();
+                b.Width = 12;
+                b.Height = 12;
+                b.CornerRadius = new CornerRadius(10);
+                b.VerticalAlignment = VerticalAlignment.Center;
+                b.Background = new SolidColorBrush( lgDef.color);
+                legendEntry.Children.Add(b);
+
+                var t = new TextBlock();
+                t.Text = lgDef.name;
+                legendEntry.Children.Add(t);
+                t.VerticalAlignment = VerticalAlignment.Center;
+                legend.Children.Add(legendEntry);
+
+            }
+
+            n.Children.Add(legend);
+            Container.Children.Add(n);
+        }
+
+        (Grid g, StackPanel sp, TextBlock monthT) RenderCalendar(int month, int year = 2024)
         {
             DateTime firstDayOfMonth = new DateTime(year, month, 1);
 
@@ -88,7 +134,7 @@ namespace VulcanForWindows.UserControls
                 column.Width = new GridLength(35);
                 grid.ColumnDefinitions.Add(column);
             }
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < Math.Ceiling(DateTime.DaysInMonth(year,month) / 7d); i++)
             {
                 var row = new RowDefinition();
                 row.Height = new GridLength(35);
@@ -106,11 +152,11 @@ namespace VulcanForWindows.UserControls
                 text.VerticalAlignment = VerticalAlignment.Center;
                 text.Text = i.Day.ToString();
                 text.TextAlignment = TextAlignment.Center;
-                if (i.Month == month)
+                if (i.Month == month && i.DayOfWeek != DayOfWeek.Saturday && i.DayOfWeek != DayOfWeek.Sunday)
                 {
                     text.FontWeight = new Windows.UI.Text.FontWeight() { Weight = 500 };
                 }
-                else
+                else if(i.Month != month)
                 {
                     text.Foreground = new SolidColorBrush(Microsoft.UI.Colors.Gray);
                 }
@@ -125,7 +171,7 @@ namespace VulcanForWindows.UserControls
                 Container.Children.Remove(Container.Children.First());
 
             Container.Children.Add(sp);
-            return grid;
+            return (grid, sp, monthText);
         }
 
         int GetDayOfWeek(DateTime t)
@@ -136,17 +182,34 @@ namespace VulcanForWindows.UserControls
             return i;
         }
 
-        public async void SpawnEntries()
+        public async void SpawnEntries(TextBlock monthT = null)
         {
             Vulcan.NewResponseEnvelope<Lesson> l = new Vulcan.NewResponseEnvelope<Lesson>();
             await new LessonsService().GetLessonsForRange(new AccountRepository().GetActiveAccountAsync(), month, month.AddMonths(1), l, false, true);
 
-            IEnumerable<(DateTime Key, bool Late, bool JustifiedLate, bool Absence, bool JustifiedAbsence)> entries = l.Entries.GroupBy(r => r.Date).Select(r => (r.Key,
-            r.ToArray().Where(r => r.PresenceType.Late && !r.PresenceType.AbsenceJustified).Count() > 0,
-            r.ToArray().Where(r => r.PresenceType.Late && r.PresenceType.AbsenceJustified).Count() > 0,
-            r.ToArray().Where(r => r.PresenceType.Absence && !r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence).Count() > 0,
-            r.ToArray().Where(r => r.PresenceType.AbsenceJustified || r.PresenceType.LegalAbsence).Count() > 0
+            IEnumerable<(DateTime Key, int LateCount, int JustifiedLateCount, int AbsenceCount, int JustifiedAbsenceCount)> entriesCount = l.Entries.GroupBy(r => r.Date).Select(r => (r.Key,
+            r.ToArray().Count(r => r.PresenceType.Late && !r.PresenceType.AbsenceJustified),
+            r.ToArray().Count(r => r.PresenceType.Late && r.PresenceType.AbsenceJustified),
+            r.ToArray().Count(r => r.PresenceType.Absence && !r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence),
+            r.ToArray().Count(r => r.PresenceType.AbsenceJustified || r.PresenceType.LegalAbsence)
             ));
+
+            // Create another var with bools
+            IEnumerable<(DateTime Key, bool Late, bool JustifiedLate, bool Absence, bool JustifiedAbsence)> entries = entriesCount.Select(entry => (entry.Key,
+                        entry.LateCount > 0,
+                        entry.JustifiedLateCount > 0,
+                        entry.AbsenceCount > 0,
+                        entry.JustifiedAbsenceCount > 0
+                        ));
+
+            if (monthT != null)
+            {
+                var e = l.entries.Where(r =>r.CalculatePresence);
+                var percent = ((float)e.Where(r => !r.PresenceType.Absence).Count() / (float)e.Count()) * 100;
+
+                monthT.Text += $" ({percent.ToString("0.00")}%)";
+            }
+
             foreach (var v in entries)
             {
                 var firstDayOfMonth = new DateTime(v.Key.Year, v.Key.Month, 1);
@@ -172,13 +235,14 @@ namespace VulcanForWindows.UserControls
 
                 List<string> s = new List<string>();
 
+                var counts = entriesCount.Where(r => r.Key == v.Key).First();
                 if (v.Late)
                 {
                     var n = new Border();
                     n.VerticalAlignment = VerticalAlignment.Stretch;
-                    n.Background = new SolidColorBrush(Microsoft.UI.Colors.Yellow);
-                    ToolTipService.SetToolTip(n, "Spóźnienie");
-                    s.Add("Spóźnienie");
+                    n.Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)255, (byte)145, (byte)0));
+
+                    s.Add($"({counts.LateCount}) Spóźnienie");
                     g.Children.Add(n);
 
                 }
@@ -186,21 +250,20 @@ namespace VulcanForWindows.UserControls
                 {
                     var n = new Border();
                     n.VerticalAlignment = VerticalAlignment.Stretch;
-                    n.Background = new SolidColorBrush(Microsoft.UI.Colors.DarkBlue);
+                    n.Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)255, (byte)171, (byte)62));
                     Grid.SetRow(n, 1);
 
-                    ToolTipService.SetToolTip(n, "Spóźnienie usprawiedliwione");
-                    s.Add("Spóźnienie uspr.");
+                    s.Add($"({counts.JustifiedLateCount}) Spóźnienie uspr.");
                     g.Children.Add(n);
                 }
                 if (v.Absence)
                 {
                     var n = new Border();
                     n.VerticalAlignment = VerticalAlignment.Stretch;
-                    n.Background = new SolidColorBrush(Microsoft.UI.Colors.Red);
+                    n.Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)165, (byte)0, (byte)0));
                     Grid.SetRow(n, 2);
-                    ToolTipService.SetToolTip(n, "Nieobecność");
-                    s.Add("Nieobecność");
+
+                    s.Add($"({counts.AbsenceCount}) Nieobecność");
                     g.Children.Add(n);
 
                 }
@@ -208,15 +271,20 @@ namespace VulcanForWindows.UserControls
                 {
                     var n = new Border();
                     n.VerticalAlignment = VerticalAlignment.Stretch;
-                    n.Background = new SolidColorBrush(Microsoft.UI.Colors.MediumPurple);
+                    n.Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb((byte)255, (byte)210, (byte)73, (byte)0));
                     Grid.SetRow(n, 3);
-                    ToolTipService.SetToolTip(n, "Nieobecność usprawiedliwiona");
-                    s.Add("Nieobecność uspr.");
+
+                    s.Add($"({counts.JustifiedAbsenceCount}) Nieobecność uspr.");
                     g.Children.Add(n);
                 }
 
-                string show = string.Join(", ",s);
+                string show = string.Join("\n", s);
 
+                foreach (var ch in gr.Children.Where(r => Grid.GetRow(r as FrameworkElement) == rowNum).Where(r => Grid.GetColumn(r as FrameworkElement) == GetDayOfWeek(v.Key)))
+                {
+                    ToolTipService.SetToolTip(ch, show);
+
+                }
 
                 gr.Children.Insert(0, g);
             }

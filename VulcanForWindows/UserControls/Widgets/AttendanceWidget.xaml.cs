@@ -63,6 +63,32 @@ namespace VulcanForWindows.UserControls.Widgets
             this.InitializeComponent();
             FetchAttendance(new AccountRepository().GetActiveAccountAsync());
             MonthsAttendance.Month = (DateTime.Now.AddDays(-3));
+
+            InitializeTimer();
+            SetRandomIndex();
+        }
+
+
+        private DispatcherTimer _timer;
+        private void InitializeTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Tick += Timer_Tick;
+            _timer.Interval = TimeSpan.FromSeconds(20); // Adjust interval as needed
+            _timer.Start();
+        }
+        private void SetRandomIndex()
+        {
+            var _random = new Random();
+            flipView.SelectedIndex = _random.Next(0, flipView.Items.Count);
+        }
+        private void Timer_Tick(object sender, object e)
+        {
+            // Move to the next item in FlipView
+            if (flipView.SelectedIndex < flipView.Items.Count - 1)
+                flipView.SelectedIndex++;
+            else
+                flipView.SelectedIndex = 0;
         }
 
         private async void FetchAttendance(Account acc)
@@ -114,6 +140,12 @@ namespace VulcanForWindows.UserControls.Widgets
             OnPropertyChanged(nameof(seriesRadial));
             OnPropertyChanged(nameof(UnjustifiedCount));
             OnPropertyChanged(nameof(InProgressCount));
+        }
+        private void flipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_timer == null) return;
+            _timer.Stop();
+            _timer.Start();
         }
     }
 }

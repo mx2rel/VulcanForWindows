@@ -15,7 +15,7 @@
         <converters:VisibilityConverter x:Key="VisibilityConverter" />
         <converters:ListToVisibility x:Key="ListToVisibility" />
     </UserControl.Resources>
-    <FlipView Background="Transparent" DataContext="{x:Bind}">
+    <FlipView Background="Transparent" DataContext="{x:Bind}" x:Name="flipView" SelectionChanged="flipView_SelectionChanged">
         <Grid>
             <Grid Visibility="{x:Bind IsLoading, Converter={StaticResource VisibilityConverter}, ConverterParameter=true, Mode=OneWay}"
                 Grid.Row="2">
