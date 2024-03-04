@@ -169,6 +169,25 @@ namespace VulcanForWindows.UserControls
 
         }
 
+
+        public static readonly DependencyProperty OrientationProperty =
+            DependencyProperty.Register("Orientation", typeof(Orientation), typeof(InfoDisplayControl), new PropertyMetadata(Orientation.Vertical, Orientation_Changed));
+
+        public Orientation Orientation
+        {
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
+        }
+
+        private static void Orientation_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is InfoDisplayControl control && e.NewValue is Orientation newValue)
+            {
+                control.MainSp.Orientation = newValue;
+            }
+        }
+
+
         public enum Moods
         {
             Happy, Sad, Excited, Normal, Bored

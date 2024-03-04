@@ -77,5 +77,11 @@ namespace VulcanForWindows.Classes
             }
             return false;
         }
+
+        public static Grade[] GetLatestGrades(this Grade[] g)
+        {
+            var startDate = g.OrderByDescending(r => r.DateModify).First().DateModify.AddDays(-7).Date;
+            return g.Where(r => r.DateModify.Date >= startDate).ToArray();
+        }
     }
 }

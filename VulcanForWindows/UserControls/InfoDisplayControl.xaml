@@ -11,27 +11,32 @@
         <converters:VisibilityConverter x:Name="VisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,50" MaxWidth="600">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="8"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Image x:Name="MoodImage" MaxWidth="100" />
-        <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center" Grid.Row="2">
-            <TextBlock x:Name="HeaderText" Text="Header" FontWeight="SemiBold" FontSize="24" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+    <Grid>
 
-            <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="LightGray" x:Name="InfoIcon"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel x:Name="MainSp" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,0" Spacing="10">
+            <Image x:Name="MoodImage" MaxWidth="100" Margin="10"/>
+            <StackPanel VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+                    <TextBlock x:Name="HeaderText" Text="Header" FontWeight="SemiBold" FontSize="24" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+
+                    <FontIcon Glyph="&#xE946;" FontSize="16" Foreground="LightGray" x:Name="InfoIcon"
                           FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" PointerEntered="FontIcon_PointerEntered"
                       PointerExited="FontIcon_PointerExited" Visibility="{x:Bind DisplayInfoButton, Converter={StaticResource VisibilityConverter}}"
                           />
-        </StackPanel>
-        <StackPanel x:Name="bodyContainer" Grid.Row="3">
-        <TextBlock x:Name="BodyText" Text="Body"  TextAlignment="Center" TextWrapping="WrapWholeWords"/>
-        </StackPanel>
-        <TeachingTip x:Name="TeachingTip"
+                </StackPanel>
+                <StackPanel x:Name="bodyContainer">
+                    <TextBlock x:Name="BodyText" Text="Body"  TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+                </StackPanel>
+                <TeachingTip x:Name="TeachingTip"
     Target="{x:Bind InfoIcon}">
-        </TeachingTip>
+                </TeachingTip>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

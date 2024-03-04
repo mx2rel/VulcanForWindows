@@ -92,11 +92,13 @@ namespace VulcanForWindows.UserControls.Widgets
             CalculateChart(res.SelectMany(r => r.Value).ToArray());
 
         }
-
+        Grade[] thisPeriodGrades { get; set; }
         private async Task FetchGrades(Account acc)
         {
             res = await new GradesService().FetchGradesFromCurrentLevelAsync(acc);
+            thisPeriodGrades = res.OrderBy(r => r.Key.Id).Last().Value;
             sg.ReplaceAll(SubjectGrades.CreateRecent(res.SelectMany(r => r.Value).ToArray()));
+            OnPropertyChanged(nameof(thisPeriodGrades));
         }
         DateTime GetWeekStartDate(DateTime date)
         {

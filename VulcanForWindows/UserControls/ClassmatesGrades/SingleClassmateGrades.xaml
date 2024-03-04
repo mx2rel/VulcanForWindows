@@ -11,6 +11,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+        <converters:BoolToStrings x:Key="BoolToStrings"/>
     </UserControl.Resources>
     <Grid>
         <Grid Visibility="{x:Bind DisplayLoadingIndicator, Converter={StaticResource VisibilityConverter}, ConverterParameter=true, Mode=OneWay}">
@@ -55,10 +56,11 @@
 
             <controls:InfoDisplayControl Mood="Sad" 
                                          Header="Brak połączenia" 
-                                         Visibility="{x:Bind FailedToLoad, Converter={StaticResource VisibilityConverter}, Mode=OneWay}">
+                                         Visibility="{x:Bind FailedToLoad, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"
+                                         Orientation="{x:Bind ErrorMessageOrientation, Mode=OneWay}" HorizontalAlignment="Stretch">
                 <controls:InfoDisplayControl.FrameworkBody>
-                    <StackPanel HorizontalAlignment="Center" Spacing="40">
-                        <TextBlock Text="Nie udało się połączyć z serwerem, aby wczytać ocenę na tle klasy."/>
+                    <StackPanel HorizontalAlignment="Center" Spacing="{x:Bind IsCompact, Mode=OneWay,Converter={StaticResource BoolToStrings}, ConverterParameter=5!40}">
+                        <TextBlock Visibility="{x:Bind IsCompact, Converter={StaticResource VisibilityConverter}, Mode=OneWay, ConverterParameter=True}" Text="Nie udało się połączyć z serwerem, aby wczytać ocenę na tle klasy." TextWrapping="WrapWholeWords" MaxWidth="250" TextAlignment="Center"/>
                         <Button Content="Spróbuj ponownie" Click="TryAgain" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </controls:InfoDisplayControl.FrameworkBody>

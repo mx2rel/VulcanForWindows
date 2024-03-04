@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:g="using:VulcanForWindows.Classes"
-     xmlns:grade="using:Vulcanova.Features.Grades" 
+    xmlns:grade="using:Vulcanova.Features.Grades" 
+    xmlns:controls="using:VulcanForWindows.UserControls" 
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
     mc:Ignorable="d">
 
@@ -43,5 +44,6 @@
         <lvc:CartesianChart x:Name="chart" 
         Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxes, Mode=OneWay}">
         </lvc:CartesianChart>
+        <controls:RecentGrade GradesPool="{x:Bind thisPeriodGrades, Mode=OneWay}"/>
     </FlipView>
 </UserControl>

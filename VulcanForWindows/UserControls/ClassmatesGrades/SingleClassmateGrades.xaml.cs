@@ -32,6 +32,42 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
     {
 
 
+        public static readonly DependencyProperty IsCompactProperty =
+            DependencyProperty.Register("IsCompact", typeof(bool), typeof(SingleClassmateGrades), new PropertyMetadata(false, IsCompact_Changed));
+
+        public bool IsCompact
+        {
+            get => (bool)GetValue(IsCompactProperty);
+            set => SetValue(IsCompactProperty, value);
+        }
+
+        private static void IsCompact_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SingleClassmateGrades control && e.NewValue is bool newValue)
+            {
+                control.OnPropertyChanged(nameof(IsCompact));
+            }
+        }
+
+
+        public static readonly DependencyProperty ErrorMessageOrientationProperty =
+            DependencyProperty.Register("ErrorMessageOrientation", typeof(Orientation), typeof(SingleClassmateGrades), new PropertyMetadata(Orientation.Vertical, ErrorMessageOrientation_Changed));
+
+        public Orientation ErrorMessageOrientation
+        {
+            get => (Orientation)GetValue(ErrorMessageOrientationProperty);
+            set => SetValue(ErrorMessageOrientationProperty, value);
+        }
+
+        private static void ErrorMessageOrientation_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SingleClassmateGrades control && e.NewValue is Orientation newValue)
+            {
+                control.OnPropertyChanged(nameof(ErrorMessageOrientation));
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged(string propertyName)
