@@ -26,13 +26,9 @@ namespace VulcanTest.Vulcan
         private static string dataFilePath
             => Path.Combine(folder, "data.dat");
 
-        public static Windows.Storage.StorageFolder roamingFolder =
-    Windows.Storage.ApplicationData.Current.RoamingFolder;
-
-
         public static void Set<T>(string key, object value)
         {
-            Debug.WriteLine(dataFilePath);
+
             Dictionary<string, string> data = GetAllData();
             data[key] = JsonConvert.SerializeObject((T)value);
 
