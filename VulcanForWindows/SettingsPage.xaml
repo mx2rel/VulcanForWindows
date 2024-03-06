@@ -9,10 +9,23 @@
     xmlns:scontrols="using:VulcanForWindows.UserControls.Settings"
     mc:Ignorable="d">
 
-    <Grid Margin="5">
-        <StackPanel Spacing="10">
-        <scontrols:ReminderSettings/>
+    <Grid VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <ListView Margin="5" SelectionMode="None">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <scontrols:ReminderSettings/>
+            <scontrols:BackgroundTaskSettings/>
+        </ListView>
+        <Grid Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}" Padding="15" CornerRadius="4,4,0,0">
             <Button Content="Wyloguj" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
-        </StackPanel>
+        </Grid>
     </Grid>
 </Page>

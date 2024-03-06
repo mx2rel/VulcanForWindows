@@ -30,7 +30,7 @@ namespace VulcanTest.Vulcan
     Windows.Storage.ApplicationData.Current.RoamingFolder;
 
 
-        public static void Set<T>(string key, object value)
+        public static void Set<T>(string key, T value)
         {
             Debug.WriteLine(dataFilePath);
             Dictionary<string, string> data = GetAllData();

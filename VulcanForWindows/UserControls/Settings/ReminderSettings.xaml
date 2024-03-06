@@ -12,7 +12,7 @@
             <TextBlock Grid.Row="0" Text="Powiadomienia o sprawdzianach i zadaniach" FontWeight="SemiBold" FontSize="18" Margin="0,0,0,5"/>
         </Expander.Header>
         <Expander.Content >
-            <Grid Margin="10" HorizontalAlignment="Stretch">
+            <Grid Margin="0" HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto" MaxHeight="400"/>

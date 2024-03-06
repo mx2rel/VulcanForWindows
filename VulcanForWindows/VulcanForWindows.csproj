@@ -48,6 +48,8 @@
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
     <None Remove="UserControls\MessageControl.xaml" />
     <None Remove="UserControls\MonthAttendanceControl.xaml" />
+    <None Remove="UserControls\Settings\BackgroundTaskSetting.xaml" />
+    <None Remove="UserControls\Settings\BackgroundTaskSettings.xaml" />
     <None Remove="UserControls\Settings\ReminderSettings.xaml" />
     <None Remove="UserControls\SingleDeadlineable.xaml" />
     <None Remove="UserControls\SingleMessageBig.xaml" />
@@ -153,6 +155,16 @@
     <Content Update="Assets\Pupil\Sad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\Settings\BackgroundTaskSetting.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\Settings\BackgroundTaskSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\MonthAttendanceControl.xaml">

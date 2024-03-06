@@ -41,7 +41,7 @@ static class Program
     public static void MinutePassed()
     {
         var currentMinute = Math.Floor(DateTime.Now.TimeOfDay.TotalMinutes);
-        if (currentMinute % GradesUpdateInterval == 0) GradesUpdate();
+        if (currentMinute % ((GradesUpdateInterval == -1) ? 10 : GradesUpdateInterval) == 0) GradesUpdate();
     }
 
     async static void GradesUpdate()
@@ -66,6 +66,8 @@ static class Program
             }
         }
         ClassmateGradesUploader.UpsyncGrades(newGrades.ToArray(), acc.CurrentPeriod.Id);
+
+        if (GradesUpdateInterval == -1) return;
 
         newGrades = newGrades.OrderByDescending(r => r.DateModify).ToList();
 
