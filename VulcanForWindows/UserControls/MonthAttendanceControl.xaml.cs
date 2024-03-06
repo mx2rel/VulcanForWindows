@@ -187,7 +187,7 @@ namespace VulcanForWindows.UserControls
             Vulcan.NewResponseEnvelope<Lesson> l = new Vulcan.NewResponseEnvelope<Lesson>();
             await new LessonsService().GetLessonsForRange(new AccountRepository().GetActiveAccountAsync(), month, month.AddMonths(1), l, false, true);
 
-            IEnumerable<(DateTime Key, int LateCount, int JustifiedLateCount, int AbsenceCount, int JustifiedAbsenceCount)> entriesCount = l.Entries.GroupBy(r => r.Date).Select(r => (r.Key,
+            IEnumerable<(DateTime Key, int LateCount, int JustifiedLateCount, int AbsenceCount, int JustifiedAbsenceCount)> entriesCount = l.Entries.Where(r=>r.PresenceType != null).GroupBy(r => r.Date).Select(r => (r.Key,
             r.ToArray().Count(r => r.PresenceType.Late && !r.PresenceType.AbsenceJustified),
             r.ToArray().Count(r => r.PresenceType.Late && r.PresenceType.AbsenceJustified),
             r.ToArray().Count(r => r.PresenceType.Absence && !r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence),
@@ -205,7 +205,7 @@ namespace VulcanForWindows.UserControls
             if (monthT != null)
             {
                 var e = l.entries.Where(r =>r.CalculatePresence);
-                var percent = ((float)e.Where(r => !r.PresenceType.Absence).Count() / (float)e.Count()) * 100;
+                var percent = ((float)e.Where(r=>r.PresenceType!=null).Where(r => !r.PresenceType.Absence).Count() / (float)e.Count()) * 100;
 
                 monthT.Text += $" ({percent.ToString("0.00")}%)";
             }
