@@ -11,6 +11,9 @@ namespace VulcanForWindowsBgWorker;
 
 static class Program
 {
+
+    public static int GradesUpdateInterval = 10;
+
     /// <summary>
     /// G³ówny punkt wejœcia dla aplikacji.
     /// </summary>
@@ -21,22 +24,30 @@ static class Program
         Application.SetCompatibleTextRenderingDefault(false);
         AddToStartupRegistry();
 
+        GradesUpdateInterval = Preferences.Get<int>("GradesUpdateInterval", 10);
 
         // Keep the main thread alive
         // This will ensure that the application doesn't exit immediately
         // Otherwise, the background task will also terminate
         while (true)
         {
-            Thread.Sleep(15000); // Sleep for a short interval to avoid high CPU usage
-            TimerCallback(null);
+
+            MinutePassed();
+            Thread.Sleep(60000); // Wait for minute
+
         }
     }
-    async static void TimerCallback(object state)
+
+    public static void MinutePassed()
     {
-        // Display the message box
+        var currentMinute = Math.Floor(DateTime.Now.TimeOfDay.TotalMinutes);
+        if (currentMinute % GradesUpdateInterval == 0) GradesUpdate();
+    }
+
+    async static void GradesUpdate()
+    {
         var acc = new AccountRepository().GetActiveAccountAsync();
         var res = await new GradesService().FetchGradesFromCurrentPeriodAsync(acc);
-        ClassmateGradesUploader.UpsyncGrades(res, acc.CurrentPeriod.Id);
         List<Grade> newGrades = new List<Grade>();
         foreach (var grade in res)
         {
@@ -54,14 +65,27 @@ static class Program
                 Preferences.Set<DateTime>($"Grade_{grade.Id}_ShowedNotification", DateTime.Now);
             }
         }
+        ClassmateGradesUploader.UpsyncGrades(newGrades.ToArray(), acc.CurrentPeriod.Id);
 
+        newGrades = newGrades.OrderByDescending(r => r.DateModify).ToList();
 
-        new ToastContentBuilder()
-    .AddArgument("action", "viewConversation")
-    .AddArgument("conversationId", 9813)
-    .AddText($"({newGrades.Count}) nowe oceny!")
-    .AddText(JsonConvert.SerializeObject(res).Substring(0, 20))
-    .Show();
+        if (newGrades.Count > 0)
+            if (newGrades.Count < 3)
+            {
+                foreach (var v in newGrades)
+                    new ToastContentBuilder()
+                .AddText($"Nowa ocena - {v.Column.Subject.Name}")
+                .AddText($"{v.Content} - ({v.Column.Name})")
+                .Show();
+            }
+            else
+            {
+                    new ToastContentBuilder()
+            .AddText($"({newGrades.Count}) nowe oceny").AddAppLogoOverride(new Uri(Path.Combine(Application.StartupPath, "GradesIcon.png")))
+            .AddText(string.Join("\n", newGrades.Select(r => ($"{r.Column.Subject.Name} ({((r.Column.Name.Length > 22) ? (r.Column.Name.Substring(0,22) + "...") : r.Column.Name)}): {r.Content}")).Take(3).ToArray())
+            + ((newGrades.Count > 3) ? ($"\n+ {newGrades.Count - 3} innych") : ""))
+            .Show();
+            }
     }
 
 
@@ -77,14 +101,18 @@ static class Program
         {
             // Add the application to startup
             registryKey.SetValue(appName, appPath);
-            Console.WriteLine("Application added to startup.");
-            MessageBox.Show("Application added to startup!");
+            //Console.WriteLine("Application added to startup.");
+            //MessageBox.Show("Application added to startup!");
+            new ToastContentBuilder()
+                .AddText($"VulcanForWindowsBgWorker has been added to startup.")
+                .Show();
 
         }
         else
         {
-            Console.WriteLine("Application is already added to startup.");
-            MessageBox.Show("Application is already added to startup.");
+            new ToastContentBuilder()
+                .AddText($"VulcanForWindowsBgWorker is running.")
+                .Show();
         }
     }
 }
