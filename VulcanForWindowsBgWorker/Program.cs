@@ -6,13 +6,14 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.Data.Xml.Dom;
 using VulcanTest.Vulcan;
 using VulcanForWindows.Classes.VulcanGradesDb;
+using System.Diagnostics;
 
 namespace VulcanForWindowsBgWorker;
 
 static class Program
 {
 
-    public static int GradesUpdateInterval = 10;
+    public static int GradesUpdateInterval = 1;
 
     /// <summary>
     /// G³ówny punkt wejœcia dla aplikacji.
@@ -24,7 +25,7 @@ static class Program
         Application.SetCompatibleTextRenderingDefault(false);
         AddToStartupRegistry();
 
-        GradesUpdateInterval = Preferences.Get<int>("GradesUpdateInterval", 10);
+        GradesUpdateInterval = Preferences.Get<int>("GradesUpdateInterval", 1);
 
         // Keep the main thread alive
         // This will ensure that the application doesn't exit immediately
@@ -33,6 +34,7 @@ static class Program
         {
 
             MinutePassed();
+            //Thread.Sleep(15000); // Wait for minute
             Thread.Sleep(60000); // Wait for minute
 
         }
@@ -41,7 +43,7 @@ static class Program
     public static void MinutePassed()
     {
         var currentMinute = Math.Floor(DateTime.Now.TimeOfDay.TotalMinutes);
-        if (currentMinute % ((GradesUpdateInterval == -1) ? 10 : GradesUpdateInterval) == 0) GradesUpdate();
+        if (currentMinute % GradesUpdateInterval == 0) GradesUpdate();
     }
 
     async static void GradesUpdate()
@@ -56,38 +58,46 @@ static class Program
                 if (on < grade.DateModify)
                 {
                     newGrades.Add(grade);
-                    Preferences.Set<DateTime>($"Grade_{grade.Id}_ShowedNotification", DateTime.Now);
+                    //Preferences.Set<DateTime>($"Grade_{grade.Id}_ShowedNotification", DateTime.Now);
+                    //toAdd.Add($"Grade_{grade.Id}_ShowedNotification");
                 }
             }
             else
             {
                 newGrades.Add(grade);
-                Preferences.Set<DateTime>($"Grade_{grade.Id}_ShowedNotification", DateTime.Now);
+                //Preferences.Set<DateTime>($"Grade_{grade.Id}_ShowedNotification", DateTime.Now);
+                //toAdd.Add($"Grade_{grade.Id}_ShowedNotification");
             }
         }
-        ClassmateGradesUploader.UpsyncGrades(newGrades.ToArray(), acc.CurrentPeriod.Id);
+        Preferences.SetGroup<DateTime>(newGrades.Select(r => ($"Grade_{r.Id}_ShowedNotification", DateTime.Now as object)).ToArray());
 
-        if (GradesUpdateInterval == -1) return;
+        if (newGrades.Count == 0) return;
+
+
+        //if (GradesUpdateInterval == -1) return;
 
         newGrades = newGrades.OrderByDescending(r => r.DateModify).ToList();
-
+        ClassmateGradesUploader.UpsyncGrades(newGrades.ToArray(), acc.CurrentPeriod.Id);
+        
         if (newGrades.Count > 0)
-            if (newGrades.Count < 3)
+        {
+            if (newGrades.Count == 1)
             {
                 foreach (var v in newGrades)
                     new ToastContentBuilder()
                 .AddText($"Nowa ocena - {v.Column.Subject.Name}")
-                .AddText($"{v.Content} - ({v.Column.Name})")
+                .AddText($"{v.Content} ({v.Column.Name})")
                 .Show();
             }
             else
             {
-                    new ToastContentBuilder()
-            .AddText($"({newGrades.Count}) nowe oceny").AddAppLogoOverride(new Uri(Path.Combine(Application.StartupPath, "GradesIcon.png")))
-            .AddText(string.Join("\n", newGrades.Select(r => ($"{r.Column.Subject.Name} ({((r.Column.Name.Length > 22) ? (r.Column.Name.Substring(0,22) + "...") : r.Column.Name)}): {r.Content}")).Take(3).ToArray())
-            + ((newGrades.Count > 3) ? ($"\n+ {newGrades.Count - 3} innych") : ""))
-            .Show();
+                new ToastContentBuilder()
+        .AddText($"({newGrades.Count}) nowe oceny").AddAppLogoOverride(new Uri(Path.Combine(Application.StartupPath, "GradesIcon.png")))
+        .AddText(string.Join("\n", newGrades.Select(r => ($"{r.Column.Subject.Name} ({((r.Column.Name.Length > 22) ? (r.Column.Name.Substring(0, 22) + "...") : r.Column.Name)}): {r.Content}")).Take(3).ToArray())
+        + ((newGrades.Count > 3) ? ($"\n+ {newGrades.Count - 3} innych") : ""))
+        .Show();
             }
+        }
     }
 
 
@@ -105,16 +115,16 @@ static class Program
             registryKey.SetValue(appName, appPath);
             //Console.WriteLine("Application added to startup.");
             //MessageBox.Show("Application added to startup!");
-            new ToastContentBuilder()
-                .AddText($"VulcanForWindowsBgWorker has been added to startup.")
-                .Show();
+            //new ToastContentBuilder()
+            //    .AddText($"VulcanForWindowsBgWorker has been added to startup.")
+            //    .Show();
 
         }
         else
         {
-            new ToastContentBuilder()
-                .AddText($"VulcanForWindowsBgWorker is running.")
-                .Show();
+            //new ToastContentBuilder()
+            //    .AddText($"VulcanForWindowsBgWorker is running.")
+            //    .Show();
         }
     }
 }

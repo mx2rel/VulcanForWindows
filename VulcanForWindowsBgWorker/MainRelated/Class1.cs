@@ -22,38 +22,53 @@ namespace VulcanTest.Vulcan
 
     public static class Preferences
     {
-        private static string folder = Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VulcanForWindows");
+        private static string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VulcanForWindows");
         private static string dataFilePath
             => Path.Combine(folder, "data.dat");
+
+        static Dictionary<string, string> cache
+        {
+            get
+            {
+                if (_cache == null) _cache = GetAllData();
+                return _cache;
+            }
+            set => _cache = value;
+        }
+        static Dictionary<string, string> _cache;
 
         public static void Set<T>(string key, object value)
         {
 
-            Dictionary<string, string> data = GetAllData();
-            data[key] = JsonConvert.SerializeObject((T)value);
+            cache[key] = JsonConvert.SerializeObject((T)value);
 
-            SaveData(data);
+            SaveData(cache);
+        }
+        public static void SetGroup<T>((string key, object value)[] values)
+        {
+            var _ = cache;
+            foreach (var obj in values)
+                cache[obj.key] = JsonConvert.SerializeObject((T)obj.value);
+
+            SaveData(cache);
         }
 
         public static T Get<T>(string key)
         {
-            Dictionary<string, string> data = GetAllData();
-            return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
+            return cache.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(cache[key]) : default(T);
         }
         public static T Get<T>(string key, T defaultVal)
         {
-            Dictionary<string, string> data = GetAllData();
-            return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : defaultVal;
+            return cache.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(cache[key]) : defaultVal;
         }
 
 
         public static bool TryGet<T>(string key, out T output)
         {
-            Dictionary<string, string> data = GetAllData();
 
-            if(data.ContainsKey(key))
+            if (cache.ContainsKey(key))
             {
-                output = JsonConvert.DeserializeObject<T>(data[key]);
+                output = JsonConvert.DeserializeObject<T>(cache[key]);
                 return true;
             }
             output = default(T);
@@ -63,7 +78,8 @@ namespace VulcanTest.Vulcan
 
         public static void Clear()
         {
-            SaveData(new Dictionary<string, string>());
+            cache = new Dictionary<string, string>();
+            SaveData(cache);
         }
 
         private static Dictionary<string, string> GetAllData()
@@ -73,7 +89,7 @@ namespace VulcanTest.Vulcan
                 if (File.Exists(dataFilePath))
                 {
                     string json = File.ReadAllText(dataFilePath);
-                    var v= JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    var v = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                     if (v != null) return v;
                 }
                 else
@@ -86,7 +102,7 @@ namespace VulcanTest.Vulcan
                 Console.WriteLine("Error reading data: " + ex.Message);
                 return new Dictionary<string, string>();
             }
-                return new Dictionary<string, string>();
+            return new Dictionary<string, string>();
         }
 
         private static void SaveData(Dictionary<string, string> data)
@@ -94,6 +110,7 @@ namespace VulcanTest.Vulcan
             if (!File.Exists(dataFilePath))
             {
                 var s = File.Create(dataFilePath);
+                s.Close();
                 Debug.WriteLine($"Created {s.Name}");
             }
             try
@@ -128,7 +145,7 @@ namespace VulcanTest.Vulcan
     {
         public static DateTime StartOfTheMonth(this DateTime dt)
         {
-            return dt.Date.AddDays(-(dt.Day-1));
+            return dt.Date.AddDays(-(dt.Day - 1));
 
         }
     }
