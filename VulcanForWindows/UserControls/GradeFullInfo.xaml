@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
+            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="95" Width="95" CornerRadius="3">
                 <TextBlock TextAlignment="Center" Width="55"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="55" FontWeight="Bold" Padding="0,0,0,5"/>
             </Border>
             <StackPanel Grid.Column="1">
@@ -53,6 +53,8 @@
                 <TextBlock Visibility="{x:Bind Grade.IsModified}" Foreground="LightGray">
                     <Run Text="Edytowano:"/>
                     <Run Text="{x:Bind Grade.DateModify}"/>
+                </TextBlock>
+                <TextBlock Foreground="LightGray" x:Name="avgChange" Visibility="Collapsed">
                 </TextBlock>
                 <TextBlock Foreground="LightGray">
                     <Run Text="Komentarz:"/>

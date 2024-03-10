@@ -382,7 +382,9 @@ namespace VulcanForWindows
 
             w = new Window();
             var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as GradeFullInfo;
-            v.DataContext = (sender as ListView).DataContext;
+            var selectedGrade = (sender as ListView).DataContext as Grade;
+            v.DataContext = selectedGrade;
+            v.SubjectGrades = grades.Where(r => r.subject.Id == selectedGrade.Column.Subject.Id).First();
             w.Content = v;
             w.SystemBackdrop = new MicaBackdrop();
             int newX = (MainWindow.Instance.AppWindow.Size.Width - 800) / 2 + MainWindow.Instance.AppWindow.Position.X;

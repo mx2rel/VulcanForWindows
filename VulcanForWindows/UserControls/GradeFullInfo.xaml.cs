@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VulcanForWindows.Classes;
 using Vulcanova.Features.Grades;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -21,6 +22,27 @@ namespace VulcanForWindows.UserControls
 {
     public sealed partial class GradeFullInfo : UserControl
     {
+
+
+        public static readonly DependencyProperty SubjectGradesProperty =
+            DependencyProperty.Register("SubjectGrades", typeof(SubjectGrades), typeof(GradeFullInfo), new PropertyMetadata(null, SubjectGrades_Changed));
+
+        public SubjectGrades SubjectGrades
+        {
+            get => (SubjectGrades)GetValue(SubjectGradesProperty);
+            set => SetValue(SubjectGradesProperty, value);
+        }
+
+        private async static void SubjectGrades_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is GradeFullInfo control && e.NewValue is SubjectGrades newValue)
+            {
+                control.avgChange.Visibility = (newValue == null ) ? Visibility.Collapsed : Visibility.Visible;
+                if (newValue == null) return;
+                var change = Math.Round(newValue.yearlyAverage - ((await newValue.GetYearlyAverage(control.Grade)).average), 2);
+                control.avgChange.Text = $"Średnia: {((change > 0) ? "+" : "")}{change}";
+            }
+        }
 
 
         public static readonly DependencyProperty GradeProperty =
