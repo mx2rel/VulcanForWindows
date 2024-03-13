@@ -56,7 +56,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
         public async static void SyncGrade(Grade grade)
         {
             //string url = $"http://localhost:3205/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";
-            var baseUrl = await CredentialsReader.ReadCredentialAsync<string>("ClassmatesGradesServerUrl");
+            var baseUrl = Properties.Resources.ClassmatesGradesServerUrl;
             Debug.WriteLine(baseUrl);
 
             string url = $"{baseUrl}/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";

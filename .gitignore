@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /VulcanForWindows/Assets/Credentials.json
+/VulcanForWindows/Properties/Resources.Designer.cs
+/VulcanForWindows/Properties/Resources.resx

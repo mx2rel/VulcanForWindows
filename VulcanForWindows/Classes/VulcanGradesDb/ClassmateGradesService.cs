@@ -23,7 +23,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
         {
             if (new ClassmateGradesService().ShouldSync(GetResourceKey(ColumnId)) || forceSync)
             {
-                var baseUrl = await CredentialsReader.ReadCredentialAsync<string>("ClassmatesGradesServerUrl");
+                var baseUrl = Properties.Resources.ClassmatesGradesServerUrl;
                 var str = await RetrieveData($"{baseUrl}/Get/{ColumnId}");
 
                 if (str == "null") return null;

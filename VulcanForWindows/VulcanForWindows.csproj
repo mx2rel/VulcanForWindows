@@ -21,7 +21,6 @@
     <Content Remove="Assets\LargeTile.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\Credentials.json" />
     <None Remove="Assets\JustifyGranted.png" />
     <None Remove="AttendanceReportPage.xaml" />
     <None Remove="BlankPage1.xaml" />
@@ -144,9 +143,13 @@
     <Resource Include="Assets\JustifyGranted.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Assets\Credentials.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Content Update="Assets\Pupil\Bored.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -156,6 +159,12 @@
     <Content Update="Assets\Pupil\Sad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\YearAttendanceControl.xaml">

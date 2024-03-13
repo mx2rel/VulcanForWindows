@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -63,7 +64,17 @@ namespace VulcanForWindows
                     // For example, display an error message
                     Console.WriteLine("Error: " + ex.Message);
                 }
+            AddToIndex();
+        }
 
+
+
+        async void AddToIndex()
+        {
+            var indexable = new Windows.Storage.Search.IndexableContent();
+            indexable.Id = "test123333";
+            var index = Windows.Storage.Search.ContentIndexer.GetIndexer("main");
+            await index.AddAsync(indexable);
         }
 
         static bool IsProcessRunning(string processName)
