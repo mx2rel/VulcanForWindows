@@ -12,6 +12,7 @@
     <EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
     <WindowsSdkPackageVersion>10.0.19041.29</WindowsSdkPackageVersion>
     <StartupObject>VulcanForWindows.Program</StartupObject>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
