@@ -177,7 +177,7 @@ namespace VulcanForWindows.UserControls
         int GetDayOfWeek(DateTime t)
         {
             var i = (int)t.DayOfWeek;
-            if (i == 0) i = 7;
+            if (i == 0) i = 6;
             else i--;
             return i;
         }

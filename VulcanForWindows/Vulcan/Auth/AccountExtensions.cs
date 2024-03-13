@@ -15,6 +15,8 @@ public static class AccountExtensions
         var yearStart = allPeriodsInYear.First().Start;
         var yearEnd = allPeriodsInYear.Last().End;
 
+        if (yearStart.Day == 31 && yearStart.Month == 8) yearStart = yearStart.AddDays(1); //some schools have this set up wrong
+
         return (yearStart, yearEnd);
     }
 }

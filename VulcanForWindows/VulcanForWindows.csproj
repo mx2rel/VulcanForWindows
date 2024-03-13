@@ -59,6 +59,7 @@
     <None Remove="UserControls\TimetableItem.xaml" />
     <None Remove="UserControls\Widgets\AttendanceWidget.xaml" />
     <None Remove="UserControls\Widgets\GradesWidget.xaml" />
+    <None Remove="UserControls\YearAttendanceControl.xaml" />
     <None Remove="Vulcan\BlankPage1.xaml" />
     <None Remove="Vulcan\GradesChartsPage.xaml" />
   </ItemGroup>
@@ -155,6 +156,11 @@
     <Content Update="Assets\Pupil\Sad.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\YearAttendanceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\Settings\BackgroundTaskSetting.xaml">
