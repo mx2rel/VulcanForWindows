@@ -7,7 +7,9 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using VulcanTest.Vulcan;
@@ -23,6 +25,24 @@ namespace VulcanForWindows.UserControls.Settings
     {
 
 
+        public static readonly DependencyProperty NumFieldVisibilityProperty =
+            DependencyProperty.Register("NumFieldVisibility", typeof(Visibility), typeof(BackgroundTaskSetting), new PropertyMetadata(Visibility.Visible, NumFieldVisibility_Changed));
+
+        public Visibility NumFieldVisibility
+        {
+            get => (Visibility)GetValue(NumFieldVisibilityProperty);
+            set => SetValue(NumFieldVisibilityProperty, value);
+        }
+
+        private static void NumFieldVisibility_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is BackgroundTaskSetting control && e.NewValue is Visibility newValue)
+            {
+                control.numberbox.Visibility = newValue;
+            }
+        }
+
+
         public static readonly DependencyProperty PreferencesNameProperty =
             DependencyProperty.Register("PreferencesName", typeof(string), typeof(BackgroundTaskSetting), new PropertyMetadata(null, PreferencesName_Changed));
 
@@ -31,15 +51,18 @@ namespace VulcanForWindows.UserControls.Settings
             get => (string)GetValue(PreferencesNameProperty);
             set => SetValue(PreferencesNameProperty, value);
         }
-
+        bool isDuringSetup = false;
         private static void PreferencesName_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is BackgroundTaskSetting control && e.NewValue is string newValue)
             {
+                control.isDuringSetup = true;
                 var value = Preferences.Get<int>(newValue, 10);
-                control.toggle.IsOn = value != -1;
                 control.numberbox.Value = (value != -1) ? value : 10;
+                control.toggle.IsOn = value != -1;
                 control.numberbox.IsEnabled = value != -1;
+                control.isDuringSetup = false;
+
             }
         }
 
@@ -69,6 +92,7 @@ namespace VulcanForWindows.UserControls.Settings
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
         {
             numberbox.IsEnabled = toggle.IsOn;
+            if (NumFieldVisibility == Visibility.Collapsed) numberbox.Value = 2;
             Set();
         }
 
@@ -80,8 +104,27 @@ namespace VulcanForWindows.UserControls.Settings
 
         void Set()
         {
-            if (numberbox.Value == double.NaN) numberbox.Value = 10;
-            Preferences.Set<int>(PreferencesName, (int)((toggle.IsOn) ? (numberbox.Value) : -1));
+            if (isDuringSetup) return;
+            if (numberbox.Value == double.NaN || numberbox.Value == Math.Round( double.MinValue)) numberbox.Value = 10;
+            var newValue = (int)((toggle.IsOn) ? (numberbox.Value) : -1);
+            Preferences.Set<int>(PreferencesName, newValue);
+
+            Sync(newValue);
+        }
+
+        public async void Sync(int value)
+        {
+            var client = new NamedPipeClientStream(".", "VulcanForWindowsInterAppSync", PipeDirection.Out);
+
+            // Connect to the server asynchronously
+            await client.ConnectAsync();
+
+            // Write data to the server asynchronously
+            var writer = new StreamWriter(client);
+            await writer.WriteLineAsync($"{PreferencesName}|{value}");
+            await writer.FlushAsync();
+            Debug.WriteLine("Sync sent");
+            client.Close();
         }
     }
 }

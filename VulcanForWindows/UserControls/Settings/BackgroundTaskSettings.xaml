@@ -14,6 +14,7 @@
         </Expander.Header>
         <Expander.Content>
             <StackPanel HorizontalAlignment="Stretch">
+                <scontrols:BackgroundTaskSetting DisplayName="Tryb debugowania" PreferencesName="DebugMode" HorizontalAlignment="Stretch" NumFieldVisibility="Collapsed"/>
                 <scontrols:BackgroundTaskSetting DisplayName="Odświeżanie ocen" PreferencesName="GradesUpdateInterval" HorizontalAlignment="Stretch"/>
             </StackPanel>
         </Expander.Content>
