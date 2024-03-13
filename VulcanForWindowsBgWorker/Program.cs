@@ -26,9 +26,10 @@ static class Program
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
+        LoadPreferences();
+
         AddToStartupRegistry();
         Syncer();
-        LoadPreferences();
 
         // Keep the main thread alive
         // This will ensure that the application doesn't exit immediately
@@ -155,16 +156,18 @@ static class Program
             registryKey.SetValue(appName, appPath);
             //Console.WriteLine("Application added to startup.");
             //MessageBox.Show("Application added to startup!");
-            //new ToastContentBuilder()
-            //    .AddText($"VulcanForWindowsBgWorker has been added to startup.")
-            //    .Show();
+            if (DebugMode)
+                new ToastContentBuilder()
+                .AddText($"VulcanForWindowsBgWorker has been added to startup. (Debug Mode is on)")
+                .Show();
 
         }
         else
         {
-            //new ToastContentBuilder()
-            //    .AddText($"VulcanForWindowsBgWorker is running.")
-            //    .Show();
+            if (DebugMode)
+                new ToastContentBuilder()
+                    .AddText($"VulcanForWindowsBgWorker is running. (Debug Mode is on)")
+                    .Show();
         }
     }
 }
