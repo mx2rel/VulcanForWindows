@@ -64,18 +64,18 @@ namespace VulcanForWindows
                     // For example, display an error message
                     Console.WriteLine("Error: " + ex.Message);
                 }
-            AddToIndex();
+            //AddToIndex();
         }
 
 
 
-        async void AddToIndex()
-        {
-            var indexable = new Windows.Storage.Search.IndexableContent();
-            indexable.Id = "test123333";
-            var index = Windows.Storage.Search.ContentIndexer.GetIndexer("main");
-            await index.AddAsync(indexable);
-        }
+        //async void AddToIndex()
+        //{
+        //    var indexable = new Windows.Storage.Search.IndexableContent();
+        //    indexable.Id = "test123333";
+        //    var index = Windows.Storage.Search.ContentIndexer.GetIndexer("main");
+        //    await index.AddAsync(indexable);
+        //}
 
         static bool IsProcessRunning(string processName)
         {
