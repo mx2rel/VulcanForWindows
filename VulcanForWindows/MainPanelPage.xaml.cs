@@ -103,7 +103,6 @@ namespace VulcanForWindows
 
         private async Task FetchTimetable(Account acc)
         {
-            Debug.WriteLine("\nLoading\n");
 
             var to = DateTime.Today.AddDays(1);
             if ((int)DateTime.Today.DayOfWeek >= 5)
@@ -137,7 +136,6 @@ namespace VulcanForWindows
 
 
             displayDayLoaded = true;
-            Debug.WriteLine("\nLoaded\n");
             OnPropertyChanged(nameof(displayDay));
             OnPropertyChanged(nameof(displayDayLoaded));
             OnPropertyChanged(nameof(displayDayLoading));

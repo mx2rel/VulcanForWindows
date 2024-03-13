@@ -135,9 +135,6 @@ namespace VulcanForWindows.UserControls.Widgets
                 values.Add((grouped[i].month, Math.Round(sum / sumOfWeights,2)));
             }
 
-
-            Debug.WriteLine("Length: " + values.Count);
-
             Series = new ISeries[] {
                 new LineSeries<DateTimePoint>
                 {

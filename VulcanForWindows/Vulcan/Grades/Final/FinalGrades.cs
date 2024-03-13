@@ -75,7 +75,6 @@ public class FinalGrades : UonetResourceProvider
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
         foreach (var period in account.Periods)
         {
-            Debug.Write($"\nLoading {period.Id}\n");
             d.Add(period, (await GetPeriodGrades(account, period.Id,false,true)).Grades.ToArray());
         }
 

@@ -32,7 +32,6 @@ namespace VulcanTest.Vulcan
 
         public static void Set<T>(string key, T value)
         {
-            Debug.WriteLine(dataFilePath);
             Dictionary<string, string> data = GetAllData();
             data[key] = JsonConvert.SerializeObject((T)value);
 
@@ -104,7 +103,6 @@ namespace VulcanTest.Vulcan
             {
                 string json = JsonConvert.SerializeObject(data, Formatting.Indented);
                 File.WriteAllText(dataFilePath, json);
-                Debug.WriteLine($"\n{dataFilePath}\n");
             }
             catch (Exception ex)
             {
