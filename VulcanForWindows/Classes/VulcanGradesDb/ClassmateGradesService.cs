@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -28,21 +29,20 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
                 if (str == "null") return null;
 
-                if (JObject.Parse(str).TryGetValue("Data", out var o))
-                {
-                    var data = JsonConvert.DeserializeObject<SingleClassmateGrade[]>(o.ToObject<string>());
-                    var response = new SingleClassmateColumn(ColumnId, data);
-                    await _db.GetCollection<SingleClassmateColumn>().InsertAsync(response);
-                    SetJustSynced(GetResourceKey(ColumnId));
-                    return response;
-                }
-
-                return null;
+                var data = JsonConvert.DeserializeObject<SingleClassmateGrade[]>(str);
+                var response = new SingleClassmateColumn(ColumnId, data);
+                await _db.GetCollection<SingleClassmateColumn>().InsertAsync(response);
+                SetJustSynced(GetResourceKey(ColumnId));
+                return response;
             }
             else
             {
                 var response = await _db.GetCollection<SingleClassmateColumn>().FindAsync(r => r.ColumnId == ColumnId);
-                if (response.Count() == 0) return null;
+
+                if (response.Count() == 0)
+                {
+                    return null;
+                }
                 return response.First();
             }
         }
@@ -51,18 +51,19 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
         static async Task<string> RetrieveData(string url)
         {
-                using (HttpClient client = new HttpClient())
-                {
-                    // Make an HTTP GET request to the specified URL
-                    HttpResponseMessage response = await client.GetAsync(url);
+            using (HttpClient client = new HttpClient())
+            {
+                // Make an HTTP GET request to the specified URL
+                HttpResponseMessage response = await client.GetAsync(url);
 
-                    // Check if the response is successful (status code 200-299)
-                    response.EnsureSuccessStatusCode();
+                // Check if the response is successful (status code 200-299)
+                response.EnsureSuccessStatusCode();
 
-                    // Optionally, you can read the response content if needed
-                    // string responseBody = await response.Content.ReadAsStringAsync();
-                    return await response.Content.ReadAsStringAsync();
-                }
+                // Optionally, you can read the response content if needed
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("res:" + responseBody, "\nurl:" + url);
+                return responseBody;
+            }
         }
     }
 }
