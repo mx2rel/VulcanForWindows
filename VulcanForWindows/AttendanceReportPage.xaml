@@ -9,49 +9,58 @@
     xmlns:attendanceReport="using:Vulcanova.Features.Attendance.Report"
         xmlns:UserControls="using:VulcanForWindows.UserControls">
 
-    <ListView SelectionMode="None" Margin="5,20,5,0">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
-            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentPercentDisplay, Mode=OneWay}" Title="Frekwencja"/>
-            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentCount, Mode=OneWay}" Title="Obecności"/>
-            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind LateCount, Mode=OneWay}" Title="Spóźnienia"/>
-            <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind AbsentCount, Mode=OneWay}" Title="Nieobecności"/>
-        </StackPanel>
-        <GridView ItemsSource="{x:Bind reports, Mode=OneWay}"  HorizontalAlignment="Center" Margin="15,5,15,5" SelectionMode="None">
-            <GridView.ItemContainerStyle>
-                <Style TargetType="ItemContainer">
-                    <Setter Property="Margin" Value="0"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="Height" Value="0"/>
-                </Style>
-            </GridView.ItemContainerStyle>
-            <GridView.ItemTemplate>
-                <DataTemplate x:DataType="attendanceReport:AttendanceReport">
-                    <ItemContainer Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <ListView SelectionMode="None" Margin="5,20,5,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
+                <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentPercentDisplay, Mode=OneWay}" Title="Frekwencja"/>
+                <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind PresentCount, Mode=OneWay}" Title="Obecności"/>
+                <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind LateCount, Mode=OneWay}" Title="Spóźnienia"/>
+                <UserControls:SummaryAverageGradeDisplayer Average="{x:Bind AbsentCount, Mode=OneWay}" Title="Nieobecności"/>
+            </StackPanel>
+            <GridView ItemsSource="{x:Bind reports, Mode=OneWay}"  HorizontalAlignment="Center" Margin="15,5,15,5" SelectionMode="None">
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="ItemContainer">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Height" Value="0"/>
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="attendanceReport:AttendanceReport">
+                        <ItemContainer Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
                                     CornerRadius="4" Margin="2">
-                        <StackPanel Padding="0" Width="400">
-                            <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" Padding="10,7,10,7" CornerRadius="4,4,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{x:Bind Subject.Name}" HorizontalAlignment="Left"/>
-                                <TextBlock Text="{x:Bind PresencePercentageDisplay}" 
+                            <StackPanel Padding="0" Width="400">
+                                <Grid Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" Padding="10,7,10,7" CornerRadius="4,4,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind Subject.Name}" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="{x:Bind PresencePercentageDisplay}" 
                                            Grid.Column="1" HorizontalAlignment="Right" Width="60" 
                                            TextAlignment="Right"/>
-                            </Grid>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <UserControls:SummaryAverageGradeDisplayer
+                                </Grid>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <UserControls:SummaryAverageGradeDisplayer
                             Title="Obecność" Average="{x:Bind PresenceAndLate, Mode=OneWay}"/>
-                                <UserControls:SummaryAverageGradeDisplayer
+                                    <UserControls:SummaryAverageGradeDisplayer
                             Title="Nieobecność" Average="{x:Bind Absence, Mode=OneWay}"/>
-                                <UserControls:SummaryAverageGradeDisplayer
+                                    <UserControls:SummaryAverageGradeDisplayer
                             Title="Spóźnienia" Average="{x:Bind Late, Mode=OneWay}"/>
 
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                    </ItemContainer>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
-    </ListView>
+                        </ItemContainer>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </ListView>
+        <ListView SelectionMode="None" Grid.Column="1">
+            <UserControls:YearAttendanceControl />
+        </ListView>
+    </Grid>
 </Page>
