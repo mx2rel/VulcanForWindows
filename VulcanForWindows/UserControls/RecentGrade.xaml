@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+        <converters:DateTimeConverter x:Key="DateTimeConverter"/>
     </UserControl.Resources>
     
     <Grid VerticalAlignment="Stretch">
@@ -47,7 +48,7 @@
                     <Run Text="{x:Bind Grade.DateModify}"/>
                 </TextBlock>
                 <TextBlock Foreground="LightGray" Text="{x:Bind Grade.CreatorName}"/>
-                <TextBlock Foreground="White" Text="Na tle klasy:"/>
+                <TextBlock Foreground="LightGray" Text="{x:Bind Grade.DateCreated, Converter={StaticResource DateTimeConverter}}"/>
 
             </StackPanel>
 
