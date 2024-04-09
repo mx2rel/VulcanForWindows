@@ -36,8 +36,8 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
             SetJustSynced(PeriodId);
             userid = (new AccountRepository().GetActiveAccountAsync()).Pupil.Id;
             DbEntries = LiteDbManager.database.GetCollection<ClassmateGradesSyncObject>();
-            var syncObjects = (await DbEntries.FindAllAsync())
-                .ToDictionary(r => r.ColumnId, r => r.Synced);
+            var syncObjects = (await DbEntries.FindAllAsync()).GroupBy(r=>r.ColumnId)
+                .ToDictionary(r => r.First().ColumnId, r => r.First().Synced);
             foreach (var grade in grades.Where(r => r.Column.Weight > 0).Where(r => r.Value.HasValue))
             {
                 if (syncObjects.TryGetValue(grade.Column.Id, out var synced))
