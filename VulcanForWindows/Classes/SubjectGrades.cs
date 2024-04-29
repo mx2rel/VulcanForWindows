@@ -84,7 +84,7 @@ namespace VulcanForWindows.Classes
             OnPropertyChanged("removeButtonVisibility");
 
             //OnPropertyChanged(nameof(grades));
-            CalculateYearlyAverage();
+            CalculateYearlyAverage(true);
         }
 
         public Visibility removeButtonVisibility => (addedGrades.Count == 0) ? Visibility.Collapsed : Visibility.Visible;
@@ -101,7 +101,7 @@ namespace VulcanForWindows.Classes
             OnPropertyChanged("AverageColor");
             OnPropertyChanged("AverageText");
             OnPropertyChanged("removeButtonVisibility");
-            CalculateYearlyAverage();
+            CalculateYearlyAverage(true);
         }
 
         public Grade[] recentGrades => grades.OrderBy(r => r.DateCreated).ToList().Take(10).ToArray();
@@ -112,9 +112,9 @@ namespace VulcanForWindows.Classes
 
         IDictionary<Period, Grade[]> _yearGrades;
         public static IDictionary<string, ((double average, int count, int weightSum) data, DateTime generatedAt)> YearlyAverages = new Dictionary<string, ((double average, int count, int weightSum) data, DateTime generatedAt)>();
-        public async void CalculateYearlyAverage()
+        public async void CalculateYearlyAverage(bool force= false)
         {
-            if (YearlyAverages.TryGetValue($"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}", out var o))
+            if (YearlyAverages.TryGetValue($"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}", out var o) && !force)
             {
                 if (DateTime.Now - o.generatedAt < new TimeSpan(0, 10, 0))
                 {
