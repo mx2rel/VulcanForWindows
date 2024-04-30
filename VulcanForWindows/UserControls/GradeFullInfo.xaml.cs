@@ -39,7 +39,7 @@ namespace VulcanForWindows.UserControls
             {
                 control.avgChange.Visibility = (newValue == null ) ? Visibility.Collapsed : Visibility.Visible;
                 if (newValue == null) return;
-                var change = Math.Round(newValue.yearlyAverage - ((await newValue.GetYearlyAverage(control.Grade)).average), 2);
+                var change = Math.Round(newValue.yearlyAverage - ((await newValue.CalculateYearlyAverage(control.Grade)).average), 2);
                 control.avgChange.Text = $"Średnia: {((change > 0) ? "+" : "")}{change}";
             }
         }

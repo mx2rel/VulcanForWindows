@@ -28,7 +28,7 @@ namespace VulcanForWindows.Classes
             finalGrade = fGrade;
             if (prevPeriod != null)
                 prevPeriodGrades = prevPeriod.Grades.ToArray();
-            CalculateYearlyAverage();
+            GetYearlyAverage();
             foreach (var v in grades) v.CalculateClassAverage();
 
             GetFinalGrade();
@@ -40,14 +40,14 @@ namespace VulcanForWindows.Classes
             grades = new ObservableCollection<Grade>(g.Where(r => r.Column.Subject.Id == subject.Id));
             finalGrade = fGrade;
             this.periodId = periodId;
-            CalculateYearlyAverage();
+            GetYearlyAverage();
             if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
             foreach (var v in grades) v.CalculateClassAverage();
 
             GetFinalGrade();
         }
 
-        async void GetFinalGrade()
+       public async Task<string> GetFinalGrade()
         {
             var finalGrades =
                 await new FinalGrades().GetPeriodGrades(new AccountRepository().GetActiveAccountAsync(),
@@ -60,9 +60,10 @@ namespace VulcanForWindows.Classes
                 OnPropertyChanged(nameof(finalGrade));
                 OnPropertyChanged(nameof(hasFinalGrade));
             }
+            return finalGrade;
         }
 
-        int periodId;
+        public int periodId;
         public Subject subject { get; set; }
         public GradesResponseEnvelope env;
         public ObservableCollection<Grade> grades
@@ -84,7 +85,7 @@ namespace VulcanForWindows.Classes
             OnPropertyChanged("removeButtonVisibility");
 
             //OnPropertyChanged(nameof(grades));
-            CalculateYearlyAverage(true);
+            GetYearlyAverage(true);
         }
 
         public Visibility removeButtonVisibility => (addedGrades.Count == 0) ? Visibility.Collapsed : Visibility.Visible;
@@ -101,7 +102,7 @@ namespace VulcanForWindows.Classes
             OnPropertyChanged("AverageColor");
             OnPropertyChanged("AverageText");
             OnPropertyChanged("removeButtonVisibility");
-            CalculateYearlyAverage(true);
+            GetYearlyAverage(true);
         }
 
         public Grade[] recentGrades => grades.OrderBy(r => r.DateCreated).ToList().Take(10).ToArray();
@@ -112,11 +113,11 @@ namespace VulcanForWindows.Classes
 
         IDictionary<Period, Grade[]> _yearGrades;
         public static IDictionary<string, ((double average, int count, int weightSum) data, DateTime generatedAt)> YearlyAverages = new Dictionary<string, ((double average, int count, int weightSum) data, DateTime generatedAt)>();
-        public async void CalculateYearlyAverage(bool force= false)
+        public async Task<(double average, int count, int weightSum)> GetYearlyAverage(bool force= false)
         {
-            if (YearlyAverages.TryGetValue($"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}", out var o) && !force)
+            if (YearlyAverages.TryGetValue(GetYearlyAverageId(), out var o) && !force)
             {
-                if (DateTime.Now - o.generatedAt < new TimeSpan(0, 10, 0))
+                if (DateTime.Now - o.generatedAt < new TimeSpan(0, 15, 0))
                 {
 
                     yearlyAverage = o.data.average;
@@ -125,7 +126,7 @@ namespace VulcanForWindows.Classes
                     OnPropertyChanged(nameof(yearlyAverage));
                     OnPropertyChanged(nameof(averageDisplay));
                     OnPropertyChanged(nameof(yearGradesCount));
-                    return;
+                    return o.data;
                 }
             }
             if (_yearGrades == null) _yearGrades =
@@ -142,16 +143,21 @@ namespace VulcanForWindows.Classes
                 OnPropertyChanged(nameof(yearlyAverage));
                 OnPropertyChanged(nameof(averageDisplay));
                 OnPropertyChanged(nameof(yearGradesCount));
-                YearlyAverages[$"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}"] = ((yearlyAverage, yearlyGrades.Count(), yearlyGrades.Select(r => r.Column.Weight).Sum()), DateTime.Now);
-
+                var result = ((yearlyAverage, yearlyGrades.Count(), yearlyGrades.Select(r => r.Column.Weight).Sum()), DateTime.Now);
+                YearlyAverages[GetYearlyAverageId()] = result;
+                return result.Item1;
             }
-
+            return (0,0,0);
         }
-        public async Task<(double average, int count, int weightSum)> GetYearlyAverage(Grade excludeGrade = null, bool forceSlowMethod = false)
-            => await GetYearlyAverage(((excludeGrade == null) ? null : new Grade[] { excludeGrade }), forceSlowMethod);
-        public async Task<(double average, int count, int weightSum)> GetYearlyAverage(Grade[] excludeGrades = null, bool forceSlowMethod = false)
+        string GetYearlyAverageId()
         {
-            var YearlyAveragesEntryKey = $"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}";
+            return $"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}";
+        }
+        public async Task<(double average, int count, int weightSum)> CalculateYearlyAverage(Grade excludeGrade = null, bool forceSlowMethod = false)
+            => await CalculateYearlyAverage(((excludeGrade == null) ? null : new Grade[] { excludeGrade }), forceSlowMethod);
+        public async Task<(double average, int count, int weightSum)> CalculateYearlyAverage(Grade[] excludeGrades = null, bool forceSlowMethod = false)
+        {
+            var YearlyAveragesEntryKey = GetYearlyAverageId();
             if (!forceSlowMethod && (YearlyAverages.TryGetValue(YearlyAveragesEntryKey, out var YearlyAveragesData)))
             {
                 var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
@@ -164,7 +170,7 @@ namespace VulcanForWindows.Classes
             else
             {
                 var excludeIds = excludeGrades.Select(r => r.Id).ToList();
-                if (YearlyAverages.TryGetValue($"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}", out var o))
+                if (YearlyAverages.TryGetValue(GetYearlyAverageId(), out var o))
                 {
                     if (DateTime.Now - o.generatedAt < new TimeSpan(0, 10, 0))
                         return o.data;
