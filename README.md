@@ -1,5 +1,8 @@
 # Vulcan dla Windows - Klient UONET+ 💻
 
+> [!Important]
+> Vulcan Dla Windows to klient, który korzysta z API dziennika Vulcan - nie jest oficjalnym tworem żadnej firmy/organizacji bezpośrednio związanej z rozwijaniem i utrzymywaniem dziennika.
+> 
 **Vulcan dla Windows** to klient dziennika UONET+ Vulcan dla Windowsa - alternatywa dla strony internetowej. Posiada następujące funkcje:
 + Oceny 📊
 	+ Sprawdzaj oceny cząstkowe
@@ -8,19 +11,22 @@
  	+ **Sprawdzaj oceny z danego sprawdzianiu/kartkówki na tle klasy**
 	+ **Dodaj hipotetyczne oceny i sprawdź swoją średnią**
  	+ **Zobacz swoje oceny na przestrzeni czasu jako wykresy**
+	+ **Analizuj swoje oceny końcowe i końcową średnią**
 + Plan lekcji 📅
 	+ Sprawdzaj plan lekcji
 	+ Sprawdzaj nadchodzące zastępstwa
 + Frekwencja 👨‍🎓
 	+ Sprawdzaj frekwencję na poszczególnych lekcjach
 	+ Sprawdzaj podsumowanie frekwencji
+ 	+ **Sprawdzaj frekwencję w widoku kalendarza**
 + Wiadomości ✉️
 	+ Odbieraj i zarządzaj wiadomościami
 + Uwagi i pochwały 🌟
 	+ Sprawdzaj uwagi i pochwały 
 
 ## Bezpieczeństwo 🔒
-Vulcan dla Windows działa na zasadzie klienta mobilnego, co oznacza, że wszystkie dane są pobierane przez oficjalne endpointy (API) zapewnione przez Vulcana, gwarantując pełne bezpieczeństwo użytkownika.
+Vulcan dla Windows działa na zasadzie klienta mobilnego, co oznacza, że wszystkie dane (oprócz danych *Ocena na tle klasy*) są pobierane przez oficjalne endpointy (API) zapewnione przez Vulcana, gwarantując pełne bezpieczeństwo użytkownika.
+Dane *Oceny na tle klasy* przechowywane są na naszym serwerze. Przechowujemy: ID użytkownika, ocenę i datę synchronizacji. Żadna z tych danych nie jest wrażliwa i nie pozwala na zidentyfikowanie użytkownika.
 
 ## Roadmap 🗺️
 *Roadmap będzie dostępny wkrótce*
