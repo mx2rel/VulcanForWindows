@@ -24,8 +24,9 @@
             <scontrols:ReminderSettings/>
             <scontrols:BackgroundTaskSettings/>
         </ListView>
-        <Grid Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}" Padding="15" CornerRadius="4,4,0,0">
+        <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}" Padding="15" CornerRadius="4,4,0,0">
             <Button Content="Wyloguj" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
-        </Grid>
+            <Button Content="Polityka prywatności" Click="PrivacyPolicy" />
+        </StackPanel>
     </Grid>
 </Page>

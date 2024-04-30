@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Vulcanova.Features.Auth;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,6 +34,11 @@ namespace VulcanForWindows
         {
             new AccountRepository().Logout();
             MainWindow.Instance.Logout();
+        }
+
+        private async void PrivacyPolicy(object sender, RoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(new Uri("https://www.freeprivacypolicy.com/live/aaa78df4-d334-4563-98f8-bf3c260cb167"));
         }
     }
 }
