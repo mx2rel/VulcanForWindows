@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Vulcanova.Features.Grades;
@@ -80,6 +81,7 @@ namespace VulcanForWindows.Classes
 
         public static Grade[] GetLatestGrades(this Grade[] g)
         {
+            if (g.Length == 0) return new Grade[0];
             var startDate = g.OrderByDescending(r => r.DateModify).First().DateModify.AddDays(-7).Date;
             return g.Where(r => r.DateModify.Date >= startDate).ToArray();
         }
