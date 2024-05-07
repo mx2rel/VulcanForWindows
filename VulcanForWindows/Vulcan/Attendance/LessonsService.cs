@@ -68,7 +68,7 @@ public class LessonsService : UonetResourceProvider
         DateTime from;
         DateTime to;
 
-        var hasPerformedFullSyncKey = $"Lessons_{account.Id}_HasPerformedFullSync";
+        var hasPerformedFullSyncKey = $"Lessons_{account.Pupil.Id}_HasPerformedFullSync";
 
         var succes = Preferences.TryGet<bool>(hasPerformedFullSyncKey, out var hasPerformedFullSync);
 
@@ -86,11 +86,11 @@ public class LessonsService : UonetResourceProvider
         var v = new NewResponseEnvelope<Lesson>(FetchEntriesForMonthAndYear(account, from, to), async delegate (object sender, IEnumerable<Lesson> e)
         {
             SetJustSynced(resourceKey);
-            await LessonsRepository.UpsertLessonsForAccountAsync(e, account.Id, monthAndYear);
+            await LessonsRepository.UpsertLessonsForAccountAsync(e, account.Pupil.Id, monthAndYear);
 
         });
 
-        var items = await LessonsRepository.GetLessonsForAccountAsync(account.Id, monthAndYear);
+        var items = await LessonsRepository.GetLessonsForAccountAsync(account.Pupil.Id, monthAndYear);
         v.Entries.ReplaceAll(items);
 
         if (ShouldSync(resourceKey) || forceSync)
@@ -125,7 +125,7 @@ public class LessonsService : UonetResourceProvider
 
         foreach (var lesson in lessons)
         {
-            lesson.Id.AccountId = account.Id;
+            lesson.Id.AccountId = account.Pupil.Id;
         }
 
         return lessons;
@@ -141,7 +141,7 @@ public class LessonsService : UonetResourceProvider
     }
 
     private static string GetTimetableResourceKey(Account account, DateTime monthAndYear)
-        => $"Lessons_{account.Id}_{monthAndYear.Month}_{monthAndYear.Year}";
+        => $"Lessons_{account.Pupil.Id}_{monthAndYear.Month}_{monthAndYear.Year}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromHours(1);
 }

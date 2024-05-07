@@ -16,7 +16,7 @@ public class AttendanceReportService : UonetResourceProvider
 {
 
     private static string GetReportResourceKey(Account account)
-        => $"AttendanceReport_{account.Id}";
+        => $"AttendanceReport_{account.Pupil.Id}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromDays(1);
 
@@ -80,7 +80,7 @@ public class AttendanceReportService : UonetResourceProvider
 
     async Task InvalidateReportsAsync(Account account)
     {
-        int accountId = account.Id;
+        int accountId = account.Pupil.Id;
         var (yearStart, yearEnd) = account.GetSchoolYearDuration();
         NewResponseEnvelope<Lesson> l = new NewResponseEnvelope<Lesson>();
         await new LessonsService().GetLessonsForRange(account, yearStart, yearEnd, l, true, true,false,true);
@@ -129,7 +129,7 @@ public static class AttendanceReportRepository
                 .MaxAsync(r => r.DateGenerated);
 
             return await _db.GetCollection<AttendanceReport>()
-                .FindAsync(r => r.AccountId == account.Id && r.DateGenerated == maxDate);
+                .FindAsync(r => r.AccountId == account.Pupil.Id && r.DateGenerated == maxDate);
         }
         catch (LiteAsyncException e) when (e.InnerException is InvalidOperationException { Message: "Sequence contains no elements" })
         {
