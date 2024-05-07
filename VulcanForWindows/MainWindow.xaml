@@ -46,7 +46,7 @@
                             <NavigationViewItem Content="Szczegóły" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
                             <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
                             <NavigationViewItem Content="Wykresy" ToolTipService.ToolTip="Zobacz twoje oceny jako wykres" Tag="GradesChartsPage"/>
-                                <NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>
+                                <!--<NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>-->
                         </NavigationViewItem.MenuItems>
 
                     </NavigationViewItem>
@@ -54,9 +54,8 @@
                     <NavigationViewItem Icon="Save" Content="Frekwencja" Tag="AttendancePage">
                         <NavigationViewItem.MenuItems>
                             <NavigationViewItem Content="Ostatnie" ToolTipService.ToolTip="Wyświetl ostatnie obecności" Tag="AttendancePage"/>
-                            <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl podsumowanie frekwencji" Tag="AttendanceReportPage"/>
-                                <NavigationViewItem Content="Kalendarz" ToolTipService.ToolTip="Wyświetl frekwencje w widoku kalendarza" Tag="MonthsAttendancePage"/>
-                        </NavigationViewItem.MenuItems>
+                                <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl podsumowanie frekwencji" Tag="AttendanceReportPage"/>
+                            </NavigationViewItem.MenuItems>
                     </NavigationViewItem>
                     <NavigationViewItem Icon="Mail" Content="Wiadomości" Tag="MessagesPage" />
                     <NavigationViewItem Icon="Save" Content="Sprawdziany i zadania domowe" Tag="DeadlineablePage" />

@@ -26,6 +26,11 @@ namespace VulcanForWindows
     public sealed partial class PreferencesViewer : Page
     {
 
+        public void Clear()
+        {
+            VulcanTest.Vulcan.Preferences.Clear();
+        }
+
         public ObservableCollection<Preference> Preferences { get; set; } = new ObservableCollection<Preference>();
 
         public PreferencesViewer()
@@ -35,6 +40,7 @@ namespace VulcanForWindows
             this.InitializeComponent();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e) => Clear();
     }
 
 

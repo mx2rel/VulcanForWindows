@@ -11,7 +11,12 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListView ItemsSource="{x:Bind Preferences, Mode=OneWay}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Content="Wyczyść preferencje" Click="Button_Click"/>
+        <ListView ItemsSource="{x:Bind Preferences, Mode=OneWay}" Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="preference:Preference">
                     <Grid>
