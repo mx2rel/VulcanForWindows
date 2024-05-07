@@ -46,7 +46,7 @@ namespace VulcanForWindows
 
         async void Fetch()
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
             (PresentPercent, PresentCount, LateCount, AbsentCount) = await AttendanceReportService.GetPresenceInfo(acc);
 
             OnPropertyChanged(nameof(PresentPercent));

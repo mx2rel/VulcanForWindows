@@ -69,7 +69,7 @@ namespace VulcanForWindows
 
         public async void ChangeWeek()
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
 
             //env = await new OgTimetable().GetPeriodEntriesByMonth(acc, DateTime.Today, false, false);
             //env.EntriesUpdated += HandleEntriesUpdated;

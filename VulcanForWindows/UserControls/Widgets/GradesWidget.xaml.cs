@@ -88,7 +88,7 @@ namespace VulcanForWindows.UserControls.Widgets
 
         async void Load()
         {
-            await FetchGrades(new AccountRepository().GetActiveAccountAsync());
+            await FetchGrades(new AccountRepository().GetActiveAccount());
             CalculateChart(res.SelectMany(r => r.Value).ToArray());
 
         }

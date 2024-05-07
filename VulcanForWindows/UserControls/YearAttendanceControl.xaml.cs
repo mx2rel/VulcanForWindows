@@ -33,7 +33,7 @@ namespace VulcanForWindows.UserControls
 
         public void SpawnYear()
         {
-            var yearDuration = new AccountRepository().GetActiveAccountAsync().GetSchoolYearDuration();
+            var yearDuration = new AccountRepository().GetActiveAccount().GetSchoolYearDuration();
 
             for (int i = 0; i < 7; i++)
             {
@@ -97,9 +97,9 @@ namespace VulcanForWindows.UserControls
 
         public async void SpawnEntries()
         {
-            var yearDuration = new AccountRepository().GetActiveAccountAsync().GetSchoolYearDuration();
+            var yearDuration = new AccountRepository().GetActiveAccount().GetSchoolYearDuration();
             Vulcan.NewResponseEnvelope<Lesson> l = new Vulcan.NewResponseEnvelope<Lesson>();
-            await new LessonsService().GetLessonsForRange(new AccountRepository().GetActiveAccountAsync(), yearDuration.Start, DateTime.Today, l, false, true);
+            await new LessonsService().GetLessonsForRange(new AccountRepository().GetActiveAccount(), yearDuration.Start, DateTime.Today, l, false, true);
 
             IEnumerable<(DateTime Key, int LateCount, int JustifiedLateCount, int AbsenceCount, int JustifiedAbsenceCount)> entriesCount = l.Entries.Where(r => r.PresenceType != null).GroupBy(r => r.Date).Select(r => (r.Key,
             r.ToArray().Count(r => r.PresenceType.Late && !r.PresenceType.AbsenceJustified),

@@ -36,7 +36,7 @@ namespace VulcanForWindows
 
         public async void Load()
         {
-            notes.ReplaceAll((await new NotesService().GetNotesByDateRange(new AccountRepository().GetActiveAccountAsync(),true,true)).entries);
+            notes.ReplaceAll((await new NotesService().GetNotesByDateRange(new AccountRepository().GetActiveAccount(),true,true)).entries);
         }
     }
 }

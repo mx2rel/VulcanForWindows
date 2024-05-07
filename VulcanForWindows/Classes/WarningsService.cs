@@ -19,7 +19,7 @@ namespace VulcanForWindows.Warnings
         static Account acc;
         public async Task<Warning[]> Generate()
         {
-            acc = new AccountRepository().GetActiveAccountAsync();
+            acc = new AccountRepository().GetActiveAccount();
             return (new Warning[] { await GenerateGradesWarning(), await GenerateAttendanceWarning() }).Where(r=>r!=null).ToArray();
         }
 

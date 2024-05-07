@@ -66,7 +66,7 @@ namespace VulcanForWindows.UserControls.GradesCharts
 
         async Task LoadData()
         {
-            Grades = (await new GradesService().FetchGradesFromCurrentLevelAsync(new AccountRepository().GetActiveAccountAsync()))
+            Grades = (await new GradesService().FetchGradesFromCurrentLevelAsync(new AccountRepository().GetActiveAccount()))
                 .SelectMany(r => r.Value).ToArray();
             Subjects = Grades.GroupBy(r => r.Column.Subject.Id).Select(r => r.FirstOrDefault().Column.Subject).ToArray();
             SubjectNames = (new string[] { "Wszyskie przedmioty" }).Concat(Grades.GroupBy(r => r.Column.Subject.Id).Select(r => r.FirstOrDefault().Column.Subject.Name)).ToArray();

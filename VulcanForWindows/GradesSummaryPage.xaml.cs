@@ -56,7 +56,7 @@ namespace VulcanForWindows
             FinalAverage = -1;
             periodFinalGrades = new ObservableCollection<PeriodFinalGradeViewModel>();
             this.InitializeComponent();
-            selectedPeriod = new AccountRepository().GetActiveAccountAsync().CurrentPeriod;
+            selectedPeriod = new AccountRepository().GetActiveAccount().CurrentPeriod;
             PeriodSelector.SelectedIndex = avaiblePeriods.Length - 1;
             LoadAllGrades();
 
@@ -65,7 +65,7 @@ namespace VulcanForWindows
 
         public Vulcanova.Features.Shared.Period selectedPeriod;
         public int selectedPeriodId => selectedPeriod.Id;
-        public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccountAsync().Periods/*.Select(r => r.Id)*/.ToArray();
+        public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccount().Periods/*.Select(r => r.Id)*/.ToArray();
         public string[] displayPeriods => avaiblePeriods.Select(r => $"Klasa {r.Level}, Semestr {r.Number}").ToArray();
         public bool Loaded;
         private void ChangedPeriod(object sender, SelectionChangedEventArgs e)
@@ -77,8 +77,8 @@ namespace VulcanForWindows
         IDictionary<Vulcanova.Features.Shared.Period, FinalGradesEntry[]> allFinalGrades;
         private async void LoadAllGrades()
         {
-            allGrades = await new GradesService().FetchGradesFromAllPeriodsAsync(new AccountRepository().GetActiveAccountAsync());
-            allFinalGrades = await new FinalGrades().FetchGradesFromAllPeriodsAsync(new AccountRepository().GetActiveAccountAsync());
+            allGrades = await new GradesService().FetchGradesFromAllPeriodsAsync(new AccountRepository().GetActiveAccount());
+            allFinalGrades = await new FinalGrades().FetchGradesFromAllPeriodsAsync(new AccountRepository().GetActiveAccount());
 
             Loaded = true;
             LoadingBar.Visibility = Visibility.Collapsed;

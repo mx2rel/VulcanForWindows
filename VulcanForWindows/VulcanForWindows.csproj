@@ -55,6 +55,7 @@
     <None Remove="PreferencesViewer.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="TimetablePage.xaml" />
+    <None Remove="UserControls\AccountSelectorControl.xaml" />
     <None Remove="UserControls\AttachmentsIndicator.xaml" />
     <None Remove="UserControls\AttendanceLessonItem.xaml" />
     <None Remove="UserControls\ClassmatesGrades\SingleClassmateGrades.xaml" />
@@ -328,6 +329,11 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Remove="Assets\BgWorker\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\AccountSelectorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="PreferencesViewer.xaml">

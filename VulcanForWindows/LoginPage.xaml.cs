@@ -41,10 +41,14 @@ namespace VulcanForWindows
                 var ip = new FebeInstanceUrlProviderDecorator(new InstanceUrlProvider());
                 var instanceUrl = await ip.GetInstanceUrlAsync(token.Text, symbol.Text);
                 var accounts = await authserv.AuthenticateAsync(token.Text, pin.Text, instanceUrl);
-                accounts[0].IsActive = true;
-                new AccountRepository().AddAccountsAsync(accounts);
+                var ar = new AccountRepository();
+               
+                ar.AddAccounts(accounts);
+                ar.SetActiveByPupilId(accounts[0].Pupil.Id);
                 LoadingBar.Visibility = Visibility.Collapsed;
                 MainWindow.Instance.LoadMainPage();
+                if(Window.Current!=null)
+                if (MainWindow.Instance != Window.Current) Window.Current.Close();
             }
             catch
             {

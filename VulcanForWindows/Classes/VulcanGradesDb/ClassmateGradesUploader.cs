@@ -34,7 +34,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
             //if (DateTime.Now - GetLastSync(PeriodId) < new TimeSpan(0, 2, 0)) return;
             Debug.WriteLine("Upsyncing grades");
             SetJustSynced(PeriodId);
-            userid = (new AccountRepository().GetActiveAccountAsync()).Pupil.Id;
+            userid = (new AccountRepository().GetActiveAccount()).Pupil.Id;
             DbEntries = LiteDbManager.database.GetCollection<ClassmateGradesSyncObject>();
             var syncObjects = (await DbEntries.FindAllAsync()).GroupBy(r=>r.ColumnId)
                 .ToDictionary(r => r.First().ColumnId, r => r.First().Synced);

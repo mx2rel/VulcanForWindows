@@ -5,77 +5,80 @@
     xmlns:local="using:VulcanForWindows"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="using:VulcanForWindows.Classes"
-    mc:Ignorable="d"
-    >
-
+    mc:Ignorable="d">
     <Window.SystemBackdrop>
         <MicaBackdrop/>
     </Window.SystemBackdrop>
 
     <Grid>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="32" />
-            <RowDefinition Height="4" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Image Source="/Assets/StoreLogo.png" Height="16" Width="16" Grid.Column="1" VerticalAlignment="Center"/>
-            <TextBlock Style="{StaticResource AppTitle}" Grid.Column="2">Vulcan dla Windows</TextBlock>
-        </Grid>
-        <Grid Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="32" />
+                <RowDefinition Height="4" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <NavigationView x:Name="nvSample"  PaneDisplayMode="Top" SelectionChanged="NavigationChangedPage" BackRequested="BackRequested">
-                <NavigationView.MenuItems>
-                    <NavigationViewItem Icon="Home" Tag="MainPanelPage" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="/Assets/StoreLogo.png" Height="16" Width="16" Grid.Column="1" VerticalAlignment="Center"/>
+                <TextBlock Style="{StaticResource AppTitle}" Grid.Column="2">Vulcan dla Windows</TextBlock>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <NavigationView x:Name="nvSample"  PaneDisplayMode="Top" SelectionChanged="NavigationChangedPage" BackRequested="BackRequested">
+                    <NavigationView.MenuItems>
+                        <NavigationViewItem Icon="Home" Tag="MainPanelPage" />
 
-                    <NavigationViewItem Content="Oceny" Tag="GradesPage" >
-                        <NavigationViewItem.Icon>
-                            <ImageIcon Source="/Assets/GradesIcon.png"/>
-                        </NavigationViewItem.Icon>
-                        <NavigationViewItem.MenuItems>
-                            <NavigationViewItem Content="Szczegóły" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
-                            <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
-                            <NavigationViewItem Content="Wykresy" ToolTipService.ToolTip="Zobacz twoje oceny jako wykres" Tag="GradesChartsPage"/>
+                        <NavigationViewItem Content="Oceny" Tag="GradesPage" >
+                            <NavigationViewItem.Icon>
+                                <ImageIcon Source="/Assets/GradesIcon.png"/>
+                            </NavigationViewItem.Icon>
+                            <NavigationViewItem.MenuItems>
+                                <NavigationViewItem Content="Szczegóły" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
+                                <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
+                                <NavigationViewItem Content="Wykresy" ToolTipService.ToolTip="Zobacz twoje oceny jako wykres" Tag="GradesChartsPage"/>
                                 <!--<NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>-->
-                        </NavigationViewItem.MenuItems>
+                            </NavigationViewItem.MenuItems>
 
-                    </NavigationViewItem>
-                    <NavigationViewItem Icon="Save" Content="Plan Lekcji" Tag="TimetablePage" />
-                    <NavigationViewItem Icon="Save" Content="Frekwencja" Tag="AttendancePage">
-                        <NavigationViewItem.MenuItems>
-                            <NavigationViewItem Content="Ostatnie" ToolTipService.ToolTip="Wyświetl ostatnie obecności" Tag="AttendancePage"/>
+                        </NavigationViewItem>
+                        <NavigationViewItem Icon="Save" Content="Plan Lekcji" Tag="TimetablePage" />
+                        <NavigationViewItem Icon="Save" Content="Frekwencja" Tag="AttendancePage">
+                            <NavigationViewItem.MenuItems>
+                                <NavigationViewItem Content="Ostatnie" ToolTipService.ToolTip="Wyświetl ostatnie obecności" Tag="AttendancePage"/>
                                 <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl podsumowanie frekwencji" Tag="AttendanceReportPage"/>
                             </NavigationViewItem.MenuItems>
-                    </NavigationViewItem>
-                    <NavigationViewItem Icon="Mail" Content="Wiadomości" Tag="MessagesPage" />
-                    <NavigationViewItem Icon="Save" Content="Sprawdziany i zadania domowe" Tag="DeadlineablePage" />
-                    <NavigationViewItem Icon="Folder" Content="Uwagi i pochwały" Tag="NotesPage" />
+                        </NavigationViewItem>
+                        <NavigationViewItem Icon="Mail" Content="Wiadomości" Tag="MessagesPage" />
+                        <NavigationViewItem Icon="Save" Content="Sprawdziany i zadania domowe" Tag="DeadlineablePage" />
+                        <NavigationViewItem Icon="Folder" Content="Uwagi i pochwały" Tag="NotesPage" />
                         <NavigationViewItem Icon="Save" Content="test" Tag="BlankPage1" />
                         <NavigationViewItem Icon="Save" Content="Preferencje" Tag="PreferencesViewer" />
                         <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
                 <NavigationViewItem Icon="Download" Content="Menu Item4" Tag="SamplePage4" />-->
-                </NavigationView.MenuItems>
-                <!--<NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="Account" Tag="SamplePage4" Icon="Contact" />
-                <NavigationViewItem Content="Your Cart" Tag="SamplePage5" Icon="Shop" />
-                <NavigationViewItem Content="Help" Tag="SamplePage5" Icon="Help" />
-            </NavigationView.FooterMenuItems>-->
-            </NavigationView>
-            <Frame x:Name="rootFrame" Grid.Row="1"/>
+                    </NavigationView.MenuItems>
+
+                    <NavigationView.PaneCustomContent>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid HorizontalAlignment="Right">
+                                <Button Width="45" Height="45" Background="Transparent" x:Name="changeAccountButton">
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </NavigationView.PaneCustomContent>
+
+                </NavigationView>
+                <Frame x:Name="rootFrame" Grid.Row="1"/>
+
+            </Grid>
 
         </Grid>
-
-    </Grid>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{x:Bind IsOtherWindowOpenVisibility, Mode=OneWay}" Background="#88000000"/>
 
     </Grid>

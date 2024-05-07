@@ -54,7 +54,7 @@ namespace VulcanForWindows
         {
             if (DateTime.Now - cachedAt > new TimeSpan(0, 15, 0))
             {
-                var acc = new AccountRepository().GetActiveAccountAsync();
+                var acc = new AccountRepository().GetActiveAccount();
                 int currentPeriod = acc.Periods.Last().Id;
                 var env = await new GradesService().GetPeriodGrades(acc, currentPeriod, true, true);
                 cachedData =

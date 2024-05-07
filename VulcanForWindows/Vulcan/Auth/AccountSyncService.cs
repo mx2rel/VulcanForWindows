@@ -18,7 +18,7 @@ public class AccountSyncService : UonetResourceProvider, IAccountSyncService
     {
         if (!ShouldSync(ResourceKey)) return;
 
-        var accountsGroupedByLoginId = (new AccountRepository().GetAccountsAsync())
+        var accountsGroupedByLoginId = (new AccountRepository().GetAccounts())
             .GroupBy(x => x.Login.Id);
 
         foreach (var accountsGroup in accountsGroupedByLoginId)

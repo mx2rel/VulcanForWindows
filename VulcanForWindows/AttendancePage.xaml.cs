@@ -56,7 +56,7 @@ namespace VulcanForWindows
         {
             env.Updated += Env_Updated;
 
-            await new LessonsService().GetLessonsForSchoolYear(new AccountRepository().GetActiveAccountAsync(), env);
+            await new LessonsService().GetLessonsForSchoolYear(new AccountRepository().GetActiveAccount(), env);
             LoadingBar.Visibility = Visibility.Collapsed;
             Spawn();
         }

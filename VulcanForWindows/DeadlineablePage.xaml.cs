@@ -65,7 +65,7 @@ namespace VulcanForWindows
         public bool allowLoadButtons { get; set; } = true;
         public void LoadBefore()
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
 
             From = From.AddMonths(-1);
             (var start, var end) = acc.GetSchoolYearDuration();
@@ -74,7 +74,7 @@ namespace VulcanForWindows
         }
         public void LoadAfter()
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
 
             To = To.AddMonths(1);
             (var start, var end) = acc.GetSchoolYearDuration();
@@ -106,7 +106,7 @@ namespace VulcanForWindows
         }
         public async Task<IDeadlineable[]> Load(DateTime from, DateTime to)
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
             var lexams = (await new ExamsService().GetExamsByDateRange(acc, from, to, true, true)).entries.ToArray();
             List<NewResponseEnvelope<Homework>> homeworkEnvelopes = new List<NewResponseEnvelope<Homework>>();
             foreach (var period in acc.PeriodsInRange(from, to))

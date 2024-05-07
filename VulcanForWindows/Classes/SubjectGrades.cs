@@ -50,7 +50,7 @@ namespace VulcanForWindows.Classes
        public async Task<string> GetFinalGrade()
         {
             var finalGrades =
-                await new FinalGrades().GetPeriodGrades(new AccountRepository().GetActiveAccountAsync(),
+                await new FinalGrades().GetPeriodGrades(new AccountRepository().GetActiveAccount(),
                 periodId, false, true);
             var g = finalGrades.Grades.Where(r => r.Subject.Id == subject.Id);
             if (g.Count() > 0)
@@ -130,7 +130,7 @@ namespace VulcanForWindows.Classes
                 }
             }
             if (_yearGrades == null) _yearGrades =
-                (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccountAsync(), periodId));
+                (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccount(), periodId));
 
             if (_yearGrades != null)
             {
@@ -176,7 +176,7 @@ namespace VulcanForWindows.Classes
                         return o.data;
                 }
                 if (_yearGrades == null) _yearGrades =
-                    (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccountAsync(), periodId));
+                    (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccount(), periodId));
 
                 var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r => r.Column.Subject.Id == subject.Id);
                 var yearlyGrades = gradesOnly.Concat(addedGrades).ToArray();

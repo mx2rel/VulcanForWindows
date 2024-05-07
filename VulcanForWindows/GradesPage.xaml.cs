@@ -45,7 +45,7 @@ namespace VulcanForWindows
         {
             this.InitializeComponent();
 
-            selectedPeriod = new AccountRepository().GetActiveAccountAsync().Periods.Last();
+            selectedPeriod = new AccountRepository().GetActiveAccount().Periods.Last();
 
             grades = new ObservableCollection<SubjectGrades>();
             PeriodSelector.SelectedIndex = avaiblePeriods.Length - 1;
@@ -66,7 +66,7 @@ namespace VulcanForWindows
         IDictionary<int, GradesResponseEnvelope> envelopes = new Dictionary<int, GradesResponseEnvelope>();
         public Vulcanova.Features.Shared.Period selectedPeriod;
         public int selectedPeriodId => selectedPeriod.Id;
-        public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccountAsync().Periods/*.Select(r => r.Id)*/.ToArray();
+        public Vulcanova.Features.Shared.Period[] avaiblePeriods => new AccountRepository().GetActiveAccount().Periods/*.Select(r => r.Id)*/.ToArray();
         public string[] displayPeriods => avaiblePeriods.Select(r => $"Klasa {r.Level}, Semestr {r.Number}").ToArray();
         private void ChangedPeriod(object sender, SelectionChangedEventArgs e)
         {
@@ -85,7 +85,7 @@ namespace VulcanForWindows
         }
         async void AssignGrades()
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
 
 
             if (!envelopes.ContainsKey(selectedPeriodId))

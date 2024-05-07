@@ -69,7 +69,7 @@ namespace VulcanForWindows
 
         public void Fetch()
         {
-            var acc = new AccountRepository().GetActiveAccountAsync();
+            var acc = new AccountRepository().GetActiveAccount();
             FetchAttendance(acc);
             FetchGrades(acc);
             FetchTimetable(acc);

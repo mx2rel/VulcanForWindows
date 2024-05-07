@@ -185,7 +185,7 @@ namespace VulcanForWindows.UserControls
         public async void SpawnEntries(TextBlock monthT = null)
         {
             Vulcan.NewResponseEnvelope<Lesson> l = new Vulcan.NewResponseEnvelope<Lesson>();
-            await new LessonsService().GetLessonsForRange(new AccountRepository().GetActiveAccountAsync(), month, month.AddMonths(1), l, false, true);
+            await new LessonsService().GetLessonsForRange(new AccountRepository().GetActiveAccount(), month, month.AddMonths(1), l, false, true);
 
             IEnumerable<(DateTime Key, int LateCount, int JustifiedLateCount, int AbsenceCount, int JustifiedAbsenceCount)> entriesCount = l.Entries.Where(r=>r.PresenceType != null).GroupBy(r => r.Date).Select(r => (r.Key,
             r.ToArray().Count(r => r.PresenceType.Late && !r.PresenceType.AbsenceJustified),

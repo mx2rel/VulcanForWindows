@@ -43,32 +43,37 @@ namespace Vulcanova.Features.Auth
             File.WriteAllText(dataFilePath, jsonData);
         }
 
-        public void AddAccountsAsync(IEnumerable<Account> newAccounts)
+        public void AddAccounts(IEnumerable<Account> newAccounts)
         {
-            accounts.AddRange(newAccounts);
+            accounts.AddRange(newAccounts.Where(r=>!GetAccounts().Select(j=>j.Pupil.Id).Contains( r.Pupil.Id)));
             SaveData();
         }
 
-        public void SetActive(int accountId)
+        public bool SetActiveByPupilId(int accountId)
         {
-            var accountToActivate = GetById(accountId);
-            if(accountToActivate!=null)
-            {
-                foreach(var account in accounts) 
-                { 
-                    account.IsActive = false;
+            var accountToActivate = GetByPupilId(accountId);
+            if (accountToActivate != null)
+                if (accountToActivate.Pupil.Id != ((GetActiveAccount() == null) ? (0) :(GetActiveAccount().Pupil.Id)))
+                {
+                    var a = new List<Account>(accounts);
+                    foreach (var account in a)
+                    {
+                        account.IsActive = false;
+                    }
+                    UpdateAccounts(a);
+                    accountToActivate.IsActive = true;
+                    UpdateAccount(accountToActivate);
+                    return true;
                 }
-                accountToActivate.IsActive = true;
-                UpdateAccounts(accounts);
-            }
+            return false;
         }
 
-        public Account GetActiveAccountAsync()
+        public Account GetActiveAccount()
         {
             return accounts.FirstOrDefault(a => a.IsActive);
         }
 
-        public IReadOnlyCollection<Account> GetAccountsAsync()
+        public IReadOnlyCollection<Account> GetAccounts()
         {
             return accounts.AsReadOnly();
         }
@@ -86,7 +91,7 @@ namespace Vulcanova.Features.Auth
 
         public void UpdateAccount(Account account)
         {
-            int index = accounts.FindIndex(a => a.Id == account.Id);
+            int index = accounts.FindIndex(a => a.Pupil.Id == account.Pupil.Id);
             if (index != -1)
             {
                 accounts[index] = account;
@@ -98,7 +103,7 @@ namespace Vulcanova.Features.Auth
         {
             foreach (var updatedAccount in updatedAccounts)
             {
-                int index = accounts.FindIndex(a => a.Id == updatedAccount.Id);
+                int index = accounts.FindIndex(a => a.Pupil.Id == updatedAccount.Pupil.Id);
                 if (index != -1)
                 {
                     accounts[index] = updatedAccount;
@@ -117,6 +122,15 @@ namespace Vulcanova.Features.Auth
             }
         }
 
+        public void DeleteByPupilId(int id)
+        {
+            int index = accounts.FindIndex(a => a.Pupil.Id == id);
+            if (index != -1)
+            {
+                accounts.RemoveAt(index);
+                SaveData();
+            }
+        }
         public void Logout()
         {
             accounts = new List<Account>();

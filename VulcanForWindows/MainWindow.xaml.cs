@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using VulcanForWindows.UserControls;
 using Vulcanova.Features.Auth;
 using VulcanTest.Vulcan;
 
@@ -41,8 +42,11 @@ namespace VulcanForWindows
         public MainWindow()
         {
             this.InitializeComponent();
+            var f = new Flyout();
+            f.Content = new AccountSelectorControl();
+            changeAccountButton.Flyout = f;
             Instance = this;
-            isLoggedIn = (new AccountRepository().GetActiveAccountAsync() != null);
+            isLoggedIn = (new AccountRepository().GetActiveAccount() != null);
             if (!isLoggedIn)
             {
                 nvSample.Visibility = Visibility.Collapsed;
@@ -78,6 +82,7 @@ namespace VulcanForWindows
 
         public static void NavigateTo(string tag)
         {
+            if (string.IsNullOrEmpty(tag)) return;
             Type t = Type.GetType("VulcanForWindows." + tag);
             if (Instance.rootFrame.CurrentSourcePageType != t)
             {
@@ -99,6 +104,7 @@ namespace VulcanForWindows
                 if (selectedItem != null)
                 {
                     string selectedItemTag = ((string)selectedItem.Tag);
+                    if (selectedItemTag == null) return;
                     //sender.Header = "Sample Page " + selectedItemTag.Substring(selectedItemTag.Length - 1);
                     string pageName = selectedItemTag;
                     Type pageType = Type.GetType("VulcanForWindows." + pageName);
