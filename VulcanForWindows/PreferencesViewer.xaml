@@ -6,10 +6,24 @@
     xmlns:local="using:VulcanForWindows"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:preference="using:VulcanTest.Vulcan"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        
+        <ListView ItemsSource="{x:Bind Preferences, Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="preference:Preference">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Bind Name}"/>
+                        <TextBlock Text="{x:Bind Value}" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

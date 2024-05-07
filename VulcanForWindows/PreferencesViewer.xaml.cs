@@ -7,9 +7,11 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -23,9 +25,17 @@ namespace VulcanForWindows
     /// </summary>
     public sealed partial class PreferencesViewer : Page
     {
+
+        public ObservableCollection<Preference> Preferences { get; set; } = new ObservableCollection<Preference>();
+
         public PreferencesViewer()
         {
+            Preferences.ReplaceAll(VulcanTest.Vulcan.Preferences.GetAllData().ToPreferences());
+
             this.InitializeComponent();
         }
+
     }
+
+
 }

@@ -61,8 +61,9 @@
                     <NavigationViewItem Icon="Mail" Content="Wiadomości" Tag="MessagesPage" />
                     <NavigationViewItem Icon="Save" Content="Sprawdziany i zadania domowe" Tag="DeadlineablePage" />
                     <NavigationViewItem Icon="Folder" Content="Uwagi i pochwały" Tag="NotesPage" />
-                    <NavigationViewItem Icon="Save" Content="test" Tag="BlankPage1" />
-                    <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
+                        <NavigationViewItem Icon="Save" Content="test" Tag="BlankPage1" />
+                        <NavigationViewItem Icon="Save" Content="Preferencje" Tag="PreferencesViewer" />
+                        <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
                 <NavigationViewItem Icon="Download" Content="Menu Item4" Tag="SamplePage4" />-->
                 </NavigationView.MenuItems>
                 <!--<NavigationView.FooterMenuItems>

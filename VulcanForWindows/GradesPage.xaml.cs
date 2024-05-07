@@ -126,7 +126,7 @@ namespace VulcanForWindows
             chartAndTableGrid.DataContext = cd;
             chartAndTableGrid.UpdateLayout();
         }
-        public bool isLoading => ((grades.ToArray().Length > 0) ? env.isLoading : true);
+        public bool isLoading => env.isLoading;
         public ObservableCollection<SubjectGrades> grades { get; set; }
 
 
