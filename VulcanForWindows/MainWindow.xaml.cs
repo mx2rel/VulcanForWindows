@@ -73,6 +73,7 @@ namespace VulcanForWindows
         }
         public void LoadMainPage()
         {
+            nvSample.SelectedItem = null;
             nvSample.Visibility = Visibility.Visible;
             history = new List<Type>();
             history.Add(typeof(MainWindow));

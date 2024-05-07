@@ -21,11 +21,11 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
-            <scontrols:ReminderSettings/>
-            <scontrols:BackgroundTaskSettings/>
+            <!--<scontrols:ReminderSettings/>
+            <scontrols:BackgroundTaskSettings/>-->
         </ListView>
         <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}" Padding="15" CornerRadius="4,4,0,0">
-            <Button Content="Wyloguj" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
+            <Button Content="Wyloguj ze wszystkich kont" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
             <Button Content="Polityka prywatności" Click="PrivacyPolicy" />
         </StackPanel>
     </Grid>
