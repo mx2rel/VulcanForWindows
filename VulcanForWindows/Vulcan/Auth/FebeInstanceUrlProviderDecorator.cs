@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using VulcanForWindows.Properties;
 using Vulcanova.Uonet.Api.Common;
 
 namespace Vulcanova.Core.Uonet;
@@ -14,6 +15,11 @@ public class FebeInstanceUrlProviderDecorator : IInstanceUrlProvider
 
     public async Task<string> GetInstanceUrlAsync(string token, string symbol)
     {
+        if (symbol.StartsWith("!FEBE"))
+        {
+            return Resources.FebeInstanceUrl;
+        }
+
         return await _instanceUrlProvider.GetInstanceUrlAsync(token, symbol);
     }
 

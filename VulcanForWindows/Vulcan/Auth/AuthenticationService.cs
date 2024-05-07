@@ -7,6 +7,8 @@ using Vulcanova.Features.Auth;
 using Vulcanova.Uonet.Api.Auth;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth.Accounts;
+using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Vulcanova.Features.Auth;
 
@@ -41,7 +43,10 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var client = _apiClientFactory.GetAuthenticated(identity, instanceUrl);
-
+        Debug.WriteLine(instanceUrl);
+        Debug.WriteLine($"client:\n {JsonConvert.SerializeObject(client)}\n\n");
+        Debug.WriteLine($"clientnull :\n {client == null}\n\n");
+        Debug.WriteLine($"requestnull :\n {request == null}\n\n");
         await client.PostAsync(RegisterClientRequest.ApiEndpoint, request);
 
         await ClientIdentityStore.SaveIdentityAsync(identity);
