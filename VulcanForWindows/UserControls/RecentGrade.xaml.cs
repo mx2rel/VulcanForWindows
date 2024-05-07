@@ -70,11 +70,14 @@ namespace VulcanForWindows.UserControls
             set => SetValue(GradeProperty, value);
         }
 
+        public bool isGradeNull { get => Grade == null;  }
+
         private static void Grade_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is RecentGrade control && e.NewValue is Grade newValue)
             {
                 control.OnPropertyChanged(nameof(Grade));
+                control.OnPropertyChanged(nameof(isGradeNull));
             }
         }
 
