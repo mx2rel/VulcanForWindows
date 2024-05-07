@@ -58,7 +58,7 @@ public class MessagesService : UonetResourceProvider
 
     public async Task MarkMessageAsReadAsync(Guid messageBoxId, AccountEntityId<Guid> messageId)
     {
-        var account = new AccountRepository().GetByPupilIdAsync(messageId.PupilId);
+        var account = new AccountRepository().GetByPupilId(messageId.PupilId);
 
         var apiClient = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
@@ -73,7 +73,7 @@ public class MessagesService : UonetResourceProvider
     }
     public async Task TrashMessage(Guid messageBoxId, AccountEntityId<Guid> messageId)
     {
-        var account = new AccountRepository().GetByPupilIdAsync(messageId.PupilId);
+        var account = new AccountRepository().GetByPupilId(messageId.PupilId);
 
         var apiClient = await new ApiClientFactory().GetAuthenticatedAsync(account);
 

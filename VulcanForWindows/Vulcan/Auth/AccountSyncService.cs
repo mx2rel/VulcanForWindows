@@ -67,7 +67,7 @@ public class AccountSyncService : UonetResourceProvider, IAccountSyncService
 
                 acc.Capabilities = newAccount.Capabilities;
 
-                new AccountRepository().UpdateAccountAsync(acc);
+                new AccountRepository().UpdateAccount(acc);
 
                 // is it the active account?
                 //if (_accountContext.Account.Id == acc.Id)

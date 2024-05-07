@@ -49,6 +49,20 @@ namespace Vulcanova.Features.Auth
             SaveData();
         }
 
+        public void SetActive(int accountId)
+        {
+            var accountToActivate = GetById(accountId);
+            if(accountToActivate!=null)
+            {
+                foreach(var account in accounts) 
+                { 
+                    account.IsActive = false;
+                }
+                accountToActivate.IsActive = true;
+                UpdateAccounts(accounts);
+            }
+        }
+
         public Account GetActiveAccountAsync()
         {
             return accounts.FirstOrDefault(a => a.IsActive);
@@ -59,18 +73,18 @@ namespace Vulcanova.Features.Auth
             return accounts.AsReadOnly();
         }
 
-        public Account GetByIdAsync(int id)
+        public Account GetById(int id)
         {
             return accounts.FirstOrDefault(a => a.Id == id);
         }
 
 
-        public Account GetByPupilIdAsync(int id)
+        public Account GetByPupilId(int id)
         {
             return accounts.FirstOrDefault(a => a.Pupil.Id == id);
         }
 
-        public void UpdateAccountAsync(Account account)
+        public void UpdateAccount(Account account)
         {
             int index = accounts.FindIndex(a => a.Id == account.Id);
             if (index != -1)
@@ -80,7 +94,7 @@ namespace Vulcanova.Features.Auth
             }
         }
 
-        public void UpdateAccountsAsync(IEnumerable<Account> updatedAccounts)
+        public void UpdateAccounts(IEnumerable<Account> updatedAccounts)
         {
             foreach (var updatedAccount in updatedAccounts)
             {
@@ -93,7 +107,7 @@ namespace Vulcanova.Features.Auth
             SaveData();
         }
 
-        public void DeleteByIdAsync(int id)
+        public void DeleteById(int id)
         {
             int index = accounts.FindIndex(a => a.Id == id);
             if (index != -1)
