@@ -97,7 +97,9 @@ namespace VulcanForWindows
             OnPropertyChanged(nameof(allowLoadButtons));
             if (selectedExam == null)
             {
-                selectedExam = display.SelectMany(r => r.exams).Where(r => !r.IsInPast).OrderBy(r => r.Deadline).First();
+                var avaible = display.SelectMany(r => r.exams).Where(r => !r.IsInPast).OrderBy(r => r.Deadline);
+                if (avaible.Count() > 0)
+                    selectedExam = avaible.First();
                 OnPropertyChanged(nameof(selectedExam));
             }
             //if(moveToEnd) MoveToEnd(); TODO: execute after ui updates, so it actually moves to the end
