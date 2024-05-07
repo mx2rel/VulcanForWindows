@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
@@ -13,7 +13,25 @@
     <WindowsSdkPackageVersion>10.0.19041.29</WindowsSdkPackageVersion>
     <StartupObject>VulcanForWindows.Program</StartupObject>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <PackageCertificateThumbprint>BC67EF1F1013AB30E9BC31D8D9C9DAB9968F4506</PackageCertificateThumbprint>
+    <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Assets\BgWorker\**" />
+    <Content Remove="Assets\BgWorker\**" />
+    <EmbeddedResource Remove="Assets\BgWorker\**" />
+    <None Remove="Assets\BgWorker\**" />
+    <Page Remove="Assets\BgWorker\**" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
@@ -22,16 +40,19 @@
     <Content Remove="Assets\LargeTile.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="AnalyzeSubjectGrades.xaml" />
     <None Remove="Assets\JustifyGranted.png" />
     <None Remove="AttendanceReportPage.xaml" />
     <None Remove="BlankPage1.xaml" />
     <None Remove="DeadlineablePage.xaml" />
+    <None Remove="FinalGradesAnalyzerPage.xaml" />
     <None Remove="GradesPage.xaml" />
     <None Remove="GradesSummaryPage.xaml" />
     <None Remove="LoginPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
     <None Remove="MessagesPage.xaml" />
     <None Remove="NotesPage.xaml" />
+    <None Remove="PreferencesViewer.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="TimetablePage.xaml" />
     <None Remove="UserControls\AttachmentsIndicator.xaml" />
@@ -302,6 +323,24 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\JustificationRequestStatus.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="Assets\BgWorker\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="PreferencesViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="FinalGradesAnalyzerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="AnalyzeSubjectGrades.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
