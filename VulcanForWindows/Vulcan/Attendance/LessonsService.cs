@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Uonet;
-using Vulcanova.Features.Attendance.Report;
-using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Shared;
-using Vulcanova.Uonet.Api;
 using Vulcanova.Uonet.Api.Lessons;
-using Vulcanova.Uonet.Api.Presence;
 using VulcanTest.Vulcan;
 using VulcanTest.Vulcan.Attendance.Report;
 
@@ -40,7 +34,7 @@ public class LessonsService : UonetResourceProvider
                 total.Add(await GetLessonsByMonth(acc, dt, false, true));
             else
             {
-                var c = await LessonsRepository.GetLessonsForAccountAsync(acc.Id, dt);
+                var c = await LessonsRepository.GetLessonsForAccountAsync(acc.Pupil.Id, dt);
                 lessons = lessons.Concat(c).ToList();
             }
 
@@ -125,7 +119,7 @@ public class LessonsService : UonetResourceProvider
 
         foreach (var lesson in lessons)
         {
-            lesson.Id.AccountId = account.Pupil.Id;
+            lesson.Id.PupilId = account.Pupil.Id;
         }
 
         return lessons;
@@ -150,23 +144,23 @@ public static class LessonsRepository
 {
     private static LiteDatabaseAsync _db => LiteDbManager.database;
 
-    public static async Task<IEnumerable<Lesson>> GetLessonsForAccountAsync(int accountId)
+    public static async Task<IEnumerable<Lesson>> GetLessonsForAccountAsync(int pupilId)
     {
         var v = await _db.GetCollection<Lesson>()
             .FindAsync(g =>
-                g.Id.AccountId == accountId);
+                g.Id.PupilId == pupilId);
 
 
         return v;
     }
-    public static async Task<IEnumerable<Lesson>> GetLessonsForAccountAsync(int accountId, DateTime monthAndYear)
+    public static async Task<IEnumerable<Lesson>> GetLessonsForAccountAsync(int pupilid, DateTime monthAndYear)
     {
 
         //var s = DateTime.Now.Second + DateTime.Now.Millisecond * 0.01;
 
         var v = await _db.GetCollection<Lesson>()
             .FindAsync(g =>
-                g.Id.AccountId == accountId && g.Date.Year == monthAndYear.Year && g.Date.Month == monthAndYear.Month);
+                g.Id.PupilId == pupilid && g.Date.Year == monthAndYear.Year && g.Date.Month == monthAndYear.Month);
 
         //var t = DateTime.Now.Second + DateTime.Now.Millisecond * 0.01;
 
@@ -175,17 +169,17 @@ public static class LessonsRepository
         return v;
     }
 
-    public static async Task<IEnumerable<Lesson>> GetLessonsBetweenAsync(int accountId, DateTime start, DateTime end)
+    public static async Task<IEnumerable<Lesson>> GetLessonsBetweenAsync(int pupilId, DateTime start, DateTime end)
     {
         return await _db.GetCollection<Lesson>()
-            .FindAsync(g => g.Id.AccountId == accountId && g.Date >= start && g.Date <= end);
+            .FindAsync(g => g.Id.PupilId == pupilId && g.Date >= start && g.Date <= end);
     }
 
-    public static async Task UpsertLessonsForAccountAsync(IEnumerable<Lesson> entries, int accountId, DateTime monthAndYear)
+    public static async Task UpsertLessonsForAccountAsync(IEnumerable<Lesson> entries, int pupilId, DateTime monthAndYear)
     {
         await _db.GetCollection<Lesson>()
             .DeleteManyAsync(g =>
-                g.Date.Year == monthAndYear.Year && g.Date.Month == monthAndYear.Month && g.Id.AccountId == accountId);
+                g.Date.Year == monthAndYear.Year && g.Date.Month == monthAndYear.Month && g.Id.PupilId == pupilId);
 
         await _db.GetCollection<Lesson>().UpsertAsync(entries);
     }
