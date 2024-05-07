@@ -44,9 +44,6 @@ namespace VulcanForWindows
         async void Init()
         {
             grades.ReplaceAll(await GetSubjectGrades());
-            Debug.WriteLine("loaded");
-            Debug.WriteLine("STFU");
-            Debug.WriteLine(grades[0].subject.Name);
             RecalculateAverage();
         }
 
