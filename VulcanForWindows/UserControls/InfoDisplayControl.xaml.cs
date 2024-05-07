@@ -82,6 +82,7 @@ namespace VulcanForWindows.UserControls
             {
                 control.BodyText.Visibility = Visibility.Visible;
                 control.BodyText.Text = newValue;
+                control.OnPropertyChanged(nameof(ShowBody));
                 if(control.FrameworkBody != null)
                 {
                     control.bodyContainer.Children.Remove(control.FrameworkBody);
@@ -156,6 +157,7 @@ namespace VulcanForWindows.UserControls
 
 
         public bool DisplayInfoButton => !string.IsNullOrEmpty(TeachingTipText) || !string.IsNullOrEmpty(TeachingTipTitle);
+        public bool ShowBody => !string.IsNullOrEmpty(Body);
 
 
         private void FontIcon_PointerEntered(object sender, PointerRoutedEventArgs e)

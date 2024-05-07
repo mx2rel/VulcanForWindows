@@ -31,7 +31,8 @@
                           />
                 </StackPanel>
                 <StackPanel x:Name="bodyContainer">
-                    <TextBlock x:Name="BodyText" Text="Body"  TextAlignment="Center" TextWrapping="WrapWholeWords"/>
+                    <TextBlock x:Name="BodyText" Text="Body" TextAlignment="Center" TextWrapping="WrapWholeWords"
+                               Visibility="{x:Bind ShowBody, Mode=OneWay}"/>
                 </StackPanel>
                 <TeachingTip x:Name="TeachingTip"
     Target="{x:Bind InfoIcon}">
