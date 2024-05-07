@@ -6,31 +6,45 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:classes="using:VulcanForWindows.Classes"
+    xmlns:converters="using:Converters"
     mc:Ignorable="d">
+    <Page.Resources>
+        <converters:BoolToColor x:Key="BoolToColor"/>
+    </Page.Resources>
 
     <StackPanel Orientation="Horizontal">
-    <ListView ItemsSource="{x:Bind grades, Mode=OneWay}">
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="classes:SubjectGradesAnalyzed">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                        <CheckBox IsChecked="{x:Bind includeInCalculations, Mode=OneWay}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
-                                  DataContext="{x:Bind}"/>
-                        <TextBlock Text="{x:Bind subject.Name}" Grid.Column="1"/>
-                        <TextBlock Text="{x:Bind averageDisplay}" Grid.Column="2"/>
-                    <TextBox Text="{x:Bind displayGrade, Mode=OneWay}" PlaceholderText="{x:Bind defaultGrade, Mode=OneWay}" IsEnabled="{x:Bind allowEdits, Mode=OneWay}" Grid.Column="3" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"/>
-                    <TextBlock Text="{x:Bind displayGrade, Mode=OneWay}" Grid.Column="4"/>
-                </Grid>
-            </DataTemplate>
-        </ListView.ItemTemplate>
+        <ListView ItemsSource="{x:Bind grades, Mode=OneWay}" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="classes:SubjectGradesAnalyzed">
+                    <Grid ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{x:Bind includeInCalculations, Mode=OneWay}" 
+                                  Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"
+                                  DataContext="{x:Bind}" >
+                            <CheckBox.Content>
+                                <TextBlock Text="{x:Bind subject.Name}" 
+                                           Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
+                            </CheckBox.Content>
+                        </CheckBox>
+                        <TextBlock Text="{x:Bind averageDisplay}" Grid.Column="1" VerticalAlignment="Center"
+                                   Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
+                        <TextBox Text="{x:Bind displayGrade, Mode=OneWay}" 
+                             PlaceholderText="{x:Bind defaultGrade, Mode=OneWay}" 
+                             IsEnabled="{x:Bind allowEdits, Mode=OneWay}" 
+                             Grid.Column="2" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"
+                                 VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind displayGrade, Mode=OneWay}" Grid.Column="3" VerticalAlignment="Center"
+                                   Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
 
-    </ListView>
+        </ListView>
         <StackPanel>
             <TextBlock>
                 <Run Text="Avg:"/>

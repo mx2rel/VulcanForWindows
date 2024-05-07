@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades;
 using Vulcanova.Features.Shared;
+using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Classes
 {
@@ -33,8 +34,8 @@ namespace VulcanForWindows.Classes
             grades = new ObservableCollection<Grade>(g.Where(r => r.Column.Subject.Id == subject.Id));
             finalGrade = fGrade;
             this.periodId = periodId;
-            if(FetchAverages)
-            FetchYearlyAverage();
+            if (FetchAverages)
+                FetchYearlyAverage();
             if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
             foreach (var v in grades) v.CalculateClassAverage();
 
@@ -61,7 +62,7 @@ namespace VulcanForWindows.Classes
         public string defaultGrade => (finalGrade == null) ? finalGradePredicted : finalGrade;
         public string finalGradeOverride
         {
-            get => _finalGradeOverride; 
+            get => _finalGradeOverride;
             set
             {
                 _finalGradeOverride = value;
@@ -73,13 +74,28 @@ namespace VulcanForWindows.Classes
 
         string finalGradePredicted;
 
-        public bool allowEdits => finalGrade == null;
-        public bool includeInCalculations { get; set; } = true;
+        public bool allowEdits => finalGrade == null && includeInCalculations;
+        public bool includeInCalculations
+        {
+            get
+            {
+                if (_includeInCalculations == null)
+                    _includeInCalculations = Preferences.Get<bool>($"Analyzer_{subject.Id}_Include", true);
+                return _includeInCalculations.Value;
+            }
+            set
+            {
+                _includeInCalculations = value;
+                OnPropertyChanged(nameof(allowEdits));
+                OnPropertyChanged(nameof(includeInCalculations));
+            }
+        }
+        bool? _includeInCalculations;
 
         public async static Task<SubjectGradesAnalyzed[]> GetSubjectGradesAnalyzed(Grade[] g, int periodId, int trim = 0)
         {
             var r = g.GroupBy(r => r.Column.Subject.Id).Select(r => new SubjectGradesAnalyzed(r.First().Column.Subject, r.ToArray(), periodId, "", trim, false)).ToArray();
-            foreach(var v in r) await v.FetchYearlyAverage();
+            foreach (var v in r) await v.FetchYearlyAverage();
             return r;
         }
     }

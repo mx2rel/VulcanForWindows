@@ -69,7 +69,7 @@ namespace VulcanForWindows
 
         public void RecalculateAverage()
         {
-            average = Math.Round(grades.Where(r=>r.includeInCalculations).Select(r=>float.Parse(r.displayGrade)).Average() * 100)/100;
+            average = Math.Round(grades.Where(r => r.includeInCalculations).Select(r => float.Parse(r.displayGrade)).Average() * 100) / 100;
             averageDisplay.Text = average.ToString("0.00");
         }
 
@@ -104,8 +104,11 @@ namespace VulcanForWindows
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             var context = (sender as CheckBox).DataContext as SubjectGradesAnalyzed;
-            if(context != null)
-            context.includeInCalculations = true;
+            if (context != null)
+            {
+                context.includeInCalculations = true;
+                CheckedOrUnchecked(context);
+            }
             RecalculateAverage();
         }
 
@@ -113,9 +116,14 @@ namespace VulcanForWindows
         {
             var context = (sender as CheckBox).DataContext as SubjectGradesAnalyzed;
             if (context != null)
-
+            {
                 context.includeInCalculations = false;
+                CheckedOrUnchecked(context);
+            }
             RecalculateAverage();
         }
+
+        void CheckedOrUnchecked(SubjectGradesAnalyzed s)
+            => Preferences.Set<bool>($"Analyzer_{s.subject.Id}_Include", s.includeInCalculations);
     }
 }
