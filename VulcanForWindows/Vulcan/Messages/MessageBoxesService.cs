@@ -17,15 +17,15 @@ public class MessageBoxesService : UonetResourceProvider
 
     public async Task<NewResponseEnvelope<MessageBox>> GetMessageBoxesByAccountId(Account account, bool forceSync = false, bool waitForSync = false)
     {
-        var accountId = account.Id;
-        var resourceKey = GetResourceKey(accountId);
+        var pupilId = account.Pupil.Id;
+        var resourceKey = GetResourceKey(pupilId);
 
-        var items = await MessageBoxesRepository.GetMessageBoxesForAccountAsync(accountId);
+        var items = await MessageBoxesRepository.GetMessageBoxesForAccountAsync(pupilId);
 
         var v = new NewResponseEnvelope<MessageBox>(FetchMessageBoxesAsync(account), async delegate (object sender, IEnumerable<MessageBox> e)
         {
             SetJustSynced(resourceKey);
-            await MessageBoxesRepository.UpdateMessageBoxesForAccountAsync(accountId,e);
+            await MessageBoxesRepository.UpdateMessageBoxesForAccountAsync(pupilId,e);
 
         });
 
@@ -42,7 +42,7 @@ public class MessageBoxesService : UonetResourceProvider
 
     public async Task MarkMessageBoxAsSelectedAsync(MessageBox box)
     {
-        var boxes = (await MessageBoxesRepository.GetMessageBoxesForAccountAsync(box.Id.AccountId))
+        var boxes = (await MessageBoxesRepository.GetMessageBoxesForAccountAsync(box.Id.PupilId))
             .ToArray();
 
         foreach (var b in boxes)
@@ -50,7 +50,7 @@ public class MessageBoxesService : UonetResourceProvider
             b.IsSelected = b.Id == box.Id;
         }
 
-        await MessageBoxesRepository.UpdateMessageBoxesForAccountAsync(box.Id.AccountId, boxes);
+        await MessageBoxesRepository.UpdateMessageBoxesForAccountAsync(box.Id.PupilId, boxes);
     }
 
     private async Task<IEnumerable<MessageBox>> FetchMessageBoxesAsync(Account account)
@@ -74,14 +74,14 @@ public class MessageBoxesService : UonetResourceProvider
 
         foreach (var entry in entries)
         {
-            entry.Id.AccountId = account.Id;
+            entry.Id.PupilId = account.Pupil.Id;
         }
 
         return entries;
     }
 
-    private static string GetResourceKey(int accountId)
-        => $"MessageBoxes_{accountId}";
+    private static string GetResourceKey(int pupilId)
+        => $"MessageBoxes_{pupilId}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromDays(7);
 }
@@ -93,18 +93,18 @@ public class MessageBoxesRepository
 
     public static async Task<IEnumerable<MessageBox>> GetMessageBoxesForAccountAsync(int accountId)
     {
-        return await _db.GetCollection<MessageBox>().FindAsync(b => b.Id.AccountId == accountId);
+        return await _db.GetCollection<MessageBox>().FindAsync(b => b.Id.PupilId == accountId);
     }
 
     public static async Task<MessageBox> GetSelectedForAccountAsync(int accountId)
     {
         return await _db.GetCollection<MessageBox>()
-            .FindOneAsync(b => b.Id.AccountId == accountId && b.IsSelected);
+            .FindOneAsync(b => b.Id.PupilId == accountId && b.IsSelected);
     }
 
     public static async Task UpdateMessageBoxesForAccountAsync(int accountId, IEnumerable<MessageBox> boxes)
     {
-        await _db.GetCollection<MessageBox>().DeleteManyAsync(e => e.Id.AccountId == accountId);
+        await _db.GetCollection<MessageBox>().DeleteManyAsync(e => e.Id.PupilId == accountId);
 
         await _db.GetCollection<MessageBox>().UpsertAsync(boxes);
     }
@@ -116,6 +116,6 @@ public class MessageBoxesRepository
 
     public static async Task DeleteMessageBoxesForAccountAsync(int accountId)
     {
-        await _db.GetCollection<MessageBox>().DeleteManyAsync(m => m.Id.AccountId == accountId);
+        await _db.GetCollection<MessageBox>().DeleteManyAsync(m => m.Id.PupilId == accountId);
     }
 }

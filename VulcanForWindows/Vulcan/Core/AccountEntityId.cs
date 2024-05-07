@@ -6,11 +6,11 @@ namespace Vulcanova.Core.Data;
 public class AccountEntityId<T>
 {
     public T VulcanId { get; set; }
-    public int AccountId { get; set; }
+    public int PupilId { get; set; }
 
     protected bool Equals(AccountEntityId<T> other)
     {
-        return EqualityComparer<T>.Default.Equals(VulcanId, other.VulcanId) && AccountId == other.AccountId;
+        return EqualityComparer<T>.Default.Equals(VulcanId, other.VulcanId) && PupilId == other.PupilId;
     }
 
     public override bool Equals(object obj)
@@ -23,7 +23,7 @@ public class AccountEntityId<T>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(VulcanId, AccountId);
+        return HashCode.Combine(VulcanId, PupilId);
     }
 
     public static bool operator ==(AccountEntityId<T> left, AccountEntityId<T> right)

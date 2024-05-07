@@ -64,6 +64,12 @@ namespace Vulcanova.Features.Auth
             return accounts.FirstOrDefault(a => a.Id == id);
         }
 
+
+        public Account GetByPupilIdAsync(int id)
+        {
+            return accounts.FirstOrDefault(a => a.Pupil.Id == id);
+        }
+
         public void UpdateAccountAsync(Account account)
         {
             int index = accounts.FindIndex(a => a.Id == account.Id);

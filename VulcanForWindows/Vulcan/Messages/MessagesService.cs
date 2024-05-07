@@ -32,7 +32,7 @@ public class MessagesService : UonetResourceProvider
     public async Task<NewResponseEnvelope<Message>> GetMessagesByBox(
         Account account, Guid messageBoxId, MessageBoxFolder folder, bool forceSync = false, bool waitForSync = false)
     {
-        var resourceKey = GetResourceKey(account.Id, messageBoxId, folder);
+        var resourceKey = GetResourceKey(account.Pupil.Id, messageBoxId, folder);
 
         var items = await MessagesRepository.GetMessagesByBoxAsync(messageBoxId, folder);
 
@@ -58,7 +58,7 @@ public class MessagesService : UonetResourceProvider
 
     public async Task MarkMessageAsReadAsync(Guid messageBoxId, AccountEntityId<Guid> messageId)
     {
-        var account = new AccountRepository().GetByIdAsync(messageId.AccountId);
+        var account = new AccountRepository().GetByPupilIdAsync(messageId.PupilId);
 
         var apiClient = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
@@ -73,7 +73,7 @@ public class MessagesService : UonetResourceProvider
     }
     public async Task TrashMessage(Guid messageBoxId, AccountEntityId<Guid> messageId)
     {
-        var account = new AccountRepository().GetByIdAsync(messageId.AccountId);
+        var account = new AccountRepository().GetByPupilIdAsync(messageId.PupilId);
 
         var apiClient = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
@@ -111,7 +111,7 @@ public class MessagesService : UonetResourceProvider
 
         foreach (var message in messages)
         {
-            message.Id.AccountId = account.Id;
+            message.Id.PupilId = account.Pupil.Id;
             message.MessageBoxId = messageBoxId;
             message.Folder = folder;
             if(folder == MessageBoxFolder.Sent)
@@ -121,8 +121,8 @@ public class MessagesService : UonetResourceProvider
         return messages;
     }
 
-    private static string GetResourceKey(int accountId, Guid messageBoxId, MessageBoxFolder folder)
-        => $"Messages_{accountId}_{messageBoxId}_{folder}";
+    private static string GetResourceKey(int pupildId, Guid messageBoxId, MessageBoxFolder folder)
+        => $"Messages_{pupildId}_{messageBoxId}_{folder}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromHours(1);
 }

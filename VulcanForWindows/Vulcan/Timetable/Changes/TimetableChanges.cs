@@ -53,7 +53,7 @@ public class TimetableChanges : UonetResourceProvider
     
 
     private static string GetTimetableResourceKey(Account account, DateTime monthAndYear)
-        => $"TimetableChanges_{account.Id}_{account.Pupil.Id}_{monthAndYear.Month}_{monthAndYear.Year}";
+        => $"TimetableChanges_{account.Pupil.Id}_{monthAndYear.Month}_{monthAndYear.Year}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromHours(1);
 }

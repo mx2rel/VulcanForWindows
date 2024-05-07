@@ -9,7 +9,7 @@ namespace Vulcanova.Features.Auth
         void AddAccountsAsync(IEnumerable<Account> accounts);
         Account GetActiveAccountAsync();
         IReadOnlyCollection<Account> GetAccountsAsync();
-        Account GetByIdAsync(int id);
+        Account GetByPupilIdAsync(int id);
         void UpdateAccountAsync(Account account);
         void UpdateAccountsAsync(IEnumerable<Account> accounts);
         void DeleteByIdAsync(int id);

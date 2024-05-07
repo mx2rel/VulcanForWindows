@@ -21,13 +21,13 @@ public class ExamsService : UonetResourceProvider
     {
 
         var resourceKey = GetExamsResourceKey(acc, from, to);
-        var items = await ExamsRepository.GetExamsForPupilAsync(acc.Id, from, to);
+        var items = await ExamsRepository.GetExamsForPupilAsync(acc.Pupil.Id, from, to);
 
 
         var v = new NewResponseEnvelope<Exam>(FetchExamsAsync(acc,from,to), async delegate (object sender, IEnumerable<Exam> e)
         {
             SetJustSynced(resourceKey);
-            await ExamsRepository.UpdateExamsForPupilAsync(acc.Id, e);
+            await ExamsRepository.UpdateExamsForPupilAsync(acc.Pupil.Id, e);
 
         });
 
@@ -63,14 +63,14 @@ public class ExamsService : UonetResourceProvider
 
         foreach (var entry in entries)
         {
-            entry.Id.AccountId = account.Id;
+            entry.Id.PupilId = account.Pupil.Id;
         }
 
         return entries.Where(r=>r.Deadline >= from && r.Deadline <= to);
     }
 
     private static string GetExamsResourceKey(Account account, DateTime from, DateTime to)
-        => $"Timetable_{account.Id}_{from.ToShortDateString()}_{to.ToLongDateString()}";
+        => $"Timetable_{account.Pupil.Id}_{from.ToShortDateString()}_{to.ToLongDateString()}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromHours(1);
 }
@@ -79,17 +79,17 @@ public class ExamsRepository
 {
     private static LiteDatabaseAsync _db => LiteDbManager.database;
 
-    public static async Task<IEnumerable<Exam>> GetExamsForPupilAsync(int accountId, DateTime from, DateTime to)
+    public static async Task<IEnumerable<Exam>> GetExamsForPupilAsync(int pupilId, DateTime from, DateTime to)
     {
         return await _db.GetCollection<Exam>()
-            .FindAsync(e => e.Id.AccountId == accountId
+            .FindAsync(e => e.Id.PupilId == pupilId
                             && e.Deadline >= from
                             && e.Deadline <= to);
     }
 
-    public static async Task UpdateExamsForPupilAsync(int accountId, IEnumerable<Exam> entries)
+    public static async Task UpdateExamsForPupilAsync(int pupilid, IEnumerable<Exam> entries)
     {
-        await _db.GetCollection<Exam>().DeleteManyAsync(e => e.Id.AccountId == accountId);
+        await _db.GetCollection<Exam>().DeleteManyAsync(e => e.Id.PupilId == pupilid);
 
         await _db.GetCollection<Exam>().UpsertAsync(entries);
     }

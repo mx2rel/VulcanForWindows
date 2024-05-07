@@ -75,7 +75,7 @@ namespace VulcanTest.Vulcan.Timetable
             await FetchEntriesForRange(account, new DateTime(monthAndYear.Year, monthAndYear.Month, 1),
                 new DateTime(monthAndYear.Year, monthAndYear.Month, DateTime.DaysInMonth(monthAndYear.Year, monthAndYear.Month), 23, 59, 59));
         private static string GetTimetableResourceKey(Account account, DateTime monthAndYear)
-        => $"Timetable_{account.Id}_{account.Pupil.Id}_{monthAndYear.Month}_{monthAndYear.Year}";
+        => $"Timetable_{account.Pupil.Id}_{monthAndYear.Month}_{monthAndYear.Year}";
 
     }
 

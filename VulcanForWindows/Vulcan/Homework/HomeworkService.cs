@@ -22,7 +22,7 @@ namespace Vulcanova.Features.Homework
             var resourceKey = GetHomeworkResourceKey(acc, periodId);
             var items = await HomeworksRepository.GetHomeworkForPupilAsync(acc.Id);
 
-            var v = new NewResponseEnvelope<Homework>(FetchHomework(acc, periodId, acc.Id), async delegate (object sender, IEnumerable<Homework> e)
+            var v = new NewResponseEnvelope<Homework>(FetchHomework(acc, periodId), async delegate (object sender, IEnumerable<Homework> e)
             {
                 SetJustSynced(resourceKey);
                 await HomeworksRepository.UpdateHomeworkEntriesAsync(e, acc.Id);
@@ -40,7 +40,7 @@ namespace Vulcanova.Features.Homework
             return v;
         }
 
-        private async Task<IEnumerable<Homework>> FetchHomework(Account account, int periodId, int accountId)
+        private async Task<IEnumerable<Homework>> FetchHomework(Account account, int periodId)
         {
             var query = new GetHomeworkByPupilQuery(account.Pupil.Id, periodId, DateTime.MinValue);
 
@@ -59,14 +59,14 @@ namespace Vulcanova.Features.Homework
 
             foreach (var entry in entries)
             {
-                entry.Id.AccountId = accountId;
+                entry.Id.PupilId = account.Pupil.Id;
             }
 
             return entries;
         }
 
         private static string GetHomeworkResourceKey(Account account, int periodId)
-            => $"Homeworks_{account.Id}_{periodId}";
+            => $"Homeworks_{account.Pupil.Id}_{periodId}";
 
         public override TimeSpan OfflineDataLifespan => TimeSpan.FromHours(1);
     }
@@ -75,15 +75,15 @@ namespace Vulcanova.Features.Homework
     {
         private static LiteDatabaseAsync _db => LiteDbManager.database;
 
-        public static async Task<IEnumerable<Homework>> GetHomeworkForPupilAsync(int accountId)
+        public static async Task<IEnumerable<Homework>> GetHomeworkForPupilAsync(int pupilId)
         {
             return await _db.GetCollection<Homework>()
-                .FindAsync(e => e.Id.AccountId == accountId);
+                .FindAsync(e => e.Id.PupilId == pupilId);
         }
 
-        public static async Task UpdateHomeworkEntriesAsync(IEnumerable<Homework> entries, int accountId)
+        public static async Task UpdateHomeworkEntriesAsync(IEnumerable<Homework> entries, int pupildId)
         {
-            await _db.GetCollection<Homework>().DeleteManyAsync(e => e.Id.AccountId == accountId);
+            await _db.GetCollection<Homework>().DeleteManyAsync(e => e.Id.PupilId == pupildId);
 
             await _db.GetCollection<Homework>().UpsertAsync(entries);
         }
