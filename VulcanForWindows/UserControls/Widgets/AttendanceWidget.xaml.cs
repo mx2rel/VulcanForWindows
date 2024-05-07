@@ -46,9 +46,9 @@ namespace VulcanForWindows.UserControls.Widgets
         }
 
         public NewResponseEnvelope<Lesson> att { get; set; } = new NewResponseEnvelope<Lesson>();
-        public int UnjustifiedCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
+        public int UnjustifiedCount => (att != null) ? ((!att.isLoaded) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
-        public int InProgressCount => (att != null) ? ((att.Entries.Count == 0) ? -1 :
+        public int InProgressCount => (att != null) ? ((!att.isLoaded) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).Where(r => r.JustificationStatus != null)
             .Where(r => r.JustificationStatus == Vulcanova.Uonet.Api.Lessons.JustificationStatus.Requested).Count())) : -1;
         public ObservableCollection<Lesson> lastNieusprawiedliwione = new ObservableCollection<Lesson>();
