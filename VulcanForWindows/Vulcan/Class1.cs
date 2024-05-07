@@ -22,7 +22,7 @@ namespace VulcanTest.Vulcan
 
     public static class Preferences
     {
-        private static string folder = Path.Combine( Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VulcanForWindows");
+        private static string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VulcanForWindows");
         private static string dataFilePath
             => Path.Combine(folder, "data.dat");
 
@@ -54,7 +54,7 @@ namespace VulcanTest.Vulcan
         {
             Dictionary<string, string> data = GetAllData();
 
-            if(data.ContainsKey(key))
+            if (data.ContainsKey(key))
             {
                 output = JsonConvert.DeserializeObject<T>(data[key]);
                 return true;
@@ -69,14 +69,14 @@ namespace VulcanTest.Vulcan
             SaveData(new Dictionary<string, string>());
         }
 
-        private static Dictionary<string, string> GetAllData()
+        public static Dictionary<string, string> GetAllData()
         {
             try
             {
                 if (File.Exists(dataFilePath))
                 {
                     string json = File.ReadAllText(dataFilePath);
-                    var v= JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    var v = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                     if (v != null) return v;
                 }
                 else
@@ -89,7 +89,7 @@ namespace VulcanTest.Vulcan
                 Console.WriteLine("Error reading data: " + ex.Message);
                 return new Dictionary<string, string>();
             }
-                return new Dictionary<string, string>();
+            return new Dictionary<string, string>();
         }
 
         private static void SaveData(Dictionary<string, string> data)
@@ -110,6 +110,26 @@ namespace VulcanTest.Vulcan
             }
         }
 
+        
+    }
+
+    public class Preference
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+
+        public Preference(string _name, string _value)
+        {
+            Name = _name; Value = _value;
+        }
+    }
+
+    public static class PreferencesHelpers
+    {
+        public static IEnumerable<Preference> ToPreferences(this IDictionary<string, string> data)
+        {
+            return data.Select(r=>new Preference(r.Key, r.Value));
+        }
     }
 
     public static class ObservableCollectionExtensions
