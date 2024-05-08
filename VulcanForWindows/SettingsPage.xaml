@@ -24,9 +24,17 @@
             <!--<scontrols:ReminderSettings/>
             <scontrols:BackgroundTaskSettings/>-->
         </ListView>
-        <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}" Padding="15" CornerRadius="4,4,0,0">
-            <Button Content="Wyloguj ze wszystkich kont" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
-            <Button Content="Polityka prywatności" Click="PrivacyPolicy" />
-        </StackPanel>
+        <Grid ColumnSpacing="10" Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}"
+              Padding="15" CornerRadius="4,4,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Wyloguj ze wszystkich kont" Click="Logout" Style="{StaticResource AccentButtonStyle}"/>
+                <Button Content="Polityka prywatności" Click="PrivacyPolicy"/>
+            </StackPanel>
+            <TextBlock HorizontalAlignment="Right" x:Name="verDisplay" Grid.Column="1" VerticalAlignment="Bottom"/>
+        </Grid>
     </Grid>
 </Page>

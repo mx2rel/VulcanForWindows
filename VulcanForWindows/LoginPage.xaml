@@ -22,7 +22,7 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Vulcan dla Windows" FontWeight="Bold" FontSize="32" TextAlignment="Center"/>
-                    <TextBlock Text="V. 0.1 - DEV tests" FontSize="12" Foreground="Silver" TextAlignment="Center" HorizontalAlignment="Right" Grid.Row="1"/>
+                    <TextBlock x:Name="verDisplay" FontSize="12" Foreground="Silver" TextAlignment="Center" HorizontalAlignment="Right" Grid.Row="1"/>
                     <TextBlock Text="by mx2rel" FontSize="12" Foreground="Silver" TextAlignment="Center" HorizontalAlignment="Left" Grid.Row="1"/>
 
                 </Grid>

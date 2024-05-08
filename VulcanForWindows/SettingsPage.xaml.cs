@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Vulcanova.Features.Auth;
+using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -28,6 +29,8 @@ namespace VulcanForWindows
         public SettingsPage()
         {
             this.InitializeComponent();
+            verDisplay.Text = $"Ver. {AppWide.AppVersion}";
+
         }
 
         private void Logout(object sender, RoutedEventArgs e)

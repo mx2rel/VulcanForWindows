@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 
 namespace VulcanTest.Vulcan
 {
@@ -109,8 +110,15 @@ namespace VulcanTest.Vulcan
                 Debug.WriteLine("\nError saving data: " + ex.Message);
             }
         }
+    }
 
-        
+    public static class AppWide
+    {
+        public static string AppVersion => string.Format("{0}.{1}.{2}.{3}",
+                    Package.Current.Id.Version.Major,
+                    Package.Current.Id.Version.Minor,
+                    Package.Current.Id.Version.Build,
+                    Package.Current.Id.Version.Revision);
     }
 
     public class Preference

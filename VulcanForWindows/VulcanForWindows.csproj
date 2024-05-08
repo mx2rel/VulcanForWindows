@@ -22,8 +22,9 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-    <PackageCertificateThumbprint>BC67EF1F1013AB30E9BC31D8D9C9DAB9968F4506</PackageCertificateThumbprint>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+    <PackageCertificateKeyFile>VulcanForWindows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <DefaultLanguage>pl-PL</DefaultLanguage>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Assets\BgWorker\**" />

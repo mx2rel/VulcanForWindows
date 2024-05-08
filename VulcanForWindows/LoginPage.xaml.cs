@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using DevExpress.Utils;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -13,6 +14,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
 using Vulcanova.Uonet.Api.Common;
+using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -29,6 +31,7 @@ namespace VulcanForWindows
         public LoginPage()
         {
             this.InitializeComponent();
+            verDisplay.Text = $"V. {AppWide.AppVersion}";
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
