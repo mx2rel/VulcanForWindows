@@ -16,7 +16,7 @@
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
@@ -25,6 +25,7 @@
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
     <PackageCertificateKeyFile>VulcanForWindows_TemporaryKey.pfx</PackageCertificateKeyFile>
     <DefaultLanguage>pl-PL</DefaultLanguage>
+    <AppxPackageDir>E:\VulcanForWindowsRelease\</AppxPackageDir>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Assets\BgWorker\**" />
@@ -159,6 +160,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Brand\" />
+    <Folder Include="Brand\MSStoreAssets\" />
     <Folder Include="Viewmodels\" />
   </ItemGroup>
   <ItemGroup>
