@@ -31,6 +31,7 @@ namespace VulcanForWindows.UserControls
         {
             this.InitializeComponent();
             UpdateAccounts();
+            AccountRepository.OnAccountsChanged += () => UpdateAccounts();
         }
 
         private void AddAccount(object sender, RoutedEventArgs e)
@@ -56,12 +57,11 @@ namespace VulcanForWindows.UserControls
                     var selectedAccount = listView.SelectedItem as Account;
                     if (new AccountRepository().SetActiveByPupilId(selectedAccount.Pupil.Id))
                     {
-                        UpdateAccounts();
                         MainWindow.Instance.LoadMainPage();
                     }
                 }
             }
-            
+
         }
 
         public void UpdateAccounts()
@@ -70,6 +70,17 @@ namespace VulcanForWindows.UserControls
 
             list.SelectedIndex = accounts.FindIndex(r => r.IsActive);
 
+        }
+
+        private void RemoveAccount(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuFlyoutItem item)
+            {
+                if (item.DataContext is Account acc)
+                {
+                    new AccountRepository().DeleteByPupilId(acc.Pupil.Id);
+                }
+            }
         }
     }
 }

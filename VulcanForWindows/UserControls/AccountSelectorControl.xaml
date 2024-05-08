@@ -24,10 +24,19 @@
                                     <Run Text="{x:Bind Pupil.FirstName}"/>
                                     <Run Text="{x:Bind Pupil.Surname}"/>
                                 </TextBlock>
-                                <TextBlock Text="{x:Bind Unit.DisplayName}" Grid.Column="1"/>
+                                <TextBlock Text="{x:Bind Unit.DisplayName}" Grid.Column="1" MaxWidth="300" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
 
                             </StackPanel>
-
+                            <Button Grid.Column="1" DataContext="{x:Bind}" Background="Transparent" BorderThickness="0">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="More"/>
+                                </Button.Content>
+                                <Button.Flyout>
+                                    <MenuFlyout Placement="Bottom">
+                                        <MenuFlyoutItem Text="Wyloguj" Click="RemoveAccount"/>
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                                </Button>
                         </Grid>
                     </ListViewItem>
                 </DataTemplate>

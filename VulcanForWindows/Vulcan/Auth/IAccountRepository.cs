@@ -10,8 +10,8 @@ namespace Vulcanova.Features.Auth
         Account GetActiveAccount();
         IReadOnlyCollection<Account> GetAccounts();
         Account GetByPupilId(int id);
-        void UpdateAccount(Account account);
-        void UpdateAccounts(IEnumerable<Account> accounts);
+        void UpdateAccount(Account account, bool invokeEvent);
+        void UpdateAccounts(IEnumerable<Account> accounts, bool invokeEvent);
         void DeleteById(int id);
     }
 }

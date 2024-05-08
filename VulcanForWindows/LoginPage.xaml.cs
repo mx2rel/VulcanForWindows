@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
+using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Uonet.Api.Common;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
@@ -23,11 +24,13 @@ using Windows.Foundation.Collections;
 
 namespace VulcanForWindows
 {
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class LoginPage : Page
     {
+
         public LoginPage()
         {
             this.InitializeComponent();
