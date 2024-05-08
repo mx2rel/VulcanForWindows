@@ -1,9 +1,9 @@
-# Vulcan dla Windows - Klient UONET+ 💻
+# Vulcan dla Windows - Klient Vulcan 💻
 
 > [!Important]
 > Vulcan Dla Windows to klient, który korzysta z API dziennika Vulcan - nie jest oficjalnym tworem żadnej firmy/organizacji bezpośrednio związanej z rozwijaniem i utrzymywaniem dziennika.
 > 
-**Vulcan dla Windows** to klient dziennika UONET+ Vulcan dla Windowsa - alternatywa dla strony internetowej. Posiada następujące funkcje:
+**Vulcan dla Windows** to klient dziennika Vulcan dla systemu Windows - alternatywa dla strony internetowej. Posiada następujące funkcje:
 + Oceny 📊
 	+ Sprawdzaj oceny cząstkowe
 	+ Sprawdzaj oceny końcowe
