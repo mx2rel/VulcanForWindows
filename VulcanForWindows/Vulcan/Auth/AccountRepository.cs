@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using VulcanForWindows;
 using Vulcanova.Features.Auth.Accounts;
+using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Auth
 {
@@ -21,11 +22,12 @@ namespace Vulcanova.Features.Auth
         public static AccountsChangedEvent OnAccountsChanged = delegate { };
 
         private List<Account> accounts;
-        private readonly string dataFilePath;
+        private static string dataFilePath
+            => Path.Combine(Preferences.folder, "accounts.txt");
+
 
         public AccountRepository(string dataFilePath)
         {
-            this.dataFilePath = dataFilePath;
             LoadData();
 
             OnActiveAccountChanged += (Account a) =>
@@ -33,7 +35,6 @@ namespace Vulcanova.Features.Auth
         }
         public AccountRepository()
         {
-            this.dataFilePath = "C:/Vulcan/accounts.txt";
             LoadData();
         }
 

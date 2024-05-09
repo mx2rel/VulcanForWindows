@@ -23,7 +23,8 @@ namespace VulcanTest.Vulcan
 
     public static class Preferences
     {
-        private static string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VulcanForWindows");
+        //C:\Users\Marcel\AppData\Local\Packages
+        public static string folder = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "VulcanForWindows");
         private static string dataFilePath
             => Path.Combine(folder, "data.dat");
 
@@ -95,10 +96,13 @@ namespace VulcanTest.Vulcan
 
         private static void SaveData(Dictionary<string, string> data)
         {
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
             if (!File.Exists(dataFilePath))
             {
                 var s = File.Create(dataFilePath);
                 Debug.WriteLine($"Created {s.Name}");
+                s.Close();
             }
             try
             {
