@@ -15,6 +15,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using VulcanForWindows.Classes;
+using VulcanForWindows.Classes.Grades;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Grades;
 using VulcanTest.Vulcan;
@@ -58,7 +59,7 @@ namespace VulcanForWindows
                 int currentPeriod = acc.Periods.Last().Id;
                 var env = await new GradesService().GetPeriodGrades(acc, currentPeriod, true, true);
                 cachedData =
-                await SubjectGradesAnalyzed.GetSubjectGradesAnalyzed(env.Grades.ToArray(), currentPeriod);
+                await env.Grades.ToArray().GenerateSubjectGradesAnalyzed();
                 cachedAt = DateTime.Now;
             }
             return cachedData;

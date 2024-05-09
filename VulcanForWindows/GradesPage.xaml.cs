@@ -29,6 +29,7 @@ using System.Threading.Tasks;
 using VulcanForWindows.Classes.VulcanGradesDb;
 using VulcanForWindows.UserControls;
 using Windows.UI.Popups;
+using VulcanForWindows.Classes.Grades;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -112,7 +113,7 @@ namespace VulcanForWindows
                     return v.grades;
             }
             buffer[periodId] = (
-            SubjectGrades.GetSubjectsGrades(envelopes[periodId].Grades.ToArray(), periodId), DateTime.Now);
+            envelopes[periodId].Grades.ToArray().GenerateSubjectGrades(true), DateTime.Now);
             return buffer[periodId].grades;
         }
 
@@ -327,7 +328,11 @@ namespace VulcanForWindows
                 Column = new Column
                 {
                     Name = "Hipotetyczna ocena",
-                    Weight = weight
+                    Weight = weight,
+                    Subject = new Vulcanova.Features.Shared.Subject()
+                    {
+                        Id = eSg.grades[0].Column.Subject.Id
+                    }
                 },
                 Value = grade,
                 IsHipothetic = true
@@ -342,22 +347,22 @@ namespace VulcanForWindows
             //eSgu.DataContext = s;
             eSgu.GetBindingExpression(FrameworkElement.DataContextProperty)?.UpdateSource();
             TopLevel.UpdateLayout();
-            var lv = ((eSgu.Content as StackPanel).Children[0] as ListView);
+            var lv = ((eSgu.Content as StackPanel).Children[1] as ListView);
             lv.ScrollIntoView(lv.Items.Last());
         }
 
 
         private void ChangedWeight(NumberBox sender, NumberBoxValueChangedEventArgs args)
         {
-            if (sender.Parent != null)
-                foreach (var v in (sender.Parent as StackPanel).Children)
-                {
-                    if ((v as FrameworkElement).Tag != null)
-                        if (v is TextBlock t)
-                        {
-                            t.Text = $"{t.Tag}: {(sender.DataContext as SubjectGrades).CountAverage(int.Parse(t.Tag.ToString()), (int)sender.Value)}";
-                        }
-                }
+            //if (sender.Parent != null)
+            //    foreach (var v in (sender.Parent as StackPanel).Children)
+            //    {
+            //        if ((v as FrameworkElement).Tag != null)
+            //            if (v is TextBlock t)
+            //            {
+            //                t.Text = $"{t.Tag}: {(sender.DataContext as SubjectGrades).CountAverage(int.Parse(t.Tag.ToString()), (int)sender.Value)}";
+            //            }
+            //    }
         }
 
         private async void ViewGradeDetails(object sender, TappedRoutedEventArgs e)
@@ -418,6 +423,14 @@ namespace VulcanForWindows
                 w.Close();
                 MainWindow.Instance.IsOtherWindowOpen = false;
             }
+        }
+
+        private void RemoveHipotheticGrade(object sender, RoutedEventArgs e)
+        {
+            var grade = ((sender as MenuFlyoutItem).DataContext as Grade);
+            var match = grades.ToArray().Where(r => r.subject.Id == grade.Column.Subject.Id).ToArray() ;
+            if (match.Length == 0) return;
+            match[0].removeAddedGrade(grade);
         }
     }
 }

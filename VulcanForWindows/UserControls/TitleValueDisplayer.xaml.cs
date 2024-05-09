@@ -54,6 +54,28 @@ namespace VulcanForWindows.UserControls
             }
         }
 
+
+        public static readonly DependencyProperty ContentProperty =
+            DependencyProperty.Register("Content", typeof(FrameworkElement), typeof(TitleValueDisplayer), new PropertyMetadata(null, Content_Changed));
+
+        public FrameworkElement Content
+        {
+            get => (FrameworkElement)GetValue(ContentProperty);
+            set => SetValue(ContentProperty, value);
+        }
+
+        private static void Content_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TitleValueDisplayer control && e.NewValue is FrameworkElement newValue)
+            {
+                while (control.ContentHolder.Children.Count > 0)
+                    control.ContentHolder.Children.Remove(control.ContentHolder.Children[0]);
+
+                control.ContentHolder.Children.Add(newValue);
+            }
+        }
+
+
         void DisplayStyleChanged()
         {
             spVertical.Visibility = (DisplayStyle.Value == DisplayStyles.Vertical).ToVisibility();
@@ -62,7 +84,7 @@ namespace VulcanForWindows.UserControls
         }
 
 
-            public TitleValueDisplayer()
+        public TitleValueDisplayer()
         {
             this.InitializeComponent();
 

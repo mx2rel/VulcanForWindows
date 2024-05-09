@@ -18,6 +18,7 @@
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
         <converters:BoolToColor x:Key="BoolToColor"/>
         <converters:BoolToStrings x:Key="BoolToStrings"/>
+        <converters:NumberToTwoDecimals x:Key="NumberToTwoDecimals"/>
         <DataTemplate x:Key="GradeInfoFlyout" x:DataType="grade:Grade">
             <!-- Define the content of your Flyout here -->
             <StackPanel Width="200">
@@ -165,6 +166,8 @@
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Border Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
                                         ConverterParameter=Orange!Green}" VerticalAlignment="Stretch" 
@@ -202,7 +205,18 @@
                                         </StackPanel>
 
                                     </Grid>
-                                    <Border Grid.Column="2" Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
+                                    <Button Grid.Column="3" DataContext="{x:Bind}" Background="Transparent" BorderThickness="0"
+                                             Visibility="{x:Bind IsHipothetic, Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Right">
+                                        <Button.Content>
+                                            <SymbolIcon Symbol="More"/>
+                                        </Button.Content>
+                                        <Button.Flyout>
+                                            <MenuFlyout Placement="Bottom">
+                                                <MenuFlyoutItem Text="Usuń ocenę" Click="RemoveHipotheticGrade"/>
+                                            </MenuFlyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Border Grid.Column="4" Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
                                         ConverterParameter=Orange!Red}" HorizontalAlignment="Right" CornerRadius="4" Padding="3" VerticalAlignment="Center"
                                             Visibility="{x:Bind IsHipotheticOrRecent, Converter={StaticResource VisibilityConverter}}">
                                         <TextBlock Text="{x:Bind IsHipothetic, Converter={StaticResource BoolToStrings}, ConverterParameter=Hipotetyczna!Nowa}" FontWeight="Bold" FontSize="12"/>
@@ -232,12 +246,11 @@
                                                 <RowDefinition Height="18"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="{x:Bind subject.Name}" HorizontalTextAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontWeight="Medium"/>
-                                            <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10" 
-                                                       Foreground="{x:Bind AverageColor, Mode=OneWay}">
-                                        <Run Text="{x:Bind AverageText, Mode=OneWay}"/>
-                                        <Run Text="{x:Bind yearlyAverage, Mode=OneWay}" x:Name="average"/>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontWeight="SemiLight" FontSize="10">
+                                        <Run Text="Średnia r.:"/>
+                                        <Run Text="{x:Bind yearActualAverage, Mode=OneWay}" x:Name="average"/>
                                                 <Run Text="("/>
-                                                <Run Text="{x:Bind yearGradesCount, Mode=OneWay}"/>
+                                                <Run Text="{x:Bind yearActualGradesCount, Mode=OneWay}"/>
                                                 <Run Text=")"/>
                                             </TextBlock>
                                         </Grid>
@@ -273,6 +286,31 @@
                                 </Expander.Header>
                                 <Expander.Content>
                                     <StackPanel>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <controls:TitleValueDisplayer Title="Średnia z semestru" 
+                                                                          Value="{x:Bind termDisplayedAverage, Mode=OneWay, Converter={StaticResource NumberToTwoDecimals}}" DisplayStyle="Vertical"
+                                                                          Width="150" 
+                                                                          Foreground="{x:Bind isDisplayingActualAverages, Converter={StaticResource BoolToColor}, ConverterParameter=LightGray!Orange, Mode=OneWay}">
+                                                <controls:TitleValueDisplayer.Content>
+                                                    <TextBlock FontSize="12">
+                                                        <Run Text="{x:Bind termDisplayedGradesCount, Mode=OneWay}"/>
+                                                        <Run Text="ocen"/>
+                                                    </TextBlock>
+                                                </controls:TitleValueDisplayer.Content>
+                                            </controls:TitleValueDisplayer>
+                                            <controls:TitleValueDisplayer Title="Średnia roczna" 
+                                                                          Value="{x:Bind yearDisplayedAverage, Mode=OneWay, Converter={StaticResource NumberToTwoDecimals}}" DisplayStyle="Vertical"
+                                                                          Width="150"
+                                                                          Foreground="{x:Bind isDisplayingActualAverages, Converter={StaticResource BoolToColor}, ConverterParameter=LightGray!Orange, Mode=OneWay}">
+                                                <controls:TitleValueDisplayer.Content>
+                                                    <TextBlock FontSize="12">
+                                                        <Run Text="{x:Bind yearDisplayedGradesCount, Mode=OneWay}"/>
+                                                        <Run Text="ocen"/>
+                                                    </TextBlock>
+                                                </controls:TitleValueDisplayer.Content>
+                                            </controls:TitleValueDisplayer>
+
+                                        </StackPanel>
                                         <ListView ItemTemplate="{StaticResource GradeTemplate}"
                   ItemsSource="{x:Bind grades}" HorizontalAlignment="Stretch" 
           HorizontalContentAlignment="Stretch" Margin="0,5,0,3" MaxHeight="300">
@@ -284,9 +322,9 @@
                                             </ListView.ItemContainerStyle>
                                         </ListView>
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4" Spacing="3" Padding="8,0,0,0">
-                                            <Button HorizontalAlignment="Stretch" Click="DisplayHipotheticGrade">Sprawdź hipotetyczną ocenę</Button>
+                                            <!--<Button HorizontalAlignment="Stretch" Click="DisplayHipotheticGrade">Sprawdź hipotetyczną ocenę</Button>-->
                                             <Button HorizontalAlignment="Stretch" Click="AddHipotheticGrade">Dodaj hipotetyczną ocenę</Button>
-                                            <Button HorizontalAlignment="Stretch" Click="RemoveHipotheticGrades" Visibility="{x:Bind removeButtonVisibility, Mode=OneWay}">Usuń hipotetyczne oceny</Button>
+                                            <Button HorizontalAlignment="Stretch" Click="RemoveHipotheticGrades" Visibility="{x:Bind isDisplayingActualAverages, Mode=OneWay, Converter={StaticResource VisibilityConverter}, ConverterParameter=true}">Usuń hipotetyczne oceny</Button>
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander.Content>

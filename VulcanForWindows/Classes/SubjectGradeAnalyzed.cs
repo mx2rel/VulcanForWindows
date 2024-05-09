@@ -13,35 +13,19 @@ namespace VulcanForWindows.Classes
 {
     public class SubjectGradesAnalyzed : SubjectGrades
     {
-
-        public SubjectGradesAnalyzed(Subject subject, GradesResponseEnvelope env, int periodId, string fGrade = "", GradesResponseEnvelope prevPeriod = null)
-        {
-            this.subject = subject;
-            this.env = env;
-            grades = new ObservableCollection<Grade>(env.Grades.Where(r => r.Column.Subject.Id == subject.Id));
-            this.periodId = periodId;
-            finalGrade = fGrade;
-            if (prevPeriod != null)
-                prevPeriodGrades = prevPeriod.Grades.ToArray();
-            FetchYearlyAverage();
-            foreach (var v in grades) v.CalculateClassAverage();
-
-
-        }
-        public SubjectGradesAnalyzed(Subject subject, Grade[] g, int periodId, string fGrade = "", int trim = 0, bool FetchAverages = true)
+        public SubjectGradesAnalyzed(Subject subject, Grade[] g, bool FetchAverages = true)
         {
             this.subject = subject;
             grades = new ObservableCollection<Grade>(g.Where(r => r.Column.Subject.Id == subject.Id));
-            finalGrade = fGrade;
-            this.periodId = periodId;
+
             if (FetchAverages)
                 FetchYearlyAverage();
-            if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
+
             foreach (var v in grades) v.CalculateClassAverage();
 
         }
 
-        async Task<bool> FetchYearlyAverage()
+        public async Task<bool> FetchYearlyAverage()
         {
             var avg = await GetYearlyAverage();
             var fG = await GetFinalGrade();
@@ -91,12 +75,5 @@ namespace VulcanForWindows.Classes
             }
         }
         bool? _includeInCalculations;
-
-        public async static Task<SubjectGradesAnalyzed[]> GetSubjectGradesAnalyzed(Grade[] g, int periodId, int trim = 0)
-        {
-            var r = g.GroupBy(r => r.Column.Subject.Id).Select(r => new SubjectGradesAnalyzed(r.First().Column.Subject, r.ToArray(), periodId, "", trim, false)).ToArray();
-            foreach (var v in r) await v.FetchYearlyAverage();
-            return r;
-        }
     }
 }
