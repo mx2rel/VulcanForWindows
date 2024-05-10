@@ -16,9 +16,7 @@ namespace VulcanTest.Vulcan
 {
     public static class LiteDbManager
     {
-        private static string defaultFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "main.txt");
-        public static LiteDatabaseAsync database = new LiteDatabaseAsync("Filename=main.db;Connection=shared;");
-
+        public static LiteDatabaseAsync database = new LiteDatabaseAsync($"Filename={Path.Combine(Preferences.folder, ("main.db"))};Connection=shared;");
     }
 
     public static class Preferences
