@@ -23,7 +23,7 @@ namespace VulcanForWindows.UserControls
     {
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(Vulcanova.Uonet.Api.Lessons.JustificationStatus?), typeof(JustificationRequestStatus), new PropertyMetadata(null, ValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(Vulcanova.Uonet.Api.Lessons.JustificationStatus?), typeof(JustificationRequestStatus), new PropertyMetadata(null, ValueChanged));
 
         public static readonly DependencyProperty ContextProperty =
         DependencyProperty.Register("Context", typeof(PresenceType), typeof(JustificationRequestStatus), new PropertyMetadata(null, ContextChanged));

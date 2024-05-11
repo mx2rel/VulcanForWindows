@@ -29,6 +29,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
                 if (str == "null") return null;
 
+                Debug.WriteLine(str);
                 var data = JsonConvert.DeserializeObject<SingleClassmateGrade[]>(str);
                 var response = new SingleClassmateColumn(ColumnId, data);
                 await _db.GetCollection<SingleClassmateColumn>().InsertAsync(response);

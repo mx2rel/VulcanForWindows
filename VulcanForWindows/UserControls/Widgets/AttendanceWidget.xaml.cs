@@ -46,9 +46,9 @@ namespace VulcanForWindows.UserControls.Widgets
         }
 
         public NewResponseEnvelope<Lesson> att { get; set; } = new NewResponseEnvelope<Lesson>();
-        public int UnjustifiedCount => (att != null) ? ((!att.isLoaded) ? -1 :
+        public int UnjustifiedCount => (att != null) ? ((!att.isInitiallyLoaded) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence && (!r.PresenceType.AbsenceJustified && !r.PresenceType.LegalAbsence)).Count())) : -1;
-        public int InProgressCount => (att != null) ? ((!att.isLoaded) ? -1 :
+        public int InProgressCount => (att != null) ? ((!att.isInitiallyLoaded) ? -1 :
             (att.Entries.Where(r => r.PresenceType != null).Where(r => r.PresenceType.Absence).Where(r => r.JustificationStatus != null)
             .Where(r => r.JustificationStatus == Vulcanova.Uonet.Api.Lessons.JustificationStatus.Requested).Count())) : -1;
         public ObservableCollection<Lesson> lastNieusprawiedliwione = new ObservableCollection<Lesson>();
@@ -97,7 +97,7 @@ namespace VulcanForWindows.UserControls.Widgets
             OnPropertyChanged(nameof(PresentPercent));
             OnPropertyChanged(nameof(PresentPercentDisplay));
 
-            att.Updated += Att_Updated;
+            att.OnLoadingOrUpdatingFinished += Att_Updated;
             await new LessonsService().GetLessonsForSchoolYear(acc, att);
             Att_Updated(null, null);
             IsLoading = false;

@@ -15,7 +15,7 @@ namespace VulcanForWindows.Vulcan.Timetable
     public class TimetableResponseEnvelope : IResponseEnvelope<TimetableEntry>
     {
         public bool isLoading;
-        public event EventHandler<IEnumerable<TimetableEntry>> Updated;
+        public event EventHandler<IEnumerable<TimetableEntry>> OnLoadingOrUpdatingFinished;
 
         private ObservableCollection<TimetableEntry> entries;
         public ObservableCollection<TimetableEntry> Entries
@@ -24,7 +24,7 @@ namespace VulcanForWindows.Vulcan.Timetable
             set
             {
                 entries = value;
-                Updated?.Invoke(this, entries);
+                OnLoadingOrUpdatingFinished?.Invoke(this, entries);
             }
         }
         OgTimetable g; Account account; DateTime monthAndYear; string resourceKey;
@@ -50,7 +50,7 @@ namespace VulcanForWindows.Vulcan.Timetable
 
             Entries.ReplaceAll<TimetableEntry>(onlineEntries);
 
-            Updated?.Invoke(this, entries);
+            OnLoadingOrUpdatingFinished?.Invoke(this, entries);
 
         }
     }

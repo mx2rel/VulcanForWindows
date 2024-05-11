@@ -56,12 +56,12 @@ namespace VulcanForWindows.Classes
 
         private void CalculateTermAverage(bool includeAddedGrades = false)
         {
-            var calculateFrom = grades.Where(r => r.Value.HasValue).Where(r => r.Column.Weight != 0);
+            var calculateFrom = grades.Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0);
             if (!includeAddedGrades) calculateFrom = calculateFrom.Where(r => !r.IsHipothetic).ToList();
 
             if (calculateFrom.Count() > 0)
             {
-                var average = (double)calculateFrom.Where(r => r.Value.HasValue).Where(r => r.Column.Weight != 0).Select(r => Enumerable.Repeat(r.Value.Value, r.Column.Weight)
+                var average = (double)calculateFrom.Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).Select(r => Enumerable.Repeat(r.ActualValue.Value, r.Column.Weight)
                 .ToList()).ToList().SelectMany(list => list).ToList().Average();
 
                 if (includeAddedGrades)
@@ -201,9 +201,9 @@ namespace VulcanForWindows.Classes
             if (!forceSlowMethod && (YearlyAverages.TryGetValue(GetYearlyAverageId(includeAddedGrades ? addedGrades : null), out var YearlyAveragesData)))
             {
                 var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
-                excludeGrades = excludeGrades.Where(r => r.Value.HasValue && r.Column.Weight != 0).ToArray();
+                excludeGrades = excludeGrades.Where(r => r.ActualValue.HasValue && r.Column.Weight != 0).ToArray();
                 foreach (var excludedGrade in excludeGrades)
-                    sum -= (double)excludedGrade.Value.Value * (double)excludedGrade.Column.Weight;
+                    sum -= (double)excludedGrade.ActualValue.Value * (double)excludedGrade.Column.Weight;
                 var weightSum = YearlyAveragesData.data.weightSum - excludeGrades.Select(r => r.Column.Weight).Sum();
 
                 var output = (sum / weightSum, YearlyAveragesData.data.count - excludeGrades.Length, weightSum);

@@ -54,7 +54,7 @@ namespace VulcanForWindows
 
         public async void GetEnvelope()
         {
-            env.Updated += Env_Updated;
+            env.OnLoadingOrUpdatingFinished += Env_Updated;
 
             await new LessonsService().GetLessonsForSchoolYear(new AccountRepository().GetActiveAccount(), env);
             LoadingBar.Visibility = Visibility.Collapsed;

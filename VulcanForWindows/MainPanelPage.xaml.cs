@@ -96,9 +96,9 @@ namespace VulcanForWindows
         }
         private async Task FetchGrades(Account acc)
         {
-            env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);
-            env.Updated += Env_Updated;
-            Env_Updated(null, null);
+            //env = await new GradesService().GetPeriodGrades(acc, acc.CurrentPeriod.Id);
+            //env.OnLoadingOrUpdatingFinished += Env_Updated;
+            //Env_Updated(null, null);
         }
 
         private async Task FetchTimetable(Account acc)
@@ -147,7 +147,7 @@ namespace VulcanForWindows
             OnPropertyChanged(nameof(PresentPercent));
             OnPropertyChanged(nameof(PresentPercentDisplay));
 
-            att.Updated += Att_Updated;
+            att.OnLoadingOrUpdatingFinished += Att_Updated;
             await new LessonsService().GetLessonsForRange(acc, DateTime.Now.AddDays(-14), DateTime.Now, att);
             Att_Updated(null, null);
         }

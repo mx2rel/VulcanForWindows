@@ -30,7 +30,7 @@ public class GradesService : UonetResourceProvider
         var v = new GradesResponseEnvelope(this, account, periodId, normalGradesResourceKey, behaviourGradesResourceKey);
 
 
-        v.Grades = new ObservableCollection<Grade>(await GradesRepository.GetGradesForPupilAsync(account.Id, account.Pupil.Id,
+        v.Grades = new ObservableCollection<Grade>(await GradesRepository.GetGradesForPupilAsync(account.Pupil.Id,
             periodId));
 
 
@@ -47,6 +47,26 @@ public class GradesService : UonetResourceProvider
             v.isLoaded = true;
         }
         return v;
+    }
+
+    public async Task<IEnumerable<Grade>> GetPeriodGradesV2(Account account, int periodId, bool forceSync = false)
+    {
+        var normalGradesResourceKey = GetGradesResourceKey(account, periodId);
+        var behaviourGradesResourceKey = GetBehaviourGradesResourceKey(account, periodId);
+
+        if (ShouldSync(normalGradesResourceKey) || ShouldSync(behaviourGradesResourceKey) || forceSync)
+        {
+            var onlineGrades = await FetchPeriodGradesAsync(account, periodId);
+
+            await GradesRepository.UpdatePupilGradesAsync(onlineGrades);
+
+            GradesService.SetJustSynced(normalGradesResourceKey);
+            GradesService.SetJustSynced(behaviourGradesResourceKey);
+            return onlineGrades;
+        }
+
+        return await GradesRepository.GetGradesForPupilAsync(account.Pupil.Id, periodId);
+
     }
 
     public async Task<IDictionary<Period, Grade[]>> FetchGradesFromAllPeriodsAsync(Account account)
@@ -144,9 +164,9 @@ public static class GradesRepository
 
     public static IDictionary<string, IEnumerable<Grade>> buffer = new Dictionary<string, IEnumerable<Grade>>();
 
-    public static async Task<IEnumerable<Grade>> GetGradesForPupilAsync(int accountId, int pupilId, int periodId)
+    public static async Task<IEnumerable<Grade>> GetGradesForPupilAsync(int pupilId, int periodId)
     {
-        string code = $"{accountId}.{pupilId}.{periodId}";
+        string code = $"{pupilId}.{periodId}";
 
         if (buffer.TryGetValue(code, out var d))
         {
@@ -154,7 +174,7 @@ public static class GradesRepository
         }
 
         var v = (await LiteDbManager.database.GetCollection<Grade>()
-                .FindAsync(g => g.PupilId == pupilId && g.AccountId == accountId && g.Column.PeriodId == periodId))
+                .FindAsync(g => g.PupilId == pupilId && g.Column.PeriodId == periodId))
             .OrderBy(g => g.Column.Subject.Name)
             .ThenBy(g => g.DateCreated);
 

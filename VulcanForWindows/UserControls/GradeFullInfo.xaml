@@ -50,7 +50,7 @@
                     <Run Text="Wpisano:"/>
                     <Run Text="{x:Bind Grade.DateCreated}"/>
                 </TextBlock>
-                <TextBlock Visibility="{x:Bind Grade.IsModified}" Foreground="LightGray">
+                <TextBlock Visibility="{x:Bind Grade.HasBeenModifiedByTeacher}" Foreground="LightGray">
                     <Run Text="Edytowano:"/>
                     <Run Text="{x:Bind Grade.DateModify}"/>
                 </TextBlock>

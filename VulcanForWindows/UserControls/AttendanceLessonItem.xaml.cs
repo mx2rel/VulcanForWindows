@@ -24,7 +24,7 @@ namespace VulcanForWindows.UserControls
     {
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(Lesson), typeof(AttendanceLessonItem), new PropertyMetadata(null, ValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(Lesson), typeof(AttendanceLessonItem), new PropertyMetadata(null, ValueChanged));
         public static readonly DependencyProperty DisplayDateProperty =
         DependencyProperty.Register("DisplayDate", typeof(bool), typeof(AttendanceLessonItem), new PropertyMetadata(null, DisplayDateChanged));
 

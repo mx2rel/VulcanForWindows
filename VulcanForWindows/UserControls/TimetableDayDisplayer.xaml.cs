@@ -24,10 +24,10 @@ namespace VulcanForWindows.UserControls
     {
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(TimetableDay), typeof(TimetableDayDisplayer), new PropertyMetadata(null, ValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(TimetableDay), typeof(TimetableDayDisplayer), new PropertyMetadata(null, ValueChanged));
 
         public static readonly DependencyProperty DisplayDateProperty =
-        DependencyProperty.Register("Value", typeof(TimetableDay), typeof(bool), new PropertyMetadata(null, DisplayDateChanged));
+        DependencyProperty.Register("VulcanValue", typeof(TimetableDay), typeof(bool), new PropertyMetadata(null, DisplayDateChanged));
 
 
         public TimetableDay Value
