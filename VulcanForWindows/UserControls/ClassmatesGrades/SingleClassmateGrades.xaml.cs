@@ -102,7 +102,7 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         {
             if (d is SingleClassmateGrades control && e.NewValue is Grade newValue)
             {
-                control.GenerateChart(newValue.Column.Id, newValue.Value);
+                control.GenerateChart(newValue.Column.Id, newValue.VulcanValue);
 
             }
         }
@@ -252,7 +252,7 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
 
         private void TryAgain(object sender, RoutedEventArgs e)
         {
-            GenerateChart(UserGrade.Column.Id, UserGrade.Value);
+            GenerateChart(UserGrade.Column.Id, UserGrade.VulcanValue);
         }
     }
 }

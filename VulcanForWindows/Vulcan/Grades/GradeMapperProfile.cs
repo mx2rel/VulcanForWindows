@@ -13,7 +13,8 @@ public class GradeMapperProfile : Profile
     public GradeMapperProfile()
     {
         CreateMap<GradePayload, Grade>()
-            .ForMember(g => g.CreatorName, cfg => cfg.MapFrom(src => src.Creator.DisplayName));
+            .ForMember(g => g.CreatorName, cfg => cfg.MapFrom(src => src.Creator.DisplayName))
+            .ForMember(g => g.VulcanValue, cfg => cfg.MapFrom(src => src.Value));
 
         CreateMap<Uonet.Api.Grades.Column, Column>();
 

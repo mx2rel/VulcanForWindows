@@ -110,11 +110,11 @@ namespace VulcanForWindows
         //        if (!dictionary.ContainsKey(periodId))
         //        {
         //            dictionary[periodId] = await getOperation(acc, periodId, false, false);
-        //            dictionary[periodId].Updated += (sender, args) => OnChange(); // Updated this line
+        //            dictionary[periodId].OnLoadingOrUpdatingFinished += (sender, args) => OnChange(); // OnLoadingOrUpdatingFinished this line
         //        }
         //        else
         //        {
-        //            // LoadingBar.Visibility = isLoading ? Visibility.Visible : Visibility.Collapsed;
+        //            // LoadingBar.Visibility = isLoadingOrUpdating ? Visibility.Visible : Visibility.Collapsed;
         //            // TODO: LOADING BAR
         //            // Debug.Write(JsonConvert.SerializeObject(cd));
         //        }

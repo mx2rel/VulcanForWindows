@@ -26,7 +26,7 @@ namespace VulcanForWindows
     {
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(OverridableRefValue<string>), typeof(UserControl1), new PropertyMetadata(null, OnValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(OverridableRefValue<string>), typeof(UserControl1), new PropertyMetadata(null, OnValueChanged));
         public static readonly DependencyProperty TitleProperty =
         DependencyProperty.Register("Title", typeof(string), typeof(UserControl1), new PropertyMetadata(null, TitleChanged));
 

@@ -35,6 +35,7 @@
     <Page Remove="Assets\BgWorker\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="FinalGradesAnalyzerPage.xaml.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +55,7 @@
     <None Remove="MainPanelPage.xaml" />
     <None Remove="MessagesPage.xaml" />
     <None Remove="NotesPage.xaml" />
+    <None Remove="Pages\GradesPage.xaml" />
     <None Remove="PreferencesViewer.xaml" />
     <None Remove="SettingsPage.xaml" />
     <None Remove="TimetablePage.xaml" />
@@ -134,9 +136,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="GradesPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Update="UserControls\LessonFlyoutInfoContent.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
@@ -162,7 +161,6 @@
   <ItemGroup>
     <Folder Include="Brand\" />
     <Folder Include="Brand\MSStoreAssets\" />
-    <Folder Include="Viewmodels\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\JustifyGranted.png" />
@@ -335,17 +333,25 @@
     <PRIResource Remove="Assets\BgWorker\**" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="FinalGradesAnalyzerPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="GradesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\GradesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="UserControls\AccountSelectorControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="PreferencesViewer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="FinalGradesAnalyzerPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

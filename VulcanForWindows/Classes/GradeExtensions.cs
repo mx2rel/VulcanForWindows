@@ -21,9 +21,9 @@ namespace VulcanForWindows.Classes
             decimal sum = 0;
             decimal weightSum = 0;
 
-            foreach (var grade in grades.Where(r => r.Value.HasValue))
+            foreach (var grade in grades.Where(r => r.VulcanValue.HasValue))
             {
-                sum += grade.Value.Value * grade.Column.Weight;
+                sum += grade.VulcanValue.Value * grade.Column.Weight;
                 weightSum += grade.Column.Weight;
             }
 

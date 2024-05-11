@@ -173,7 +173,7 @@ namespace VulcanForWindows.UserControls.GradesCharts
 
             //        SubjectGrades.Select(r => new LineSeries<DateTimePoint>
             //        {
-            //            Values = r.Grades.Where(g => g.Value.HasValue && g.Column.Weight > 0).Select(g => new DateTimePoint(g.DateModify.Date, (double)g.Value.GetValueOrDefault())),
+            //            Values = r.Grades.Where(g => g.VulcanValue.HasValue && g.Column.Weight > 0).Select(g => new DateTimePoint(g.DateModify.Date, (double)g.VulcanValue.GetValueOrDefault())),
             //            Fill= null,
             //            Stroke = null,
             //            Name = r.Subject.Name

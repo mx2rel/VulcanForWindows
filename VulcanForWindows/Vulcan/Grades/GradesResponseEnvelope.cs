@@ -14,7 +14,7 @@ namespace VulcanForWindows.Vulcan.Grades
     {
         public bool isLoading;
         public bool isLoaded;
-        public event EventHandler<IEnumerable<Grade>> Updated;
+        public event EventHandler<IEnumerable<Grade>> OnLoadingOrUpdatingFinished;
 
         private ObservableCollection<Grade> grades;
         public ObservableCollection<Grade> Grades
@@ -23,7 +23,7 @@ namespace VulcanForWindows.Vulcan.Grades
             set
             {
                 grades = value;
-                Updated?.Invoke(this, grades);
+                OnLoadingOrUpdatingFinished?.Invoke(this, grades);
             }
         }
         GradesService g; Account account; int periodId; string normalGradesResourceKey; string behaviourGradesResourceKey;
@@ -47,12 +47,12 @@ namespace VulcanForWindows.Vulcan.Grades
             GradesService.SetJustSynced(normalGradesResourceKey);
             GradesService.SetJustSynced(behaviourGradesResourceKey);
 
-            Grades.ReplaceAll( await GradesRepository.GetGradesForPupilAsync(account.Id, account.Pupil.Id,
+            Grades.ReplaceAll( await GradesRepository.GetGradesForPupilAsync(account.Pupil.Id,
                 periodId));
             isLoading = false;
 
             isLoaded = true;
-            Updated?.Invoke(this, grades);
+            OnLoadingOrUpdatingFinished?.Invoke(this, grades);
 
         }
     }

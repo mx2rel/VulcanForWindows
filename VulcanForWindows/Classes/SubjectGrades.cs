@@ -161,9 +161,9 @@ namespace VulcanForWindows.Classes
             if (!forceSlowMethod && (YearlyAverages.TryGetValue(YearlyAveragesEntryKey, out var YearlyAveragesData)))
             {
                 var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
-                excludeGrades = excludeGrades.Where(r => r.Value.HasValue && r.Column.Weight != 0).ToArray();
+                excludeGrades = excludeGrades.Where(r => r.VulcanValue.HasValue && r.Column.Weight != 0).ToArray();
                 foreach (var excludedGrade in excludeGrades)
-                    sum -= (double)excludedGrade.Value.Value * (double)excludedGrade.Column.Weight;
+                    sum -= (double)excludedGrade.VulcanValue.Value * (double)excludedGrade.Column.Weight;
                 var weightSum = YearlyAveragesData.data.weightSum - excludeGrades.Select(r => r.Column.Weight).Sum();
                 return (sum / weightSum, YearlyAveragesData.data.count - excludeGrades.Length, weightSum);
             }

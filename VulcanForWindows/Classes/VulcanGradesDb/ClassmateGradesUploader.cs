@@ -38,7 +38,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
             DbEntries = LiteDbManager.database.GetCollection<ClassmateGradesSyncObject>();
             var syncObjects = (await DbEntries.FindAllAsync()).GroupBy(r=>r.ColumnId)
                 .ToDictionary(r => r.First().ColumnId, r => r.First().Synced);
-            foreach (var grade in grades.Where(r => r.Column.Weight > 0).Where(r => r.Value.HasValue))
+            foreach (var grade in grades.Where(r => r.Column.Weight > 0).Where(r => r.ActualValue.HasValue))
             {
                 if (syncObjects.TryGetValue(grade.Column.Id, out var synced))
                 {
@@ -55,11 +55,13 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
         public async static void SyncGrade(Grade grade)
         {
-            //string url = $"http://localhost:3205/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";
+            //string url = $"http://localhost:3205/UploadGrade/{grade.Column.Id}/{grade.VulcanValue}/{userid}";
             var baseUrl = Properties.Resources.ClassmatesGradesServerUrl;
             Debug.WriteLine(baseUrl);
 
-            string url = $"{baseUrl}/UploadGrade/{grade.Column.Id}/{grade.Value}/{userid}";
+            if (grade.ActualValue == null || grade.Column.Weight == 0) return;
+
+            string url = $"{baseUrl}/UploadGrade/{grade.Column.Id}/{grade.ActualValue}/{userid}";
             var succes = await VisitUrlInBackground(url);
             if (succes) await DbEntries.InsertAsync(new ClassmateGradesSyncObject(grade.Column.Id, DateTime.Now));
         }

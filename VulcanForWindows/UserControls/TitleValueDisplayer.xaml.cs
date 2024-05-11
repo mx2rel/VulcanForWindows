@@ -86,7 +86,7 @@ namespace VulcanForWindows.UserControls
         DependencyProperty.Register("Title", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, TitleChanged));
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata("-", ValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata("-", ValueChanged));
 
         public static readonly DependencyProperty StartAsLoadingProperty =
         DependencyProperty.Register("StartAsLoading", typeof(bool), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(false, LoadingChanged));

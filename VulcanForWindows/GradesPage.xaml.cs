@@ -1,4 +1,4 @@
-﻿using LiveChartsCore;
+using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -91,7 +91,7 @@ namespace VulcanForWindows
             if (!envelopes.ContainsKey(selectedPeriodId))
             {
                 env = await new GradesService().GetPeriodGrades(acc, selectedPeriodId, false, false);
-                env.Updated += HandleGradesUpdated;
+                env.OnLoadingOrUpdatingFinished += HandleGradesUpdated;
                 if (env.isLoaded) HandleGradesUpdated(env, null);
             }
             else
@@ -108,7 +108,7 @@ namespace VulcanForWindows
         {
             if (buffer.TryGetValue(periodId, out var v))
             {
-                if (DateTime.Now - v.GeneratedAt <= new TimeSpan(0,10,0))
+                if (DateTime.Now - v.GeneratedAt <= new TimeSpan(0, 10, 0))
                     return v.grades;
             }
             buffer[periodId] = (
@@ -329,7 +329,7 @@ namespace VulcanForWindows
                     Name = "Hipotetyczna ocena",
                     Weight = weight
                 },
-                Value = grade,
+                VulcanValue = grade,
                 IsHipothetic = true
             });
             eSgu.DataContext = eSg;
