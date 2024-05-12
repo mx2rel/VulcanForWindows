@@ -1,0 +1,21 @@
+<UserControl
+    x:Class="VulcanForWindows.UserControls.AverageDisplayerSmall"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:converters="using:Converters"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:VisibilityConverter x:Key="VisibilityConverter"/>
+    </UserControl.Resources>
+    <StackPanel Margin="3" x:Name="spVertical" HorizontalAlignment="Stretch">
+        <TextBlock TextAlignment="Center" FontSize="18" FontWeight="Medium"
+                   Text="{x:Bind Value,Mode=OneWay}" 
+                       Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}}"/>
+        <TextBlock FontSize="12" TextWrapping="WrapWholeWords" Margin="0,0,0,0" TextAlignment="Center" 
+           Text="{x:Bind Title,Mode=OneWay}" />
+        
+    </StackPanel>
+</UserControl>

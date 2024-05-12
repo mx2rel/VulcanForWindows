@@ -25,7 +25,7 @@ namespace VulcanTest.Vulcan
         public static string folder = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "VulcanForWindows");
         private static string prefFolder = Path.Combine(folder, "Preferences");
         private static string GetCategoryPath(string category)
-            => Path.Combine(folder, $"{(category ?? "main")}.dat");
+            => Path.Combine(prefFolder, $"{(category ?? "main")}.dat");
 
         public static Windows.Storage.StorageFolder roamingFolder =
     Windows.Storage.ApplicationData.Current.RoamingFolder;
@@ -192,6 +192,14 @@ namespace VulcanTest.Vulcan
             if (collection.Count > 0)
                 collection.Clear();
 
+            foreach (var item in newItems.Where(r => r != null))
+            {
+                collection.Add(item);
+            }
+
+        }
+        public static void Add<T>(this ObservableCollection<T> collection, IEnumerable<T> newItems)
+        {
             foreach (var item in newItems.Where(r => r != null))
             {
                 collection.Add(item);

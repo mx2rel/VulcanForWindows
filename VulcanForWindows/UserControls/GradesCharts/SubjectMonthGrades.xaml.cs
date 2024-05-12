@@ -42,6 +42,42 @@ namespace VulcanForWindows.UserControls.GradesCharts
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+
+        public static readonly DependencyProperty ChartHeightProperty =
+            DependencyProperty.Register("ChartHeight", typeof(int), typeof(SubjectMonthGrades), new PropertyMetadata(400, ChartHeight_Changed));
+
+        public int ChartHeight
+        {
+            get => (int)GetValue(ChartHeightProperty);
+            set => SetValue(ChartHeightProperty, value);
+        }
+
+        private static void ChartHeight_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SubjectMonthGrades control && e.NewValue is int newValue)
+            {
+                control.OnPropertyChanged(nameof(ChartHeight));
+            }
+        }
+
+
+        public static readonly DependencyProperty ShowOptionsProperty =
+            DependencyProperty.Register("ShowOptions", typeof(bool), typeof(SubjectMonthGrades), new PropertyMetadata(true, ShowOptions_Changed));
+
+        public bool ShowOptions
+        {
+            get => (bool)GetValue(ShowOptionsProperty);
+            set => SetValue(ShowOptionsProperty, value);
+        }
+
+        private static void ShowOptions_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SubjectMonthGrades control && e.NewValue is bool newValue)
+            {
+                control.Controls.Visibility = newValue.ToVisibility();
+            }
+        }
+
         void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

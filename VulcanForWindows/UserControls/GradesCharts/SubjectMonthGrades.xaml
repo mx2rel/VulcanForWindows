@@ -10,7 +10,7 @@
     mc:Ignorable="d">
 
     <StackPanel DataContext="{x:Bind}">
-        <StackPanel Orientation="Horizontal" Spacing="5">
+        <StackPanel x:Name="Controls" Orientation="Horizontal" Spacing="5">
             <TextBlock Text="Oceny z" VerticalAlignment="Center"/>
             <ToggleButton x:Name="toggleButton" Content="Wszystkie przedmioty" Click="ToggleButton_Click" LostFocus="ToggleButton_LostFocus"/>
             
@@ -35,7 +35,7 @@
 
         <lvc:CartesianChart x:Name="chart"
         Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxes, Mode=OneWay}" 
-                            Height="400" ZoomMode="X" ZoomingSpeed="0.1"  TooltipFindingStrategy="CompareOnlyX"
+                            Height="{x:Bind ChartHeight, Mode=OneWay}" ZoomMode="X" ZoomingSpeed="0.1"  TooltipFindingStrategy="CompareOnlyX"
 >
         </lvc:CartesianChart>
     </StackPanel>

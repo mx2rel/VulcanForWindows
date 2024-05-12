@@ -24,7 +24,7 @@ namespace VulcanForWindows.Classes
     {
         public Subject subject { get; set; }
 
-        public int periodId => (grades.Count == 0) ? 0 : (grades.FirstOrDefault().Column.PeriodId);
+        public int periodId => (grades.Count == 0) ? 0 : ( grades.FirstOrDefault().Column.PeriodId);
 
         public ObservableCollection<Grade> grades
         {
@@ -216,7 +216,7 @@ namespace VulcanForWindows.Classes
             {
                 var excludeIds = excludeGrades.Select(r => r.Id).ToList();
                 if (_yearGrades == null) _yearGrades =
-                    (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccount(), periodId));
+                    (await (new GradesService()).FetchGradesFromLevelAsync(new AccountRepository().GetActiveAccount(), periodId));
 
                 var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r => r.Column.Subject.Id == subject.Id);
                 var yearlyGrades = gradesOnly;

@@ -1,4 +1,5 @@
-﻿using LiveChartsCore;
+﻿using DevExpress.Pdf.Drawing.DirectX;
+using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -89,7 +90,7 @@ namespace VulcanForWindows.UserControls.Widgets
         async void Load()
         {
             await FetchGrades(new AccountRepository().GetActiveAccount());
-            CalculateChart(res.SelectMany(r => r.Value).ToArray());
+            LoadChartData(res.SelectMany(r => r.Value).ToArray());
 
         }
         Grade[] thisPeriodGrades { get; set; }
@@ -100,7 +101,7 @@ namespace VulcanForWindows.UserControls.Widgets
             sg.ReplaceAll(SubjectGrades.CreateRecent(res.SelectMany(r => r.Value).ToArray()));
             OnPropertyChanged(nameof(thisPeriodGrades));
         }
-        DateTime GetWeekStartDate(DateTime date)
+        static DateTime GetWeekStartDate(DateTime date)
         {
             DayOfWeek firstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
             int diff = date.DayOfWeek - firstDayOfWeek;
@@ -108,8 +109,24 @@ namespace VulcanForWindows.UserControls.Widgets
                 diff += 7;
             return date.AddDays(-diff).Date;
         }
-        void CalculateChart(Grade[] g)
+        void LoadChartData(Grade[] g, DateTime? startDate = null)
         {
+            var v = CalculateChart(g, startDate);
+            Series = v.Series;
+            XAxes = v.XAxes;
+            OnPropertyChanged(nameof(Series));
+            OnPropertyChanged(nameof(XAxes));
+        }
+
+        public static (ISeries[] Series, List<Axis> XAxes) CalculateChart(Grade[] g, DateTime? startDate = null)
+        {
+            ISeries[] Series = new ISeries[0];
+
+            List<Axis> XAxes = new List<Axis>();
+
+            if (!startDate.HasValue)
+                startDate = GetWeekStartDate(DateTime.Now).AddDays(-7 * 6);
+
             (DateTime month, Grade[] grades)[] grouped =
             g.GroupBy(r => GetWeekStartDate(r.DateModify))
             .Select(group =>
@@ -132,13 +149,13 @@ namespace VulcanForWindows.UserControls.Widgets
                 var output = grouped[i].grades.CalculateAverageRaw();
                 sumOfWeights += output.weights;
                 sum += output.sum;
-                values.Add((grouped[i].month, Math.Round(sum / sumOfWeights,2)));
+                values.Add((grouped[i].month, Math.Round(sum / sumOfWeights, 2)));
             }
 
             Series = new ISeries[] {
                 new LineSeries<DateTimePoint>
                 {
-                    Values = values.Where(r => r.firstDayOfWeek >= GetWeekStartDate(DateTime.Now).AddDays(-7 * 6)).Select(r => new DateTimePoint(
+                    Values = values.Where(r => r.firstDayOfWeek >= startDate).Select(r => new DateTimePoint(
                         r.firstDayOfWeek, r.avg)).ToArray(),
                     Fill = new LinearGradientPaint(
                 new [] { new SKColor(0, 255, 40, 150), new SKColor(0, 255, 40, 0) },
@@ -146,13 +163,11 @@ namespace VulcanForWindows.UserControls.Widgets
                 new SKPoint(0.5f, 1)),
                     DataPadding = new LiveChartsCore.Drawing.LvcPoint(0, 1),
                     LineSmoothness = 1,
-                    Stroke = new SolidColorPaint(new SKColor(0,230,50)) { 
+                    Stroke = new SolidColorPaint(new SKColor(0,230,50)) {
                     StrokeThickness=3},
                     GeometryFill = new SolidColorPaint(new SKColor(255,255,255)),
                     GeometryStroke = new SolidColorPaint(new SKColor(0,230,50)){
                     StrokeThickness=3},
-                    
-                    
                 }
             };
 
@@ -163,8 +178,7 @@ namespace VulcanForWindows.UserControls.Widgets
 
             };
 
-            OnPropertyChanged(nameof(Series));
-            OnPropertyChanged(nameof(XAxes));
+            return (Series, XAxes);
         }
 
         private void flipView_SelectionChanged(object sender, SelectionChangedEventArgs e)

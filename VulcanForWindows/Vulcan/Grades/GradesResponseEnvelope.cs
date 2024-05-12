@@ -47,7 +47,7 @@ namespace VulcanForWindows.Vulcan.Grades
             GradesService.SetJustSynced(normalGradesResourceKey);
             GradesService.SetJustSynced(behaviourGradesResourceKey);
 
-            Grades.ReplaceAll( await GradesRepository.GetGradesForPupilAsync(account.Pupil.Id,
+            Grades.ReplaceAll( await GradesRepository.GetPeriodGradesForPupilAsync(account.Pupil.Id,
                 periodId));
             isLoading = false;
 

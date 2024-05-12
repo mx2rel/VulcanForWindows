@@ -46,16 +46,19 @@ namespace VulcanForWindows.UserControls
                 var iterateThrough = newValue.GetLatestGrades().Where(r => r.Column.Weight > 0).Where(r => r.VulcanValue.HasValue);
                 bool onlyNewOnes = iterateThrough.Where(r => r.IsRecent).Count() > 0;
                 var listOfGrades = new List<Grade>();
-                foreach(var grade in iterateThrough.Where(r=>(r.IsRecent || !onlyNewOnes)))
+                foreach (var grade in iterateThrough.Where(r => (r.IsRecent || !onlyNewOnes)))
                 {
-                    for (int i = 0; i <= Math.Max(Math.Pow(grade.Column.Weight, 1d / 3d),1); i++)
+                    for (int i = 0; i <= Math.Max(Math.Pow(grade.Column.Weight, 1d / 3d), 1); i++)
                         listOfGrades.Add(grade);
                 }
-                Random random = new Random();
-                int randomIndex = random.Next(0, listOfGrades.Count);
+                if (listOfGrades.Count > 0)
+                {
+                    Random random = new Random();
+                    int randomIndex = random.Next(0, listOfGrades.Count);
 
-                var selected = listOfGrades[randomIndex];
-                control.Grade = selected;
+                    var selected = listOfGrades[randomIndex];
+                    control.Grade = selected;
+                }
             }
         }
 
