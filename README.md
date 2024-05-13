@@ -1,9 +1,9 @@
-# Vulcan dla Windows - Klient Vulcan 💻
+# E-Dziennik Vulcanoid - klient Dziennika Vulcan 💻
 
 > [!Important]
-> Vulcan Dla Windows to klient, który korzysta z API dziennika Vulcan - nie jest oficjalnym tworem żadnej firmy/organizacji bezpośrednio związanej z rozwijaniem i utrzymywaniem dziennika.
+> Vulcanoid to klient, który korzysta z API dziennika Vulcan - nie jest oficjalnym tworem żadnej firmy/organizacji bezpośrednio związanej z rozwijaniem i utrzymywaniem dziennika.
 > 
-**Vulcan dla Windows** to klient dziennika Vulcan dla systemu Windows - alternatywa dla strony internetowej. Posiada następujące funkcje:
+**Vulcanoid** to klient dziennika Vulcan dla systemu Windows - alternatywa dla strony internetowej. Posiada następujące funkcje:
 + Oceny 📊
 	+ Sprawdzaj oceny cząstkowe
 	+ Sprawdzaj oceny końcowe
