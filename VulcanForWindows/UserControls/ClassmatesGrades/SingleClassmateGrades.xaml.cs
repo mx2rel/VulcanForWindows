@@ -32,6 +32,24 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
     {
 
 
+        public static readonly DependencyProperty LoadOnSetProperty =
+            DependencyProperty.Register("LoadOnSet", typeof(bool), typeof(SingleClassmateGrades), new PropertyMetadata(true, LoadOnSet_Changed));
+
+        public bool LoadOnSet
+        {
+            get => (bool)GetValue(LoadOnSetProperty);
+            set => SetValue(LoadOnSetProperty, value);
+        }
+
+        private static void LoadOnSet_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SingleClassmateGrades control && e.NewValue is bool newValue)
+            {
+                // TODO: Implement your logic here
+            }
+        }
+
+
         public static readonly DependencyProperty IsCompactProperty =
             DependencyProperty.Register("IsCompact", typeof(bool), typeof(SingleClassmateGrades), new PropertyMetadata(false, IsCompact_Changed));
 
@@ -102,7 +120,8 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         {
             if (d is SingleClassmateGrades control && e.NewValue is Grade newValue)
             {
-                control.GenerateChart(newValue.Column.Id, newValue.VulcanValue);
+                if (control.LoadOnSet)
+                    control.GenerateChart(newValue.Column.Id, newValue.ActualValue);
 
             }
         }
@@ -131,7 +150,7 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         int MinGradesAvaibleToShowChart { get; set; } = 4;
         public async void GenerateChart(int columnId, decimal? userGrade)
         {
-            GenerateChart(columnId, userGrade.HasValue? (double)userGrade.Value : -1);
+            GenerateChart(columnId, userGrade.HasValue ? (double)userGrade.Value : -1);
         }
 
         public async void GenerateChart(int columnId, double userGrade = 0)

@@ -10,6 +10,7 @@
     xmlns:controls="using:VulcanForWindows.UserControls"
     xmlns:controlsGrades="using:VulcanForWindows.UserControls.Grades"
     xmlns:classes="using:VulcanForWindows.Classes"
+    xmlns:grade="using:Vulcanova.Features.Grades"
     mc:Ignorable="d">
     <Page.Resources>
     </Page.Resources>
@@ -21,14 +22,26 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Stretch" IsIndeterminate="True" Visibility="Visible"/>
-        <ScrollView x:Name="RecentGrades">
-            <ItemsView Margin="0,0,0,15">
-                <ItemsView.Layout>
+
+        <StackPanel Spacing="3">
+            <TextBlock Text="Ostatnie oceny" FontWeight="SemiBold" FontSize="18"/>
+            <ScrollView x:Name="RecentGradesDisplayer">
+            <ItemsRepeater Margin="0,0,0,15" ItemsSource="{x:Bind RecentGrades}">
+                <ItemsRepeater.Layout>
                     <StackLayout Spacing="5" Orientation="Horizontal"/>
-                </ItemsView.Layout>
+                </ItemsRepeater.Layout>
                 <!--<StackPanel CornerRadius="5" Background="{ThemeResource CardBackgroundFillColorDefault}" Width="300" Height="130"/>-->
-            </ItemsView>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="grade:Grade">
+                        <Grid Background="{ThemeResource CardBackgroundFillColorDefault}" CornerRadius="5"> 
+                            <controls:RecentGrade Grade="{x:Bind}" Width="350" DisplayClassmatesGrades="False"/>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
         </ScrollView>
+        </StackPanel>
 
         <FlipView x:Name="yearSelector" Grid.Row="1" HorizontalAlignment="Stretch" 
                   Background="Transparent" VerticalAlignment="Stretch" 

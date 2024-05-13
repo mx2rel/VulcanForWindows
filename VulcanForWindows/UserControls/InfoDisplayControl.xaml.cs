@@ -10,11 +10,13 @@ using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using WinRT;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -185,7 +187,17 @@ namespace VulcanForWindows.UserControls
         {
             if (d is InfoDisplayControl control && e.NewValue is Orientation newValue)
             {
-                control.MainSp.Orientation = newValue;
+                Debug.WriteLine("orientation changed");
+                if(newValue== Orientation.Horizontal)
+                {
+                    Grid.SetRow(control.MainSp.Children[1] as FrameworkElement, 0);
+                    Grid.SetColumn(control.MainSp.Children[1] as FrameworkElement, 1);
+                }
+                else
+                {
+                    Grid.SetRow(control.MainSp.Children[1] as FrameworkElement, 1);
+                    Grid.SetColumn(control.MainSp.Children[1] as FrameworkElement, 0);
+                }
             }
         }
 

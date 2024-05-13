@@ -44,6 +44,8 @@
         <lvc:CartesianChart x:Name="chart" 
         Series="{Binding Series, Mode=OneWay}" XAxes="{Binding XAxes, Mode=OneWay}">
         </lvc:CartesianChart>
-        <controls:RecentGrade GradesPool="{x:Bind thisPeriodGrades, Mode=OneWay}"/>
+        <StackPanel>
+            <controls:RecentGrade GradesPool="{x:Bind thisPeriodGrades, Mode=OneWay}"/>
+        </StackPanel>
     </FlipView>
 </UserControl>

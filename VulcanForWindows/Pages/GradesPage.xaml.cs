@@ -51,6 +51,7 @@ namespace VulcanForWindows.Pages
             => AllPeriods[yearSelector.SelectedIndex];
 
         public ObservableCollection<SubjectGrades> SubjectGrades { get; set; } = new ObservableCollection<SubjectGrades>();
+        public ObservableCollection<Grade> RecentGrades { get; set; } = new ObservableCollection<Grade>();
 
         public GradesPage()
         {
@@ -77,16 +78,24 @@ namespace VulcanForWindows.Pages
             ProgressBar.Visibility = Visibility.Visible;
             if (PeriodEnvelopes.TryGetValue(SelectedPeriod.Id, out var v))
             {
-                //await v.Sync();
-                SubjectGrades.ReplaceAll(GradesHelper.GenerateSubjectGrades(v.Entries.ToArray()));
+                await v.Sync();
+                GradesLoaded(v.Entries.ToArray());
+
             }
             else
             {
-                PeriodEnvelopes[SelectedPeriod.Id] = await new GradesService().GetPeriodGradesV3(new AccountRepository().GetActiveAccount(), SelectedPeriod.Id, waitForSync: true, forceSync:true);
+                PeriodEnvelopes[SelectedPeriod.Id] = await new GradesService().GetPeriodGradesV3(new AccountRepository().GetActiveAccount(), SelectedPeriod.Id, waitForSync: true, forceSync: true);
                 IEnumerable<Grade> d = PeriodEnvelopes[SelectedPeriod.Id].Entries.ToArray();
-                SubjectGrades.ReplaceAll(GradesHelper.GenerateSubjectGrades(d));
+                GradesLoaded(d);
             }
             ProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        public void GradesLoaded(IEnumerable<Grade> grades)
+        {
+            SubjectGrades.ReplaceAll(GradesHelper.GenerateSubjectGrades(grades));
+            RecentGrades.ReplaceAll(grades.Where(r => (r.HasBeenModifiedByTeacher ? r.DateModify : r.DateCreated) > DateTime.Now.AddDays(-14))
+                .OrderByDescending(r => (r.HasBeenModifiedByTeacher ? r.DateModify : r.DateCreated)));
         }
 
     }

@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using VulcanForWindows.Classes;
+using VulcanForWindows.UserControls.ClassmatesGrades;
 using Vulcanova.Features.Grades;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -63,6 +64,28 @@ namespace VulcanForWindows.UserControls
         }
 
 
+        public static readonly DependencyProperty DisplayClassmatesGradesProperty =
+            DependencyProperty.Register("DisplayClassmatesGrades", typeof(bool), typeof(RecentGrade), new PropertyMetadata(true, DisplayClassmatesGrades_Changed));
+
+        public bool DisplayClassmatesGrades
+        {   
+            get => (bool)GetValue(DisplayClassmatesGradesProperty);
+            set => SetValue(DisplayClassmatesGradesProperty, value);
+        }
+
+        private static void DisplayClassmatesGrades_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RecentGrade control && e.NewValue is bool newValue)
+            {
+                //control.ClassmateGradesContainer.Visibility = newValue ? Visibility.Visible : Visibility.Collapsed;
+                //if (newValue == false)
+                //{
+                //    (control.ClassmateGradesContainer.Parent as Grid).Children.Remove(control.ClassmateGradesContainer); //TODO: MAKE IT RIGHT WAY, SOMETHING CRASHES APP WHEN ACTUALLY HIDDEN, NOT REMOVED
+                //}
+            }
+        }
+
+
 
         public static readonly DependencyProperty GradeProperty =
             DependencyProperty.Register("Grade", typeof(Grade), typeof(RecentGrade), new PropertyMetadata(null, Grade_Changed));
@@ -73,7 +96,7 @@ namespace VulcanForWindows.UserControls
             set => SetValue(GradeProperty, value);
         }
 
-        public bool isGradeNull { get => Grade == null;  }
+        public bool isGradeNull { get => Grade == null; }
 
         private static void Grade_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -81,7 +104,21 @@ namespace VulcanForWindows.UserControls
             {
                 control.OnPropertyChanged(nameof(Grade));
                 control.OnPropertyChanged(nameof(isGradeNull));
+                if (control.DisplayClassmatesGrades)
+                    control.SpawnClassmateGrades();
             }
+        }
+
+        void SpawnClassmateGrades()
+        {
+            if (!DisplayClassmatesGrades) return;
+
+            var c = new SingleClassmateGrades();
+            c.ErrorMessageOrientation = Orientation.Horizontal;
+            c.ColumnId = Grade.Column.Id;
+            c.UserGrade = Grade;
+            c.IsCompact = true;
+            ClassmateGradesContainer.Children.Add(c);
         }
 
         public RecentGrade()

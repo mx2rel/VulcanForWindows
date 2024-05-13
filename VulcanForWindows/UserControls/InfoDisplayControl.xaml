@@ -19,9 +19,18 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="MainSp" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,0" Spacing="10">
+        <Grid x:Name="MainSp" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="0,0,0,0" ColumnSpacing="10" RowSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            
             <Image x:Name="MoodImage" MaxWidth="100" Margin="10"/>
-            <StackPanel VerticalAlignment="Center">
+            <StackPanel VerticalAlignment="Center" Grid.Row="1">
                 <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
                     <TextBlock x:Name="HeaderText" Text="Header" FontWeight="SemiBold" FontSize="24" TextAlignment="Center" TextWrapping="WrapWholeWords"/>
 
@@ -38,6 +47,6 @@
     Target="{x:Bind InfoIcon}">
                 </TeachingTip>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
