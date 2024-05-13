@@ -1,4 +1,4 @@
-# E-Dziennik Vulcanoid - klient Dziennika Vulcan 💻
+# <img src="https://github.com/marciweleq/VulcanForWindows/blob/master/VulcanForWindows/Assets/Pupil/Happy.png" width="25" height="25"/> E-Dziennik Vulcanoid - klient Dziennika Vulcan 💻
 
 > [!Important]
 > Vulcanoid to klient, który korzysta z API dziennika Vulcan - nie jest oficjalnym tworem żadnej firmy/organizacji bezpośrednio związanej z rozwijaniem i utrzymywaniem dziennika.
@@ -34,5 +34,5 @@ Dane *Oceny na tle klasy* przechowywane są na naszym serwerze. Przechowujemy: I
 ## Podziękowania 🙏
 Serdeczne podziękowania dla *v0idzz* oraz *MRmlik12* za [UONET+ Vulcan API](https://github.com/Vulcanova/Vulcanova.Uonet/tree/3795b85b29a838624622eaf9cb97bb0b09b73dcb).
 
-## Błędy i sugestie 🐞
+## <img src="https://github.com/marciweleq/VulcanForWindows/blob/master/VulcanForWindows/Assets/Pupil/Sad.png" width="20" height="20"/> Błędy i sugestie 🐞
 W przypadku znalezienia błędu proszę o zgłoszenie go w zakładce [Issues](https://github.com/marciweleq/VulcanForWindows/issues).
