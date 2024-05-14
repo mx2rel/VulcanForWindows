@@ -35,7 +35,7 @@ Dane *Oceny na tle klasy* przechowywane są na naszym serwerze. Przechowujemy: I
 *Roadmap będzie dostępny wkrótce*
 
 ## Podziękowania 🙏
-Serdeczne podziękowania dla *v0idzz* oraz *MRmlik12* za [UONET+ Vulcan API](https://github.com/Vulcanova/Vulcanova.Uonet/tree/3795b85b29a838624622eaf9cb97bb0b09b73dcb).
+Serdeczne podziękowania dla *v0idzz*, *MRmlik12* oraz *kapi2289* za [UONET+ Vulcan API](https://github.com/Vulcanova/Vulcanova.Uonet/tree/3795b85b29a838624622eaf9cb97bb0b09b73dcb).
 
 ## <img src="https://github.com/marciweleq/VulcanForWindows/blob/master/VulcanForWindows/Assets/Pupil/Sad.png" width="20" height="20"/> Błędy i sugestie 🐞
 W przypadku znalezienia błędu proszę o zgłoszenie go w zakładce [Issues](https://github.com/marciweleq/VulcanForWindows/issues).
