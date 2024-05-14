@@ -35,6 +35,7 @@
     <Page Remove="Assets\BgWorker\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="BlankPage1.xaml.cs" />
     <Compile Remove="FinalGradesAnalyzerPage.xaml.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
