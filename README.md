@@ -2,7 +2,10 @@
 
 > [!Important]
 > Vulcanoid to klient, który korzysta z API dziennika Vulcan - nie jest oficjalnym tworem żadnej firmy/organizacji bezpośrednio związanej z rozwijaniem i utrzymywaniem dziennika.
-> 
+
+[!Important]
+> Vulcanoid jest dalej w wersji beta. Mogą występować błędy, a niektóre funkcje mogą być niedokończone.
+
 **Vulcanoid** to klient dziennika Vulcan dla systemu Windows - alternatywa dla strony internetowej. Posiada następujące funkcje:
 + Oceny 📊
 	+ Sprawdzaj oceny cząstkowe
