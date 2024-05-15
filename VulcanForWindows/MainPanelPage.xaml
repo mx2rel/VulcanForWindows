@@ -20,7 +20,7 @@
         <converters:VisibilityConverter x:Key="VisibilityConverter" />
         <converters:ListToVisibility x:Key="ListToVisibility" />
         <Style TargetType="Grid" x:Key="Panel">
-            <Setter Property="Background" Value="{StaticResource AcrylicBackgroundFillColorBaseBrush}"/>
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Margin" Value="5"/>
@@ -57,7 +57,13 @@
             </Rectangle.Fill>
         </Rectangle>-->
         </Grid>
+
         <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" MaxHeight="600" Margin="10">
+            <Grid Style="{StaticResource Panel}" x:Name="AnnouncementsPanel" Padding="0"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
+                <widgets:AnnouncementsWidget/>
+            </Grid>
+
             <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
               VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
                 <Grid.RowDefinitions>
