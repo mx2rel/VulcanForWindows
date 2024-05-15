@@ -1,0 +1,3 @@
+[submodule "VulcanForWindows/VulcanoidServerClient"]
+	path = VulcanForWindows/VulcanoidServerClient
+	url = https://github.com/marciweleq/VulcanoidServerClient
