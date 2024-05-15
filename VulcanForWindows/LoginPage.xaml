@@ -43,7 +43,7 @@
                         <InfoBar x:Name="errorBar"
     IsOpen="False"
     Severity="Error"
-    Message="Nastąpił błąd przy logowaniu."/>
+    Title="Nastąpił błąd przy logowaniu."/>
                         <Button Style="{StaticResource AccentButtonStyle}" Content="Zaloguj" HorizontalAlignment="Stretch" Click="Button_Click"/>
                     </StackPanel>
                 </StackPanel>
