@@ -60,7 +60,10 @@ public class AuthenticationService : IAuthenticationService
 
         IMapper mapper = mapperConfig.CreateMapper();
 
-        var accounts = registerHebeResponse.Envelope.Select(mapper.Map<Account>).ToArray();
+        var accounts = registerHebeResponse.Envelope
+            .Where(a => a.Login != null && a.Periods is { Length: > 0 })
+            .Select(mapper.Map<Account>)
+            .ToArray();
 
         foreach (var account in accounts)
         {
