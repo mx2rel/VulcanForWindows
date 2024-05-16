@@ -41,7 +41,7 @@
             <Setter Property="Width" Value="22"/>
         </Style>
     </Page.Resources>
-    <Grid>
+    <Grid x:Name="rootGrid">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

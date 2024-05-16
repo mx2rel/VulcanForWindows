@@ -65,6 +65,7 @@ namespace VulcanForWindows
             messages = new ObservableCollection<MessageViewModel>();
             Fetch();
             this.InitializeComponent();
+            AnnouncementsManager.Update(rootGrid as FrameworkElement);
         }
 
         public void Fetch()

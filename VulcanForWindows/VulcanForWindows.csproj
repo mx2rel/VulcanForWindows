@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Remove="BlankPage1.xaml.cs" />
     <Compile Remove="FinalGradesAnalyzerPage.xaml.cs" />
+    <Compile Remove="VulcanoidServerClient\VulcanoidServerClient\Program.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,12 +64,14 @@
     <None Remove="UserControls\AccountSelectorControl.xaml" />
     <None Remove="UserControls\AttachmentsIndicator.xaml" />
     <None Remove="UserControls\AttendanceLessonItem.xaml" />
+    <None Remove="UserControls\AverageDisplayerSmall.xaml" />
     <None Remove="UserControls\ClassmatesGrades\SingleClassmateGrades.xaml" />
     <None Remove="UserControls\Deadlinables\DeadlineablesWidget.xaml" />
     <None Remove="UserControls\Deadlinables\ExamPopup.xaml" />
     <None Remove="UserControls\DeadlineDisplayer.xaml" />
     <None Remove="UserControls\GradeFullInfo.xaml" />
     <None Remove="UserControls\GradesCharts\SubjectMonthGrades.xaml" />
+    <None Remove="UserControls\Grades\SubjectGradesExpander.xaml" />
     <None Remove="UserControls\InfoDisplayControl.xaml" />
     <None Remove="UserControls\JustificationRequestStatus.xaml" />
     <None Remove="UserControls\LessonFlyoutInfoContent.xaml" />
@@ -83,10 +86,10 @@
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
     <None Remove="UserControls\TimetableDayDisplayer.xaml" />
     <None Remove="UserControls\TimetableItem.xaml" />
+    <None Remove="UserControls\Widgets\AnnouncementsWidget.xaml" />
     <None Remove="UserControls\Widgets\AttendanceWidget.xaml" />
     <None Remove="UserControls\Widgets\GradesWidget.xaml" />
     <None Remove="UserControls\YearAttendanceControl.xaml" />
-    <None Remove="Vulcan\BlankPage1.xaml" />
     <None Remove="Vulcan\GradesChartsPage.xaml" />
   </ItemGroup>
 
@@ -123,11 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="GradesSummaryPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -256,6 +254,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="UserControls\Widgets\AnnouncementsWidget.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="UserControls\Deadlinables\DeadlineablesWidget.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,11 +314,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Vulcan\BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="AttendanceReportPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -334,6 +332,7 @@
     <PRIResource Remove="Assets\BgWorker\**" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="BlankPage1.xaml" />
     <Page Remove="FinalGradesAnalyzerPage.xaml" />
   </ItemGroup>
   <ItemGroup>

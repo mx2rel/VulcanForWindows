@@ -152,11 +152,10 @@ namespace VulcanTest.Vulcan
 
     public static class AppWide
     {
-        public static string AppVersion => string.Format("{0}.{1}.{2}.{3}",
+        public static string AppVersion => string.Format("{0}.{1}.{2}",
                     Package.Current.Id.Version.Major,
                     Package.Current.Id.Version.Minor,
-                    Package.Current.Id.Version.Build,
-                    Package.Current.Id.Version.Revision);
+                    Package.Current.Id.Version.Build);
     }
 
     public class Preference
