@@ -13,7 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VulcanForWindows.Classes.Preferences;
+using VulcanForWindows.Preferences;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -30,7 +30,7 @@ namespace VulcanForWindows.UserControls.Settings
 
         public ReminderSettings()
         {
-            Entries.ReplaceAll(Preferences.Get<ReminderSettingEntry[]>("ReminderSettings", new ReminderSettingEntry[]
+            Entries.ReplaceAll(PreferencesManager.Get<ReminderSettingEntry[]>("ReminderSettings", new ReminderSettingEntry[]
             {
                 new ReminderSettingEntry(new TimeSpan(16,0,0), 1),
                 new ReminderSettingEntry(new TimeSpan(18,0,0), 3),
@@ -41,7 +41,7 @@ namespace VulcanForWindows.UserControls.Settings
 
         public void Save()
         {
-            Preferences.Set<ReminderSettingEntry[]>("ReminderSettings", Entries.OrderBy(r=>r.daysPrior + r.hour.TotalDays).ToArray());
+            PreferencesManager.Set<ReminderSettingEntry[]>("ReminderSettings", Entries.OrderBy(r=>r.daysPrior + r.hour.TotalDays).ToArray());
         }
 
         private void NewEntry(object sender, RoutedEventArgs e)

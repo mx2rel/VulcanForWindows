@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VulcanForWindows.Preferences;
 
-namespace VulcanForWindows
+namespace VulcanForWindows.Classes
 {
     public static class LiteDbManager
     {

@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VulcanForWindows.Classes.Preferences;
+using VulcanForWindows.Preferences;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -29,14 +29,14 @@ namespace VulcanForWindows
 
         public void Clear()
         {
-            Classes.Preferences.Preferences.Clear();
+            VulcanForWindows.Preferences.PreferencesManager.Clear();
         }
 
         public ObservableCollection<Preference> Preferences { get; set; } = new ObservableCollection<Preference>();
 
         public PreferencesViewer()
         {
-            Preferences.ReplaceAll(Classes.Preferences.Preferences.GetAllData().ToPreferences());
+            Preferences.ReplaceAll(VulcanForWindows.Preferences.PreferencesManager.GetAllData().ToPreferences());
 
             this.InitializeComponent();
         }

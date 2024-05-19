@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Preferences;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Grades;
@@ -19,23 +20,23 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
         public static DateTime GetGeneralLastSent(int PeriodId)
         {
-            return Preferences.Get<DateTime>($"LastSync_ClassmatesGrades_{PeriodId}", DateTime.MinValue);
+            return PreferencesManager.Get<DateTime>($"LastSync_ClassmatesGrades_{PeriodId}", DateTime.MinValue);
         }
 
         public static void SetGeneralJustSynced(int PeriodId)
         {
-            Preferences.Set<DateTime>($"LastSync_ClassmatesGrades_{PeriodId}", DateTime.Now);
+            PreferencesManager.Set<DateTime>($"LastSync_ClassmatesGrades_{PeriodId}", DateTime.Now);
         }
 
 
         public static DateTime GetGradeLastSent(int GradeId)
         {
-            return Preferences.Get<DateTime>($"LastSync_ClassmatesGrades_Grade_Sent_{GradeId}", DateTime.MinValue);
+            return PreferencesManager.Get<DateTime>($"LastSync_ClassmatesGrades_Grade_Sent_{GradeId}", DateTime.MinValue);
         }
 
         public static void SetGradeJustSent(int GradeId)
         {
-            Preferences.Set<DateTime>($"LastSync_ClassmatesGrades_Grade_Sent_{GradeId}", DateTime.Now);
+            PreferencesManager.Set<DateTime>($"LastSync_ClassmatesGrades_Grade_Sent_{GradeId}", DateTime.Now);
         }
 
         public async static void UpsyncGrades(Grade[] grades, int PeriodId)

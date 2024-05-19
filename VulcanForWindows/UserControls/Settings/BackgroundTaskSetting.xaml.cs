@@ -12,7 +12,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VulcanForWindows.Classes.Preferences;
+using VulcanForWindows.Preferences;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -57,7 +57,7 @@ namespace VulcanForWindows.UserControls.Settings
             if (d is BackgroundTaskSetting control && e.NewValue is string newValue)
             {
                 control.isDuringSetup = true;
-                var value = Preferences.Get<int>(newValue, 10);
+                var value = PreferencesManager.Get<int>(newValue, 10);
                 control.numberbox.Value = (value != -1) ? value : 10;
                 control.toggle.IsOn = value != -1;
                 control.numberbox.IsEnabled = value != -1;
@@ -107,7 +107,7 @@ namespace VulcanForWindows.UserControls.Settings
             if (isDuringSetup) return;
             if (numberbox.Value == double.NaN || numberbox.Value == Math.Round( double.MinValue)) numberbox.Value = 10;
             var newValue = (int)((toggle.IsOn) ? (numberbox.Value) : -1);
-            Preferences.Set<int>(PreferencesName, newValue);
+            PreferencesManager.Set<int>(PreferencesName, newValue);
 
             Sync(newValue);
         }
