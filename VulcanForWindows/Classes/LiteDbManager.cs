@@ -10,6 +10,6 @@ namespace VulcanForWindows
 {
     public static class LiteDbManager
     {
-        public static LiteDatabaseAsync database = new LiteDatabaseAsync($"Filename={Path.Combine(Preferences.Preferences.folder, ("main.db"))};Connection=shared;");
+        public static LiteDatabaseAsync database = new LiteDatabaseAsync($"Filename={Path.Combine(Preferences.PreferencesManager.folder, ("main.db"))};Connection=shared;");
     }
 }

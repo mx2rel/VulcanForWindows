@@ -19,19 +19,19 @@ namespace VulcanTest.Vulcan.Settings
 
         public ModifierSettings(string key, decimal defaultValue)
         {
-            //SelectedValue = decimal.Parse(Preferences.Get(key, defaultValue.ToString(CultureInfo.InvariantCulture)),
+            //SelectedValue = decimal.Parse(PreferencesManager.Get(key, defaultValue.ToString(CultureInfo.InvariantCulture)),
             //    CultureInfo.InvariantCulture);
 
-            //UsesCustomValue = Preferences.Get($"{key}IsCustom", false);
+            //UsesCustomValue = PreferencesManager.Get($"{key}IsCustom", false);
 
             //this.WhenAnyValue(v => v.SelectedValue)
             //    .Subscribe(value
-            //        => Preferences.Set(key, value.ToString(CultureInfo.InvariantCulture)));
+            //        => PreferencesManager.Set(key, value.ToString(CultureInfo.InvariantCulture)));
 
             //this.WhenAnyValue(vm => vm.UsesCustomValue)
             //    .Subscribe(value =>
             //    {
-            //        Preferences.Set($"{key}IsCustom", value);
+            //        PreferencesManager.Set($"{key}IsCustom", value);
             //    });
 
             //TODO: SAVE

@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Microsoft.UI.Xaml.Media.Imaging;
 using VulcanoidServerClient;
 using MarkdownToWinUi3.MdToWinUi;
+using VulcanForWindows.Preferences;
 
 namespace VulcanForWindows.Classes
 {
@@ -28,7 +29,7 @@ namespace VulcanForWindows.Classes
         public async static void DisplayNewPopups(IEnumerable<Announcement> relevantAnnouncements,FrameworkElement root)
         {
             await Task.Delay(1000);
-            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r=>!r.PopupOnlyOnce || Preferences.Get<bool>("announcements", $"{r.ID}_viewed", false) == false).ToList();
+            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r=>!r.PopupOnlyOnce || PreferencesManager.Get<bool>("announcements", $"{r.ID}_viewed", false) == false).ToList();
 
             announcementsToShow = announcementsToShow
                 .GroupBy(r => r.Priority).OrderByDescending(r => r.Key).Select(r => r.OrderBy(r => r.SentOn)).SelectMany(r => r).ToList();
@@ -47,7 +48,7 @@ namespace VulcanForWindows.Classes
                         await lPrev.ShowAsync();
 
                         if(lAnn.PopupOnlyOnce)
-                            Preferences.Set<bool>("announcements", $"{lAnn.ID}_viewed", true);
+                            PreferencesManager.Set<bool>("announcements", $"{lAnn.ID}_viewed", true);
                     };
 
                 prev = dialog;
