@@ -40,7 +40,6 @@ namespace VulcanForWindows.UserControls.Widgets
         {
             var all = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
             all = all.Where(r => r.Type == VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Announcement).ToArray();
-            Debug.WriteLine(JsonConvert.SerializeObject(all));
             Announcements = new ObservableCollection<Announcement>(all);
             if (Announcements.Count == 0)
             {
