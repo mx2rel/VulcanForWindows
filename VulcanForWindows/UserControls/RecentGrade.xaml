@@ -45,7 +45,7 @@
                     <Run Text="Waga:"/>
                     <Run Text="{x:Bind Grade.Column.Weight}"/>
                     </TextBlock>
-                    <TextBlock Visibility="{x:Bind Grade.IsModified}" Foreground="LightGray">
+                    <TextBlock Visibility="{x:Bind Grade.HasBeenModifiedByTeacher}" Foreground="LightGray">
                     <Run Text="Edytowano:"/>
                     <Run Text="{x:Bind Grade.DateModify}"/>
                     </TextBlock>

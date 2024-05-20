@@ -15,21 +15,17 @@ namespace VulcanForWindows.Vulcan
 {
     public class NewResponseEnvelope<T> : IResponseEnvelope<T>, INotifyPropertyChanged
     {
-        public bool isLoading { get; set; }
-        public bool isLoaded
-        {
-            get => !isLoading;
-            set => isLoaded = !value;
-        }
+        public bool isLoadingOrUpdating { get; set; }
+        public bool isInitiallyLoaded { get; set; }
 
         public void SendUpdate()
         {
-            Updated?.Invoke(this, entries);
-            OnPropertyChanged(nameof(isLoaded));
-            OnPropertyChanged(nameof(isLoading));
+            OnLoadingOrUpdatingFinished?.Invoke(this, entries);
+            OnPropertyChanged(nameof(isInitiallyLoaded));
+            OnPropertyChanged(nameof(isLoadingOrUpdating));
         }
 
-        public event EventHandler<IEnumerable<T>> Updated;
+        public event EventHandler<IEnumerable<T>> OnLoadingOrUpdatingFinished;
 
         public ObservableCollection<T> entries;
 
@@ -39,7 +35,7 @@ namespace VulcanForWindows.Vulcan
             set
             {
                 entries = value;
-                Updated?.Invoke(this, entries);
+                OnLoadingOrUpdatingFinished?.Invoke(this, entries);
             }
         }
 
@@ -52,17 +48,36 @@ namespace VulcanForWindows.Vulcan
 
         public EventHandler<IEnumerable<T>> RepoUpdate;
 
+        public NewResponseEnvelope(Task<IEnumerable<T>> GetFunction, EventHandler<IEnumerable<T>> RepoUpdateFunc, EventHandler<IEnumerable<T>> OnUpdated)
+        {
+            entries = new ObservableCollection<T>();
+            this.GetFunction = GetFunction;
+            RepoUpdate += RepoUpdateFunc;
+            OnLoadingOrUpdatingFinished += OnUpdated;
+        }
         public NewResponseEnvelope(Task<IEnumerable<T>> GetFunction, EventHandler<IEnumerable<T>> RepoUpdateFunc)
         {
             entries = new ObservableCollection<T>();
             this.GetFunction = GetFunction;
             RepoUpdate += RepoUpdateFunc;
         }
+        public NewResponseEnvelope(IEnumerable<T> initialEntries, Task<IEnumerable<T>> GetFunction,
+            EventHandler<IEnumerable<T>> RepoUpdateFunc,
+            EventHandler<IEnumerable<T>> OnUpdated, bool actAsIfSynced = true)
+        {
+            entries = new ObservableCollection<T>(initialEntries);
+            isInitiallyLoaded = true;
+            this.GetFunction = GetFunction;
+            RepoUpdate += RepoUpdateFunc;
+            OnLoadingOrUpdatingFinished += OnUpdated;
+            if (actAsIfSynced) OnLoadingOrUpdatingFinished?.Invoke(this, entries);
+        }
+
         public NewResponseEnvelope(IEnumerable<T> items)
         {
             entries = new ObservableCollection<T>(items);
         }
-        
+
         public NewResponseEnvelope()
         {
             entries = new ObservableCollection<T>();
@@ -70,20 +85,20 @@ namespace VulcanForWindows.Vulcan
 
         public async Task Sync()
         {
-            isLoading = true;
+            isLoadingOrUpdating = true;
 
-            OnPropertyChanged(nameof(isLoaded));
-            OnPropertyChanged(nameof(isLoading));
+            OnPropertyChanged(nameof(isInitiallyLoaded));
+            OnPropertyChanged(nameof(isLoadingOrUpdating));
 
             var onlineEntries = await GetFunction;
             entries.ReplaceAll((IEnumerable<T>)onlineEntries);
 
             RepoUpdate?.Invoke(this, onlineEntries);
 
-            isLoading = false;
-            Updated?.Invoke(this, entries);
-            OnPropertyChanged(nameof(isLoaded));
-            OnPropertyChanged(nameof(isLoading));
+            isLoadingOrUpdating = false;
+            OnLoadingOrUpdatingFinished?.Invoke(this, entries);
+            OnPropertyChanged(nameof(isInitiallyLoaded));
+            OnPropertyChanged(nameof(isLoadingOrUpdating));
 
         }
 

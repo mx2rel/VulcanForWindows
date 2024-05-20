@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using VulcanForWindows;
 using VulcanForWindows.Classes.VulcanGradesDb;
+using Vulcanova.Features.Grades.Summary;
 
 namespace Vulcanova.Features.Grades;
 
@@ -18,8 +19,18 @@ public class Grade : INotifyPropertyChanged
     public string Comment { get; set; }
     public DateTime? DateCreated { get; set; }
     public DateTime DateModify { get; set; }
-    public bool IsModified => DateCreated != DateModify;
-    public decimal? Value { get; set; }
+    public bool HasBeenModifiedByTeacher => DateCreated != DateModify;
+    public decimal? ActualValue
+    {
+        get
+        {
+            if (VulcanValue == null) return null;
+            if (AverageCalculator.TryGetValueFromContentRaw(ContentRaw, out var d))
+                return d;
+            return VulcanValue;
+        }
+    }
+    public decimal? VulcanValue { get; set; }
     public Column Column { get; set; }
     public bool IsHipothetic { get; set; }
     public bool IsRecent { get => DateModify.Date >= DateTime.Today.AddDays(-1) || DateModify >= MainWindow.lastLaunch; }

@@ -144,7 +144,7 @@ namespace VulcanForWindows.Classes
         //        return data.Select(r => new TableRow
         //        {
         //            name = r.Key.ToString("MMMM/yyyy").Replace(".", " "),
-        //            value = r.Value.CountAverage().ToString("0.00") + $" ({r.Value.Length} {OcenToQuantity(r.Value.Length)})"
+        //            value = r.VulcanValue.CountAverage().ToString("0.00") + $" ({r.VulcanValue.Length} {OcenToQuantity(r.VulcanValue.Length)})"
         //        }).ToArray();
         //    }
         //}
@@ -152,7 +152,7 @@ namespace VulcanForWindows.Classes
         public static GradesCountChartData Generate(Grade[] grades)
         {
             var chartData = new GradesCountChartData();
-            var v = grades.GroupBy(r => r.Value).ToArray();
+            var v = grades.GroupBy(r => r.VulcanValue).ToArray();
             chartData.data = v.Where(r => r.Key != null).OrderBy(r => r.Key).ToDictionary(group => (float)group.Key.GetValueOrDefault(), group => group.ToArray().Length);
 
             for (int i = 1; i <= 6; i++)

@@ -10,7 +10,7 @@ public static class AverageCalculator
     public static decimal? Average(this IEnumerable<Grade> grades, ModifiersSettings modifiers)
     {
         var nonNullGrades = grades
-            .Where(g => g.Value != null)
+            .Where(g => g.VulcanValue != null)
             .SelectMany(g => Enumerable.Repeat(TryGetValueFromContentRaw(g.ContentRaw, modifiers), g.Column.Weight))
             .Where(g => g != null)
             .ToList();
@@ -25,7 +25,7 @@ public static class AverageCalculator
     public static (decimal average, int sumOfWeights)? AverageRaw(this IEnumerable<Grade> grades, ModifiersSettings modifiers)
     {
         var nonNullGrades = grades
-            .Where(g => g.Value != null)
+            .Where(g => g.VulcanValue != null)
             .SelectMany(g => Enumerable.Repeat(TryGetValueFromContentRaw(g.ContentRaw, modifiers), g.Column.Weight))
             .Where(g => g != null)
             .ToList();
@@ -41,6 +41,8 @@ public static class AverageCalculator
 
     private static readonly Regex ValueRegex = new("(\\d+)([+|-])?");
 
+    public static bool TryGetValueFromContentRaw(string contentRaw, out decimal d)
+        => TryGetValueFromContentRaw(contentRaw, new ModifiersSettings(), out d);
     public static bool TryGetValueFromContentRaw(string contentRaw, ModifiersSettings modifiers, out decimal d)
     {
         var value = TryGetValueFromContentRaw(contentRaw, modifiers);
@@ -50,7 +52,7 @@ public static class AverageCalculator
             d = 0;
             return false;
         }
-            
+
         d = value.Value;
         return true;
     }
@@ -76,5 +78,35 @@ public static class AverageCalculator
 
         var modifier = GradeModifier.FromString(match.Groups[2].Value, modifiers);
         return modifier.ApplyTo(numericValue);
+    }
+
+    public static bool TryGetRawContentFromValue(decimal value, ModifiersSettings modifiers, out string d)
+    {
+        d = string.Empty;
+        decimal decimals = value % 1;
+
+        if (value < 1 || value > 6) return false;
+
+        if (decimals == 0)
+        {
+            d = ((int)value).ToString();
+            return true;
+        }
+        else
+        if (decimals == modifiers.PlusSettings.SelectedValue)
+        {
+            d = value.ToString()[0] + "+";
+            return true;
+        }
+        else
+        if (decimals == (1 - modifiers.MinusSettings.SelectedValue))
+        {
+            d = value.ToString()[0] + "-";
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

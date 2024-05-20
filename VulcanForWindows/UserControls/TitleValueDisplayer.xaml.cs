@@ -54,6 +54,28 @@ namespace VulcanForWindows.UserControls
             }
         }
 
+
+        public static readonly DependencyProperty ContentProperty =
+            DependencyProperty.Register("Content", typeof(FrameworkElement), typeof(TitleValueDisplayer), new PropertyMetadata(null, Content_Changed));
+
+        public FrameworkElement Content
+        {
+            get => (FrameworkElement)GetValue(ContentProperty);
+            set => SetValue(ContentProperty, value);
+        }
+
+        private static void Content_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is TitleValueDisplayer control && e.NewValue is FrameworkElement newValue)
+            {
+                while (control.ContentHolder.Children.Count > 0)
+                    control.ContentHolder.Children.Remove(control.ContentHolder.Children[0]);
+
+                control.ContentHolder.Children.Add(newValue);
+            }
+        }
+
+
         void DisplayStyleChanged()
         {
             spVertical.Visibility = (DisplayStyle.Value == DisplayStyles.Vertical).ToVisibility();
@@ -62,7 +84,7 @@ namespace VulcanForWindows.UserControls
         }
 
 
-            public TitleValueDisplayer()
+        public TitleValueDisplayer()
         {
             this.InitializeComponent();
 
@@ -86,7 +108,7 @@ namespace VulcanForWindows.UserControls
         DependencyProperty.Register("Title", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(null, TitleChanged));
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata("-", ValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(string), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata("-", ValueChanged));
 
         public static readonly DependencyProperty StartAsLoadingProperty =
         DependencyProperty.Register("StartAsLoading", typeof(bool), typeof(SummaryAverageGradeDisplayer), new PropertyMetadata(false, LoadingChanged));

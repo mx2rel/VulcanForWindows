@@ -25,7 +25,7 @@ namespace VulcanForWindows.UserControls
     {
 
         public static readonly DependencyProperty ValueProperty =
-        DependencyProperty.Register("Value", typeof(TimetableListEntry), typeof(LessonFlyoutInfoContent), new PropertyMetadata(null, ValueChanged));
+        DependencyProperty.Register("VulcanValue", typeof(TimetableListEntry), typeof(LessonFlyoutInfoContent), new PropertyMetadata(null, ValueChanged));
 
         public TimetableListEntry Value
         {

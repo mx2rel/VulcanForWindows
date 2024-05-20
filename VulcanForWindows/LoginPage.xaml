@@ -10,6 +10,12 @@
     <Grid>
         <ProgressBar  IsIndeterminate="True" ShowPaused="False" ShowError="False" VerticalAlignment="Top" x:Name="LoadingBar" Visibility="Collapsed"/>
 
+        <InfoBar
+            Severity="Informational"
+            IsOpen="True"
+            Title="Vulcanoid jest w trakcie rozwoju"
+            Message="Vulcanoid jest w wczesnej fazie rozwoju - pamiętaj, że mogą występować błędy." />
+
         <Grid VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -51,6 +57,6 @@
         </Grid>
 
     </Grid>
-    
+
 
 </Page>

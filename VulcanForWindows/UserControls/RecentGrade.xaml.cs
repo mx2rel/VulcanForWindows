@@ -43,7 +43,7 @@ namespace VulcanForWindows.UserControls
             if (d is RecentGrade control && e.NewValue is Grade[] newValue)
             {
                 if (newValue.Length == 0) return;
-                var iterateThrough = newValue.GetLatestGrades().Where(r => r.Column.Weight > 0).Where(r => r.Value.HasValue);
+                var iterateThrough = newValue.GetLatestGrades().Where(r => r.Column.Weight > 0).Where(r => r.VulcanValue.HasValue);
                 bool onlyNewOnes = iterateThrough.Where(r => r.IsRecent).Count() > 0;
                 var listOfGrades = new List<Grade>();
                 foreach(var grade in iterateThrough.Where(r=>(r.IsRecent || !onlyNewOnes)))

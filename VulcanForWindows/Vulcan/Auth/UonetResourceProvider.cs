@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using VulcanTest.Vulcan;
+using VulcanForWindows.Preferences;
 
 namespace Vulcanova.Core.Uonet
 {
@@ -19,12 +19,12 @@ namespace Vulcanova.Core.Uonet
 
         public static DateTime GetLastSync(string resourceKey)
         {
-            return Preferences.Get<DateTime>($"LastSync_{resourceKey}", DateTime.MinValue);
+            return PreferencesManager.Get<DateTime>($"LastSync_{resourceKey}", DateTime.MinValue);
         }
 
         public static void SetJustSynced(string resourceKey)
         {
-            Preferences.Set<DateTime>($"LastSync_{resourceKey}", DateTime.Now);
+            PreferencesManager.Set<DateTime>($"LastSync_{resourceKey}", DateTime.Now);
         }
     }
 }

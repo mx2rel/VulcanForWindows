@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using VulcanForWindows;
+using VulcanForWindows.Preferences;
 using Vulcanova.Features.Auth.Accounts;
-using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Auth
 {
@@ -23,7 +23,7 @@ namespace Vulcanova.Features.Auth
 
         private List<Account> accounts;
         private static string dataFilePath
-            => Path.Combine(Preferences.folder, "accounts.txt");
+            => Path.Combine(PreferencesManager.folder, "accounts.txt");
 
 
         public AccountRepository(string dataFilePath)

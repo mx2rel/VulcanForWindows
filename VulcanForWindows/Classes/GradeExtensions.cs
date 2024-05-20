@@ -21,9 +21,9 @@ namespace VulcanForWindows.Classes
             decimal sum = 0;
             decimal weightSum = 0;
 
-            foreach (var grade in grades.Where(r => r.Value.HasValue))
+            foreach (var grade in grades.Where(r => r.VulcanValue.HasValue))
             {
-                sum += grade.Value.Value * grade.Column.Weight;
+                sum += grade.VulcanValue.Value * grade.Column.Weight;
                 weightSum += grade.Column.Weight;
             }
 
@@ -56,13 +56,13 @@ namespace VulcanForWindows.Classes
             return (double)Math.Round(sum / weightSum * 100) / 100;
         }
 
-        public static double CountAverage(this SubjectGrades grades, double newGrade, int newWeight)
-        {
-            var raw = grades.yearlyGrades.CalculateAverageRaw();
-            var newSum = raw.sum + newGrade * newWeight;
-            double newWeightsSum = raw.weights + newWeight;
-            return Math.Round(newSum / newWeightsSum, 2);
-        }
+        //public static double CountAverage(this SubjectGrades grades, double newGrade, int newWeight)
+        //{
+        //    var raw = grades.yearlyGrades.CalculateAverageRaw();
+        //    var newSum = raw.sum + newGrade * newWeight;
+        //    double newWeightsSum = raw.weights + newWeight;
+        //    return Math.Round(newSum / newWeightsSum, 2);
+        //}
 
         public static bool GetValue(string s, out decimal o)
         {

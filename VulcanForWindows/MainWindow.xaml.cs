@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using VulcanForWindows.Preferences;
 using VulcanForWindows.UserControls;
 using Vulcanova.Features.Auth;
-using VulcanTest.Vulcan;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -57,12 +57,12 @@ namespace VulcanForWindows
             {
                 LoadMainPage();
             }
-            Preferences.TryGet<DateTime>("lastLaunch", out lastLaunch);
-            Preferences.Set<DateTime>("lastLaunch", DateTime.Now);
+            PreferencesManager.TryGet<DateTime>("lastLaunch", out lastLaunch);
+            PreferencesManager.Set<DateTime>("lastLaunch", DateTime.Now);
 
 
-            
-            Preferences.Set<int>("timesLaunched", Preferences.Get<int>("timesLaunched", 0)+1);
+
+            PreferencesManager.Set<int>("timesLaunched", PreferencesManager.Get<int>("timesLaunched", 0)+1);
         }
         bool isLoggedIn = false;
         public void Logout()

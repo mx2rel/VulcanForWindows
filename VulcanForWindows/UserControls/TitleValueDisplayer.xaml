@@ -20,6 +20,7 @@ xmlns:converters="using:Converters"
                        Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}}"/>
             <ProgressRing IsActive="True" Width="20" Height="20"
                           Visibility="{x:Bind IsLoaded, Mode=OneWay,Converter={StaticResource VisibilityConverter}, ConverterParameter=True}"/>
+            <StackPanel x:Name="ContentHolder" HorizontalAlignment="Center"/>
         </StackPanel>
         
         <StackPanel Margin="0" x:Name="spHorizontal" Orientation="Horizontal" Spacing="10">

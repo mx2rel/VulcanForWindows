@@ -14,7 +14,7 @@ namespace VulcanForWindows.Vulcan.Grades.Final
     public class FinalGradesResponseEnvelope : IResponseEnvelope<FinalGradesEntry>
     {
         public bool isLoading;
-        public event EventHandler<IEnumerable<FinalGradesEntry>> Updated;
+        public event EventHandler<IEnumerable<FinalGradesEntry>> OnLoadingOrUpdatingFinished;
 
         private ObservableCollection<FinalGradesEntry> grades;
         public ObservableCollection<FinalGradesEntry> Grades
@@ -23,7 +23,7 @@ namespace VulcanForWindows.Vulcan.Grades.Final
             set
             {
                 grades = value;
-                Updated?.Invoke(this, grades);
+                OnLoadingOrUpdatingFinished?.Invoke(this, grades);
             }
         }
         FinalGrades g; Account account; int periodId; string finalGradesResourceKey;
@@ -49,7 +49,7 @@ namespace VulcanForWindows.Vulcan.Grades.Final
                 periodId));
             isLoading = false;
 
-            Updated?.Invoke(this, grades);
+            OnLoadingOrUpdatingFinished?.Invoke(this, grades);
 
         }
     }

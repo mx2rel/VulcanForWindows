@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Data;
 using Vulcanova.Core.Uonet;
@@ -69,7 +70,7 @@ public class MessagesService : UonetResourceProvider
 
         await MessagesRepository.UpdateMessageAsync(message);
 
-        //MessageBus.Current.SendMessage(new MessageReadEvent(messageBoxId, messageId.VulcanId, message.DateRead.Value));
+        //MessageBus.Current.SendMessage(new MessageReadEvent(messageBoxId, messageId.VulcanId, message.DateRead.VulcanValue));
     }
     public async Task TrashMessage(Guid messageBoxId, AccountEntityId<Guid> messageId)
     {
@@ -80,7 +81,7 @@ public class MessagesService : UonetResourceProvider
         await apiClient.PostAsync(ChangeMessageStatusRequest.ApiEndpoint,
             new ChangeMessageStatusRequest(messageBoxId, messageId.VulcanId, ChangeMessageStatusRequest.SetMessageStatus.Trash));
 
-        //MessageBus.Current.SendMessage(new MessageReadEvent(messageBoxId, messageId.VulcanId, message.DateRead.Value));
+        //MessageBus.Current.SendMessage(new MessageReadEvent(messageBoxId, messageId.VulcanId, message.DateRead.VulcanValue));
     }
 
     private async Task<IEnumerable<Message>> FetchMessagesByBoxAsync(Account account, Guid messageBoxId, MessageBoxFolder folder)

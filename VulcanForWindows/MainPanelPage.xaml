@@ -20,7 +20,7 @@
         <converters:VisibilityConverter x:Key="VisibilityConverter" />
         <converters:ListToVisibility x:Key="ListToVisibility" />
         <Style TargetType="Grid" x:Key="Panel">
-            <Setter Property="Background" Value="{StaticResource AcrylicBackgroundFillColorBaseBrush}"/>
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Margin" Value="5"/>
@@ -41,25 +41,25 @@
             <Setter Property="Width" Value="22"/>
         </Style>
     </Page.Resources>
-    <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <!--<Image Source="C:\Users\Marcel\Desktop\SchoolBg.png" 
-               VerticalAlignment="Top" HorizontalAlignment="Stretch" Stretch="UniformToFill"/>-->
-            <!--<Rectangle HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="800">
-            <Rectangle.Fill>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Color="#7F000000" Offset="0.0"/>
-                    <GradientStop Color="#00000000" Offset="1.0"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>-->
-        </Grid>
-        <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="32" ItemWidth="100" MaxHeight="600" Margin="10">
-            <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
+    <Grid x:Name="rootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="InfosPanel" Margin="0,0,5,0" Spacing="1">
+            
+        </StackPanel>
+        
+        <VariableSizedWrapGrid Grid.Row="1"
+            Orientation="Vertical" ItemHeight="32" ItemWidth="100" MaxHeight="600" Margin="10">
+            <Grid Style="{StaticResource Panel}" x:Name="AnnouncementsPanel" Padding="0"
               VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
+                <widgets:AnnouncementsWidget/>
+            </Grid>
+
+            <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -87,6 +87,21 @@
                 </Grid>
 
                 <widgets:AttendanceWidget Grid.Row="1"/>
+            </Grid>
+
+
+
+            <Grid Style="{StaticResource Panel}" x:Name="DeadlineablesPanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" RowSpacing="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Style="{StaticResource TitleStack}">
+                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                    <TextBlock Style="{StaticResource HeaderText}">Zadania i sprawdziany</TextBlock>
+                </StackPanel>
+                <deadlineablecontrols:DeadlineablesWidget Grid.Row="1"/>
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"
@@ -145,19 +160,6 @@
                 <!--<ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsActive="{x:Bind messagesLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>-->
 
-            </Grid>
-
-            <Grid Style="{StaticResource Panel}" x:Name="DeadlineablesPanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="10" RowSpacing="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Style="{StaticResource TitleStack}">
-                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                    <TextBlock Style="{StaticResource HeaderText}">Zadania i sprawdziany</TextBlock>
-                </StackPanel>
-                <deadlineablecontrols:DeadlineablesWidget Grid.Row="1"/>
             </Grid>
         </VariableSizedWrapGrid>
     </Grid>

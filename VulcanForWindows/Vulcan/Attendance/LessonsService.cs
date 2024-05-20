@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VulcanForWindows;
+using VulcanForWindows.Classes;
+using VulcanForWindows.Preferences;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth.Accounts;
@@ -20,7 +23,7 @@ public class LessonsService : UonetResourceProvider
         => await GetLessonsForRange(acc, acc.GetSchoolYearDuration().Start, acc.GetSchoolYearDuration().End, l, true, true);
     public async Task GetLessonsForRange(Account acc, DateTime from, DateTime to, NewResponseEnvelope<Lesson> l, bool startFromMostRecent = true, bool updateAsap = true, bool forceSync = false, bool waitForSync = false)
     {
-        l.isLoading = true;
+        l.isLoadingOrUpdating = true;
         var total = new List<NewResponseEnvelope<Lesson>>();
         var lessons = new List<Lesson>();
         for (DateTime i = (startFromMostRecent ? to : from).StartOfTheMonth();
@@ -43,7 +46,7 @@ public class LessonsService : UonetResourceProvider
 
         var result = total.SelectMany(r => r.Entries).Concat(lessons);
         l.entries.ReplaceAll(result);
-        l.isLoading = false;
+        l.isLoadingOrUpdating = false;
         l.SendUpdate();
 
         void Update()
@@ -64,7 +67,7 @@ public class LessonsService : UonetResourceProvider
 
         var hasPerformedFullSyncKey = $"Lessons_{account.Pupil.Id}_HasPerformedFullSync";
 
-        var succes = Preferences.TryGet<bool>(hasPerformedFullSyncKey, out var hasPerformedFullSync);
+        var succes = PreferencesManager.TryGet<bool>(hasPerformedFullSyncKey, out var hasPerformedFullSync);
 
         if (!hasPerformedFullSync || !succes)
         {
@@ -95,7 +98,7 @@ public class LessonsService : UonetResourceProvider
                 v.Sync();
         }
 
-        Preferences.Set<bool>(hasPerformedFullSyncKey, true);
+        PreferencesManager.Set<bool>(hasPerformedFullSyncKey, true);
 
         return v;
     }
