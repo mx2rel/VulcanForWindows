@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Grades;
-using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Classes.VulcanGradesDb
 {

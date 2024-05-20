@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using System.Threading.Tasks;
 using VulcanForWindows;
+using VulcanForWindows.Classes.Preferences;
 using Vulcanova.Features.Auth.Accounts;
-using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Auth
 {

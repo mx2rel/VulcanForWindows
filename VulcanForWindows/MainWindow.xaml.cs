@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using VulcanForWindows.Classes.Preferences;
 using VulcanForWindows.UserControls;
 using Vulcanova.Features.Auth;
-using VulcanTest.Vulcan;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.

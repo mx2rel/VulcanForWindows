@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades;
 using Vulcanova.Features.Shared;
-using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Classes
 {

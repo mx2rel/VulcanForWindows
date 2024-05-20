@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VulcanForWindows.Classes;
+using VulcanForWindows.Classes.Preferences;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth.Accounts;

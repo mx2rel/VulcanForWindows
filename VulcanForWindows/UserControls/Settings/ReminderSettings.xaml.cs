@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VulcanForWindows.Classes.Preferences;
 using VulcanTest.Vulcan;
 using Windows.Foundation;
 using Windows.Foundation.Collections;

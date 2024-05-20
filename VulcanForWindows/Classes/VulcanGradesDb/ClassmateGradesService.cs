@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using VulcanForWindows.Classes.VulcanGradesDb.Models;
 using Vulcanova.Core.Uonet;
-using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Classes.VulcanGradesDb
 {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
 using Newtonsoft.Json;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Core.Uonet;
@@ -15,7 +16,6 @@ using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Shared;
 using Vulcanova.Uonet.Api;
 using Vulcanova.Uonet.Api.Grades;
-using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Grades;
 

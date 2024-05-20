@@ -12,7 +12,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using VulcanTest.Vulcan;
+using VulcanForWindows.Classes.Preferences;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 

@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
 using Newtonsoft.Json;
+using VulcanForWindows.Classes;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Uonet.Api.Schedule;
-using VulcanTest.Vulcan;
 using VulcanTest.Vulcan.Timetable;
 using VulcanTest.Vulcan.Timetable.Changes;
 

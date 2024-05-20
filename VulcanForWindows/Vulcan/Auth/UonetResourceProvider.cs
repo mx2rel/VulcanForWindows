@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using VulcanTest.Vulcan;
+using VulcanForWindows.Classes.Preferences;
 
 namespace Vulcanova.Core.Uonet
 {

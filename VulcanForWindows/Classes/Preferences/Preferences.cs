@@ -1,31 +1,19 @@
-﻿using LiteDB.Async;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel;
 
-namespace VulcanTest.Vulcan
+namespace VulcanForWindows.Preferences
 {
-    public static class LiteDbManager
-    {
-        public static LiteDatabaseAsync database = new LiteDatabaseAsync($"Filename={Path.Combine(Preferences.folder, ("main.db"))};Connection=shared;");
-    }
-
     public static class Preferences
     {
         //C:\Users\Marcel\AppData\Local\Packages
         public static string folder = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "VulcanForWindows");
         private static string prefFolder = Path.Combine(folder, "Preferences");
         private static string GetCategoryPath(string category)
-            => Path.Combine(folder, $"{(category ?? "main")}.dat");
+            => Path.Combine(folder, $"{category ?? "main"}.dat");
 
         public static Windows.Storage.StorageFolder roamingFolder =
     Windows.Storage.ApplicationData.Current.RoamingFolder;
@@ -37,7 +25,7 @@ namespace VulcanTest.Vulcan
         public static void Set<T>(string category, string key, T value)
         {
             Dictionary<string, string> data = GetAllData(category);
-            data[key] = JsonConvert.SerializeObject((T)value);
+            data[key] = JsonConvert.SerializeObject(value);
 
             SaveData(category, data);
         }
@@ -47,7 +35,7 @@ namespace VulcanTest.Vulcan
         public static T Get<T>(string category, string key)
         {
             Dictionary<string, string> data = GetAllData(category);
-            return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default(T);
+            return data.ContainsKey(key) ? JsonConvert.DeserializeObject<T>(data[key]) : default;
         }
 
         public static T Get<T>(string key, T defaultVal)
@@ -61,7 +49,7 @@ namespace VulcanTest.Vulcan
 
 
         public static bool TryGet<T>(string key, out T output)
-            => TryGet<T>(null, key, out output);
+            => TryGet(null, key, out output);
 
         public static bool TryGet<T>(string category, string key, out T output)
         {
@@ -72,7 +60,7 @@ namespace VulcanTest.Vulcan
                 output = JsonConvert.DeserializeObject<T>(data[key]);
                 return true;
             }
-            output = default(T);
+            output = default;
             return false;
 
         }
@@ -91,7 +79,7 @@ namespace VulcanTest.Vulcan
 
             var s = v
                 .Select(category => category.dict.Select(e => ((category.category, e.Key), e.Value))).SelectMany(r => r)
-                .ToDictionary(d => d.Item1, d=>d.Value);
+                .ToDictionary(d => d.Item1, d => d.Value);
 
             return s;
         }
@@ -148,62 +136,5 @@ namespace VulcanTest.Vulcan
 
         public static string[] GetAllCategories()
             => Directory.GetFileSystemEntries(prefFolder);
-    }
-
-    public static class AppWide
-    {
-        public static string AppVersion => string.Format("{0}.{1}.{2}",
-                    Package.Current.Id.Version.Major,
-                    Package.Current.Id.Version.Minor,
-                    Package.Current.Id.Version.Build);
-    }
-
-    public class Preference
-    {
-        public string Category { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-
-        public Preference(string _category,string _name, string _value)
-        {
-            Category = _category;
-            Name = _name; 
-            Value = _value;
-        }
-    }
-
-    public static class PreferencesHelpers
-    {
-        public static IEnumerable<Preference> ToPreferences(this IDictionary<string, string> data)
-        {
-            return data.Select(r => new Preference(null, r.Key, r.Value));
-        }
-        public static IEnumerable<Preference> ToPreferences(this IDictionary<(string, string), string> data)
-        {
-            return data.Select(r => new Preference(r.Key.Item1, r.Key.Item2, r.Value));
-        }
-    }
-
-    public static class ObservableCollectionExtensions
-    {
-        public static void ReplaceAll<T>(this ObservableCollection<T> collection, IEnumerable<T> newItems)
-        {
-            if (collection.Count > 0)
-                collection.Clear();
-
-            foreach (var item in newItems.Where(r => r != null))
-            {
-                collection.Add(item);
-            }
-
-        }
-    }
-    public static class DateTimeHelper
-    {
-        public static DateTime StartOfTheMonth(this DateTime dt)
-        {
-            return dt.Date.AddDays(-(dt.Day - 1));
-
-        }
     }
 }
