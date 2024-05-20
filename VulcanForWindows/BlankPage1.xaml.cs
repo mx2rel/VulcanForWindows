@@ -39,11 +39,6 @@ namespace VulcanForWindows
             Preferences.Clear();
             b1.Content = "Done!";
         }
-
-        private void b2_Click(object sender, RoutedEventArgs e)
-        {
-            LiteDbManager.database.GetCollection<Classes.VulcanGradesDb.ClassmateGradesSyncObject>().DeleteAllAsync();
-        }
         private async void GetColumn(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine(JsonConvert.SerializeObject(await ClassmateGradesService.GetSingleClassmateColumn(2361146)));

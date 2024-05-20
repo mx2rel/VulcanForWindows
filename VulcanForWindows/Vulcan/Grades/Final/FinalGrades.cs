@@ -6,13 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan.Grades.Final;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Shared;
 using Vulcanova.Uonet.Api.Grades;
-using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Grades.Final;
 

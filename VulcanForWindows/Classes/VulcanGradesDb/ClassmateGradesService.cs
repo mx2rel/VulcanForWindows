@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using VulcanForWindows.Classes.VulcanGradesDb.Models;
 using Vulcanova.Core.Uonet;
-using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Classes.VulcanGradesDb
 {
@@ -29,7 +28,6 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
                 if (str == "null") return null;
 
-                Debug.WriteLine(str);
                 var data = JsonConvert.DeserializeObject<SingleClassmateGrade[]>(str);
                 var response = new SingleClassmateColumn(ColumnId, data);
                 await _db.GetCollection<SingleClassmateColumn>().InsertAsync(response);

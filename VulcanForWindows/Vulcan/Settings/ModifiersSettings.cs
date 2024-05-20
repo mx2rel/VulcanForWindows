@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Preferences;
 
 namespace VulcanTest.Vulcan.Settings
 {
@@ -20,10 +21,10 @@ namespace VulcanTest.Vulcan.Settings
 
         public ModifierSettings(string key, decimal defaultValue)
         {
-            SelectedValue = decimal.Parse(Preferences.Get(key, defaultValue.ToString(CultureInfo.InvariantCulture)),
+            SelectedValue = decimal.Parse(PreferencesManager.Get(key, defaultValue.ToString(CultureInfo.InvariantCulture)),
                 CultureInfo.InvariantCulture);
 
-            UsesCustomValue = Preferences.Get($"{key}IsCustom", false);
+            UsesCustomValue = PreferencesManager.Get($"{key}IsCustom", false);
 
             //this.WhenAnyValue(v => v.SelectedValue)
             //    .Subscribe(value

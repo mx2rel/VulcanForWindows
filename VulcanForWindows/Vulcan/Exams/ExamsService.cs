@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth;

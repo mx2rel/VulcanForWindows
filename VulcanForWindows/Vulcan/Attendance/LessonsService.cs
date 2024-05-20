@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VulcanForWindows;
+using VulcanForWindows.Classes;
+using VulcanForWindows.Preferences;
 using VulcanForWindows.Vulcan;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth.Accounts;
@@ -64,7 +67,7 @@ public class LessonsService : UonetResourceProvider
 
         var hasPerformedFullSyncKey = $"Lessons_{account.Pupil.Id}_HasPerformedFullSync";
 
-        var succes = Preferences.TryGet<bool>(hasPerformedFullSyncKey, out var hasPerformedFullSync);
+        var succes = PreferencesManager.TryGet<bool>(hasPerformedFullSyncKey, out var hasPerformedFullSync);
 
         if (!hasPerformedFullSync || !succes)
         {
@@ -95,7 +98,7 @@ public class LessonsService : UonetResourceProvider
                 v.Sync();
         }
 
-        Preferences.Set<bool>(hasPerformedFullSyncKey, true);
+        PreferencesManager.Set<bool>(hasPerformedFullSyncKey, true);
 
         return v;
     }

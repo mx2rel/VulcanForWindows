@@ -28,7 +28,7 @@ public class AuthenticationService : IAuthenticationService
 
         var x509Certificate2 = identity.Certificate;
 
-        var device = $"Vulcan dla Windows (mx2rel) – {System.Environment.MachineName}";
+        var device = $"Vulcanoid (mx2rel) – Windows: {System.Environment.MachineName}";
 
         var request = new RegisterClientRequest
         {
@@ -43,10 +43,6 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var client = _apiClientFactory.GetAuthenticated(identity, instanceUrl);
-        Debug.WriteLine(instanceUrl);
-        Debug.WriteLine($"client:\n {JsonConvert.SerializeObject(client)}\n\n");
-        Debug.WriteLine($"clientnull :\n {client == null}\n\n");
-        Debug.WriteLine($"requestnull :\n {request == null}\n\n");
         await client.PostAsync(RegisterClientRequest.ApiEndpoint, request);
 
         await ClientIdentityStore.SaveIdentityAsync(identity);
@@ -60,7 +56,10 @@ public class AuthenticationService : IAuthenticationService
 
         IMapper mapper = mapperConfig.CreateMapper();
 
-        var accounts = registerHebeResponse.Envelope.Select(mapper.Map<Account>).ToArray();
+        var accounts = registerHebeResponse.Envelope
+            .Where(a => a.Login != null && a.Periods is { Length: > 0 })
+            .Select(mapper.Map<Account>)
+            .ToArray();
 
         foreach (var account in accounts)
         {

@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Preferences;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades;
 using Vulcanova.Features.Shared;
-using VulcanTest.Vulcan;
 
 namespace VulcanForWindows.Classes
 {
@@ -64,7 +64,7 @@ namespace VulcanForWindows.Classes
             get
             {
                 if (_includeInCalculations == null)
-                    _includeInCalculations = Preferences.Get<bool>($"Analyzer_{subject.Id}_Include", true);
+                    _includeInCalculations = PreferencesManager.Get<bool>($"Analyzer_{subject.Id}_Include", true);
                 return _includeInCalculations.Value;
             }
             set

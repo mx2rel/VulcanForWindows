@@ -29,13 +29,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Assets\BgWorker\**" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
     <Content Remove="Assets\BgWorker\**" />
     <EmbeddedResource Remove="Assets\BgWorker\**" />
+    <EmbeddedResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <EmbeddedResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
     <None Remove="Assets\BgWorker\**" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
     <Page Remove="Assets\BgWorker\**" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="BlankPage1.xaml.cs" />
     <Compile Remove="FinalGradesAnalyzerPage.xaml.cs" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml.cs" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml.cs" />
+    <Compile Remove="VulcanoidServerClient\VulcanoidServerClient\Program.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +65,10 @@
     <None Remove="GradesSummaryPage.xaml" />
     <None Remove="LoginPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\app.manifest" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\Package.appxmanifest" />
     <None Remove="MessagesPage.xaml" />
     <None Remove="NotesPage.xaml" />
     <None Remove="Pages\GradesPage.xaml" />
@@ -84,10 +100,10 @@
     <None Remove="UserControls\SummaryAverageGradeDisplayer.xaml" />
     <None Remove="UserControls\TimetableDayDisplayer.xaml" />
     <None Remove="UserControls\TimetableItem.xaml" />
+    <None Remove="UserControls\Widgets\AnnouncementsWidget.xaml" />
     <None Remove="UserControls\Widgets\AttendanceWidget.xaml" />
     <None Remove="UserControls\Widgets\GradesWidget.xaml" />
     <None Remove="UserControls\YearAttendanceControl.xaml" />
-    <None Remove="Vulcan\BlankPage1.xaml" />
     <None Remove="Vulcan\GradesChartsPage.xaml" />
   </ItemGroup>
 
@@ -124,11 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="GradesSummaryPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -257,6 +268,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="UserControls\Widgets\AnnouncementsWidget.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="UserControls\Deadlinables\DeadlineablesWidget.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -312,11 +328,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Vulcan\BlankPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="AttendanceReportPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -335,7 +346,10 @@
     <PRIResource Remove="Assets\BgWorker\**" />
   </ItemGroup>
   <ItemGroup>
+    <Page Remove="BlankPage1.xaml" />
     <Page Remove="FinalGradesAnalyzerPage.xaml" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="UserControls\Grades\SubjectGradesExpander.xaml">
@@ -371,5 +385,11 @@
     <Page Update="AnalyzeSubjectGrades.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
   </ItemGroup>
 </Project>

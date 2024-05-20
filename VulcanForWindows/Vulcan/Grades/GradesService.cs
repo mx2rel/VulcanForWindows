@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LiteDB.Async;
 using Newtonsoft.Json;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Extensions;
 using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;

@@ -7,11 +7,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Classes;
 using VulcanForWindows.Vulcan.Timetable;
 using Vulcanova.Core.Uonet;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Uonet.Api.Schedule;
-using VulcanTest.Vulcan;
 using VulcanTest.Vulcan.Timetable;
 
 namespace VulcanTest.Vulcan.Timetable
