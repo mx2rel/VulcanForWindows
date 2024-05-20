@@ -29,14 +29,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Assets\BgWorker\**" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
     <Content Remove="Assets\BgWorker\**" />
     <EmbeddedResource Remove="Assets\BgWorker\**" />
+    <EmbeddedResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <EmbeddedResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
     <None Remove="Assets\BgWorker\**" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
     <Page Remove="Assets\BgWorker\**" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="BlankPage1.xaml.cs" />
     <Compile Remove="FinalGradesAnalyzerPage.xaml.cs" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml.cs" />
+    <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml.cs" />
     <Compile Remove="VulcanoidServerClient\VulcanoidServerClient\Program.cs" />
     <Compile Remove="Vulcan\Grades\Average\AverageGrades.cs" />
   </ItemGroup>
@@ -55,6 +65,10 @@
     <None Remove="GradesSummaryPage.xaml" />
     <None Remove="LoginPage.xaml" />
     <None Remove="MainPanelPage.xaml" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\app.manifest" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml" />
+    <None Remove="MarkdownToWinUi3\MarkdownToWinUi3\Package.appxmanifest" />
     <None Remove="MessagesPage.xaml" />
     <None Remove="NotesPage.xaml" />
     <None Remove="Pages\GradesPage.xaml" />
@@ -334,6 +348,8 @@
   <ItemGroup>
     <Page Remove="BlankPage1.xaml" />
     <Page Remove="FinalGradesAnalyzerPage.xaml" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml" />
+    <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="GradesPage.xaml">
@@ -359,5 +375,11 @@
     <Page Update="AnalyzeSubjectGrades.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
   </ItemGroup>
 </Project>

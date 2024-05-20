@@ -1,3 +1,6 @@
 [submodule "VulcanForWindows/VulcanoidServerClient"]
 	path = VulcanForWindows/VulcanoidServerClient
 	url = https://github.com/marciweleq/VulcanoidServerClient
+[submodule "VulcanForWindows/MarkdownToWinUi3"]
+	path = VulcanForWindows/MarkdownToWinUi3
+	url = https://github.com/marciweleq/MarkdownToWinUI3

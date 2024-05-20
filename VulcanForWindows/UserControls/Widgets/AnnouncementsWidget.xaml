@@ -14,7 +14,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <FlipView x:Name="flipView">
+        <FlipView x:Name="flipView" Background="Transparent">
             <FlipView.ItemTemplate>
                 <DataTemplate x:DataType="ServerModels:Announcement">
                     <Grid Tapped="ElementTapped">

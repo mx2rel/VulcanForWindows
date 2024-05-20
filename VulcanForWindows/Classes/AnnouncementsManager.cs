@@ -11,6 +11,7 @@ using VulcanTest.Vulcan;
 using System.Diagnostics;
 using Microsoft.UI.Xaml.Media.Imaging;
 using VulcanoidServerClient;
+using MarkdownToWinUi3.MdToWinUi;
 
 namespace VulcanForWindows.Classes
 {
@@ -20,16 +21,16 @@ namespace VulcanForWindows.Classes
 
         public static async void Update(FrameworkElement root)
         {
-            var allAnnouncements = await AnnouncementsService.GetAll();
-            DisplayNewPopups(allAnnouncements, root);
+            var relevantAnnouncement = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
+            DisplayNewPopups(relevantAnnouncement, root);
         }
 
-        public async static void DisplayNewPopups(IEnumerable<Announcement> allAnnouncements,FrameworkElement root)
+        public async static void DisplayNewPopups(IEnumerable<Announcement> relevantAnnouncements,FrameworkElement root)
         {
             await Task.Delay(1000);
-            var announcementsToShow = allAnnouncements.Where(r => r.ShowAsPopup).Where(r=>!r.PopupOnlyOnce || Preferences.Get<bool>("announcements", $"{r.ID}_viewed", false) == false).ToList();
+            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r=>!r.PopupOnlyOnce || Preferences.Get<bool>("announcements", $"{r.ID}_viewed", false) == false).ToList();
 
-            announcementsToShow = announcementsToShow.Where(r=> AnnouncementExtensions.isVersionTargeted( r.TargetVersions, AppWide.AppVersion))
+            announcementsToShow = announcementsToShow
                 .GroupBy(r => r.Priority).OrderByDescending(r => r.Key).Select(r => r.OrderBy(r => r.SentOn)).SelectMany(r => r).ToList();
 
             if (announcementsToShow.Count == 0) return;
@@ -77,9 +78,7 @@ namespace VulcanForWindows.Classes
                 sp.Children.Add(headerImg);
             }
 
-            var tb = new TextBlock();
-            tb.Text = announcement.MdContent;
-            sp.Children.Add(tb);
+            sp.Children.Add(MdConverter.ConvertMarkdownToStackPanel(announcement.MdContent));
 
             if (showInstantly)
                 await dialog.ShowAsync();

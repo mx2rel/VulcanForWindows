@@ -19,6 +19,7 @@ using VulcanTest.Vulcan;
 using VulcanForWindows.Classes;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Microsoft.UI.Text;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,16 +38,29 @@ namespace VulcanForWindows.UserControls.Widgets
 
         async void Load()
         {
-            var all = await AnnouncementsService.GetAll();
+            var all = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
             Debug.WriteLine(JsonConvert.SerializeObject(all));
             Announcements = new ObservableCollection<Announcement>(all);
-            flipView.ItemsSource = Announcements;
+            if (Announcements.Count == 0)
+            {
+                flipView.ItemTemplate = null;
+                flipView.Items.Add(new TextBlock
+                {
+                    TextAlignment = TextAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Text = "Brak og³oszeñ",
+                    FontSize = 16,
+                    FontWeight = FontWeights.SemiBold
+                }) ;
+            }
+            else
+                flipView.ItemsSource = Announcements;
         }
 
         private void ElementTapped(object sender, TappedRoutedEventArgs e)
         {
-            if(sender is FrameworkElement fe)
-                if(fe.DataContext is Announcement announcement)
+            if (sender is FrameworkElement fe)
+                if (fe.DataContext is Announcement announcement)
                 {
                     AnnouncementsManager.GetContentDialog(announcement, fe);
                 }
