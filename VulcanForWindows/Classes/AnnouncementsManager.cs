@@ -20,16 +20,58 @@ namespace VulcanForWindows.Classes
     {
         static ContentDialog prev = null;
 
-        public static async void Update(FrameworkElement root)
+        public static async Task Update(FrameworkElement root, StackPanel infosPanel)
         {
             var relevantAnnouncement = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
+            DisplayInfos(relevantAnnouncement, infosPanel);
             DisplayNewPopups(relevantAnnouncement, root);
         }
 
-        public async static void DisplayNewPopups(IEnumerable<Announcement> relevantAnnouncements,FrameworkElement root)
+        public static void DisplayInfos(IEnumerable<Announcement> relevantAnnouncements, StackPanel infosPanel)
         {
-            await Task.Delay(1000);
-            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r=>!r.PopupOnlyOnce || PreferencesManager.Get<bool>("announcements", $"{r.ID}_viewed", false) == false).ToList();
+
+            relevantAnnouncements = relevantAnnouncements.Where(r =>
+            r.Type == VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Info
+            || r.Type == VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Warning
+            || r.Type == VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Error).OrderBy(r => r.Priority);
+
+            relevantAnnouncements =
+                relevantAnnouncements.Where(r => (r.InfoBarOnlyOnce && !PreferencesManager.Get<bool>("announcements", $"{r.ID}_popup_displayed", false)) || !r.InfoBarOnlyOnce);
+
+            foreach (var announcement in relevantAnnouncements)
+            {
+                var i = new InfoBar();
+                switch (announcement.Type)
+                {
+                    case VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Info:
+                        i.Severity = InfoBarSeverity.Informational; break;
+
+                    case VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Warning:
+                        i.Severity = InfoBarSeverity.Warning; break;
+
+                    case VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Error:
+                        i.Severity = InfoBarSeverity.Error; break;
+                }
+                i.Title = announcement.Title;
+                if (!string.IsNullOrEmpty(announcement.MdContent))
+                    i.Content = MdConverter.ConvertMarkdownToStackPanel(announcement.MdContent);
+                i.IsOpen = true;
+                if (!string.IsNullOrEmpty(announcement.ButtonText))
+                {
+                    i.ActionButton = new HyperlinkButton { Content = announcement.ButtonText, NavigateUri = new Uri("https://google.com") };
+                }
+                infosPanel.Children.Add(i);
+                if (announcement.InfoBarOnlyOnce)
+                    PreferencesManager.Set<bool>("announcements", $"{announcement.ID}_popup_displayed", true);
+            }
+        }
+
+        public async static void DisplayNewPopups(IEnumerable<Announcement> relevantAnnouncements, FrameworkElement root)
+        {
+
+            await Task.Delay(500);
+
+            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r => (r.InfoBarOnlyOnce && !PreferencesManager.Get<bool>("announcements", $"{r.ID}_viewed", false)) || !r.InfoBarOnlyOnce).ToList();
 
             announcementsToShow = announcementsToShow
                 .GroupBy(r => r.Priority).OrderByDescending(r => r.Key).Select(r => r.OrderBy(r => r.SentOn)).SelectMany(r => r).ToList();
@@ -42,12 +84,12 @@ namespace VulcanForWindows.Classes
                 var lAnn = announcementsToShow[i];
                 var lPrev = prev;
                 if (prev != null)
-                    dialog.Closed += async delegate 
-                    { 
-                        
+                    dialog.Closed += async delegate
+                    {
+
                         await lPrev.ShowAsync();
 
-                        if(lAnn.PopupOnlyOnce)
+                        if (lAnn.PopupOnlyOnce)
                             PreferencesManager.Set<bool>("announcements", $"{lAnn.ID}_viewed", true);
                     };
 
@@ -57,7 +99,7 @@ namespace VulcanForWindows.Classes
             await prev.ShowAsync();
 
             prev = null;
-
+            return;
         }
 
 

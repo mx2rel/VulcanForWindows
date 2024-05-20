@@ -13,7 +13,7 @@ namespace VulcanForWindows.Preferences
         public static string folder = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "VulcanForWindows");
         private static string prefFolder = Path.Combine(folder, "Preferences");
         private static string GetCategoryPath(string category)
-            => Path.Combine(folder, $"{category ?? "main"}.dat");
+            => Path.Combine(prefFolder, $"{(string.IsNullOrEmpty(category) ? ("main") : category)}.dat");
 
         public static Windows.Storage.StorageFolder roamingFolder =
     Windows.Storage.ApplicationData.Current.RoamingFolder;

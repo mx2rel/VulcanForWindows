@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using VulcanForWindows.Classes;
@@ -59,22 +60,27 @@ namespace VulcanForWindows
         public ObservableCollection<Lesson> lastNieusprawiedliwione;
         public MainPanelPage()
         {
+
             att = new NewResponseEnvelope<Lesson>();
             lastNieusprawiedliwione = new ObservableCollection<Lesson>();
             sg = new ObservableCollection<SubjectGrades>();
             messages = new ObservableCollection<MessageViewModel>();
             Fetch();
             this.InitializeComponent();
-            AnnouncementsManager.Update(rootGrid as FrameworkElement);
+
+            _ = AnnouncementsManager.Update(rootGrid as FrameworkElement, InfosPanel);
         }
+
 
         public void Fetch()
         {
             var acc = new AccountRepository().GetActiveAccount();
+
             FetchAttendance(acc);
             FetchGrades(acc);
             FetchTimetable(acc);
             FetchMessages(acc);
+
         }
 
         public NewResponseEnvelope<Message> messagesEnvelope { get; set; } = new NewResponseEnvelope<Message>();
