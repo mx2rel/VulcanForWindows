@@ -65,7 +65,7 @@
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="GradesPanel" 
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8">
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="9">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -93,6 +93,21 @@
                 </Grid>
 
                 <widgets:AttendanceWidget Grid.Row="1"/>
+            </Grid>
+
+
+
+            <Grid Style="{StaticResource Panel}" x:Name="DeadlineablesPanel"
+              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="8" RowSpacing="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Style="{StaticResource TitleStack}">
+                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
+                    <TextBlock Style="{StaticResource HeaderText}">Zadania i sprawdziany</TextBlock>
+                </StackPanel>
+                <deadlineablecontrols:DeadlineablesWidget Grid.Row="1"/>
             </Grid>
 
             <Grid Style="{StaticResource Panel}" x:Name="TimetablePanel"
@@ -151,19 +166,6 @@
                 <!--<ProgressRing Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsActive="{x:Bind messagesLoaded, Converter={StaticResource VisibilityConverter}, Mode=OneWay}"/>-->
 
-            </Grid>
-
-            <Grid Style="{StaticResource Panel}" x:Name="DeadlineablesPanel"
-              VariableSizedWrapGrid.ColumnSpan="4" VariableSizedWrapGrid.RowSpan="10" RowSpacing="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Style="{StaticResource TitleStack}">
-                    <Image Source="/Assets/GradesIcon.png" Style="{StaticResource HeaderImage}"/>
-                    <TextBlock Style="{StaticResource HeaderText}">Zadania i sprawdziany</TextBlock>
-                </StackPanel>
-                <deadlineablecontrols:DeadlineablesWidget Grid.Row="1"/>
             </Grid>
         </VariableSizedWrapGrid>
     </Grid>

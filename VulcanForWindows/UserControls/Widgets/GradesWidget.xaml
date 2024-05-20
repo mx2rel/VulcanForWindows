@@ -12,7 +12,7 @@
     mc:Ignorable="d">
 
     <FlipView x:Name="flipView" Background="Transparent" DataContext="{x:Bind}" SelectionChanged="flipView_SelectionChanged">
-        <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick" Padding="-2">
+        <ListView ItemsSource="{x:Bind sg}" Grid.Row="1" ItemClick="ListView_ItemClick" Padding="-2" VerticalAlignment="Center">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="g:SubjectGrades">
                     <StackPanel Orientation="Horizontal" Height="32">
