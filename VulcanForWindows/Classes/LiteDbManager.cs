@@ -4,11 +4,12 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Preferences;
 
-namespace VulcanTest.Vulcan
+namespace VulcanForWindows
 {
     public static class LiteDbManager
     {
-        public static LiteDatabaseAsync database = new LiteDatabaseAsync($"Filename={Path.Combine(Preferences.folder, ("main.db"))};Connection=shared;");
+        public static LiteDatabaseAsync database = new LiteDatabaseAsync($"Filename={Path.Combine(Preferences.Preferences.folder, ("main.db"))};Connection=shared;");
     }
 }
