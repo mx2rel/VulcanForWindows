@@ -58,7 +58,7 @@ namespace VulcanForWindows.Classes
                 i.IsOpen = true;
                 if (!string.IsNullOrEmpty(announcement.ButtonText))
                 {
-                    i.ActionButton = new HyperlinkButton { Content = announcement.ButtonText, NavigateUri = new Uri("https://google.com") };
+                    i.ActionButton = new HyperlinkButton { Content = announcement.ButtonText, NavigateUri = new Uri(announcement.ButtonUrl) };
                 }
                 infosPanel.Children.Add(i);
                 if (announcement.InfoBarOnlyOnce)
