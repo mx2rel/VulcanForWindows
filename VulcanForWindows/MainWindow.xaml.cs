@@ -1,12 +1,15 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using VulcanForWindows.Preferences;
 using VulcanForWindows.UserControls;
 using Vulcanova.Features.Auth;
+using VulcanTest.Vulcan;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -18,6 +21,8 @@ namespace VulcanForWindows
     /// </summary>
     public sealed partial class MainWindow : Window, INotifyPropertyChanged
     {
+
+        public static bool REMOVE_ALL_SAVED_FILES_WITH_UPDATE = true;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -46,6 +51,16 @@ namespace VulcanForWindows
             f.Content = new AccountSelectorControl();
             changeAccountButton.Flyout = f;
             Instance = this;
+
+            if (REMOVE_ALL_SAVED_FILES_WITH_UPDATE) {
+                var lastVer = PreferencesManager.Get<string>("lastVerLaunched");
+                if (lastVer != AppWide.AppVersion && !string.IsNullOrEmpty(lastVer) && PreferencesManager.Get<int>("timesLaunched") > 0)
+                {
+                    PreferencesManager.WipeFolder();
+                    ShowLogoutPopup();
+                }
+            }
+
             isLoggedIn = (new AccountRepository().GetActiveAccount() != null);
             if (!isLoggedIn)
             {
@@ -57,13 +72,28 @@ namespace VulcanForWindows
             {
                 LoadMainPage();
             }
+
+           
+
             PreferencesManager.TryGet<DateTime>("lastLaunch", out lastLaunch);
             PreferencesManager.Set<DateTime>("lastLaunch", DateTime.Now);
+            PreferencesManager.Set<string>("lastVerLaunched", AppWide.AppVersion);
 
-
-
-            PreferencesManager.Set<int>("timesLaunched", PreferencesManager.Get<int>("timesLaunched", 0)+1);
+            PreferencesManager.Set<int>("timesLaunched", PreferencesManager.Get<int>("timesLaunched", 0) + 1);
         }
+
+        private async void ShowLogoutPopup()
+        {
+            await Task.Delay(500);
+
+            var popup = new ContentDialog();
+            popup.Title = "Ta aktualizacja wymagała zresetowania zapisanych danych.";
+            popup.Content = "Ze względów technicznych, wylogowaliśmy Cię ze wszystkich kont. Zaloguj się ponownie";
+            popup.PrimaryButtonText = "Okej";
+            popup.XamlRoot = root.XamlRoot;
+            await popup.ShowAsync();
+        }
+
         bool isLoggedIn = false;
         public void Logout()
         {
