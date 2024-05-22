@@ -56,10 +56,11 @@ namespace VulcanForWindows
                 if(Window.Current!=null)
                 if (MainWindow.Instance != Window.Current) Window.Current.Close();
             }
-            catch
+            catch (Exception ex)
             {
                 LoadingBar.Visibility = Visibility.Collapsed;
                 errorBar.IsOpen = true;
+                errorBar.Message = ex.Message;
             }
         }
     }

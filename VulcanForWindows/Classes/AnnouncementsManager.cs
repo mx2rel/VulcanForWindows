@@ -36,7 +36,7 @@ namespace VulcanForWindows.Classes
             || r.Type == VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Error).OrderBy(r => r.Priority);
 
             relevantAnnouncements =
-                relevantAnnouncements.Where(r => (r.InfoBarOnlyOnce && !PreferencesManager.Get<bool>("announcements", $"{r.ID}_popup_displayed", false)) || !r.InfoBarOnlyOnce);
+                relevantAnnouncements.Where(r => (r.InfoBarOnlyOnce && !PreferencesManager.Get<bool>("announcements", $"{r.ID}_viewed", false)) || !r.InfoBarOnlyOnce);
 
             foreach (var announcement in relevantAnnouncements)
             {
@@ -62,7 +62,7 @@ namespace VulcanForWindows.Classes
                 }
                 infosPanel.Children.Add(i);
                 if (announcement.InfoBarOnlyOnce)
-                    PreferencesManager.Set<bool>("announcements", $"{announcement.ID}_popup_displayed", true);
+                    PreferencesManager.Set<bool>("announcements", $"{announcement.ID}_viewed", true);
             }
         }
 
@@ -71,13 +71,13 @@ namespace VulcanForWindows.Classes
 
             await Task.Delay(500);
 
-            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r => (r.InfoBarOnlyOnce && !PreferencesManager.Get<bool>("announcements", $"{r.ID}_viewed", false)) || !r.InfoBarOnlyOnce).ToList();
+            var announcementsToShow = relevantAnnouncements.Where(r => r.ShowAsPopup).Where(r => (r.PopupOnlyOnce && !PreferencesManager.Get<bool>("announcements", $"{r.ID}_popup_viewed", false)) || !r.PopupOnlyOnce).ToList();
 
             announcementsToShow = announcementsToShow
                 .GroupBy(r => r.Priority).OrderByDescending(r => r.Key).Select(r => r.OrderBy(r => r.SentOn)).SelectMany(r => r).ToList();
 
             if (announcementsToShow.Count == 0) return;
-
+            Announcement last = null;
             for (int i = announcementsToShow.Count - 1; i >= 0; i--)
             {
                 var dialog = await GetContentDialog(announcementsToShow[i], root, false);
@@ -90,14 +90,16 @@ namespace VulcanForWindows.Classes
                         await lPrev.ShowAsync();
 
                         if (lAnn.PopupOnlyOnce)
-                            PreferencesManager.Set<bool>("announcements", $"{lAnn.ID}_viewed", true);
+                            PreferencesManager.Set<bool>("announcements", $"{lAnn.ID}_popup_viewed", true);
                     };
-
+                last = lAnn;
                 prev = dialog;
             }
 
             await prev.ShowAsync();
-
+            if (last != null)
+                if (last.PopupOnlyOnce)
+                    PreferencesManager.Set<bool>("announcements", $"{last.ID}_popup_viewed", true);
             prev = null;
             return;
         }
