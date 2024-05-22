@@ -9,14 +9,12 @@ namespace VulcanForWindows.Preferences
 {
     public static class PreferencesManager
     {
-        //C:\Users\Marcel\AppData\Local\Packages
-        public static string folder = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "VulcanForWindows");
+        //C:\Users\Marcel\AppData\Local\Packages\mx2rel.VulcanDlaWindows_rnfa7nf5b04yc
+        public static string folder =
+            Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "Vulcanoid");
         private static string prefFolder = Path.Combine(folder, "Preferences");
         private static string GetCategoryPath(string category)
             => Path.Combine(prefFolder, $"{(string.IsNullOrEmpty(category) ? ("main") : category)}.dat");
-
-        public static Windows.Storage.StorageFolder roamingFolder =
-    Windows.Storage.ApplicationData.Current.RoamingFolder;
 
 
         public static void Set<T>(string key, T value)
@@ -69,8 +67,12 @@ namespace VulcanForWindows.Preferences
             => Clear(null);
 
         public static void Clear(string category)
+            => SaveData(category, new Dictionary<string, string>());
+
+        public static void WipeFolder()
         {
-            SaveData(category, new Dictionary<string, string>());
+            if (Directory.Exists(folder))
+                Directory.Delete(folder, true);
         }
 
         public static Dictionary<(string category, string key), string> GetAllData()
@@ -120,7 +122,7 @@ namespace VulcanForWindows.Preferences
             if (!File.Exists(filePath))
             {
                 var s = File.Create(filePath);
-                Debug.WriteLine($"Created {s.Name}");
+                Debug.WriteLine($"Created {filePath}");
                 s.Close();
             }
             try
