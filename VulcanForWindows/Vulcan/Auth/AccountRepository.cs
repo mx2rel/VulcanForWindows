@@ -147,6 +147,7 @@ namespace Vulcanova.Features.Auth
             var account = accounts[index];
             bool updateActiveAccountLaterOn = GetActiveAccount() == account;
 
+            ClientIdentityStore.RemoveClientIdentity(account.IdentityThumbprint);
             accounts.RemoveAt(index);
 
             if (updateActiveAccountLaterOn)
@@ -170,6 +171,9 @@ namespace Vulcanova.Features.Auth
 
         public void Logout()
         {
+            foreach(var account in accounts)
+                ClientIdentityStore.RemoveClientIdentity(account.IdentityThumbprint);
+
             accounts = new List<Account>();
             SaveData();
         }
