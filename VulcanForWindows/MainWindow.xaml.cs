@@ -52,12 +52,13 @@ namespace VulcanForWindows
             changeAccountButton.Flyout = f;
             Instance = this;
 
-            if (REMOVE_ALL_SAVED_FILES_WITH_UPDATE) {
+            if (REMOVE_ALL_SAVED_FILES_WITH_UPDATE)
+            {
                 var lastVer = PreferencesManager.Get<string>("lastVerLaunched");
                 if (lastVer != AppWide.AppVersion && !string.IsNullOrEmpty(lastVer) && PreferencesManager.Get<int>("timesLaunched") > 0)
                 {
                     PreferencesManager.WipeFolder();
-                    ShowLogoutPopup();
+                    ShowLogoutInfo();
                 }
             }
 
@@ -73,7 +74,7 @@ namespace VulcanForWindows
                 LoadMainPage();
             }
 
-           
+
 
             PreferencesManager.TryGet<DateTime>("lastLaunch", out lastLaunch);
             PreferencesManager.Set<DateTime>("lastLaunch", DateTime.Now);
@@ -82,16 +83,13 @@ namespace VulcanForWindows
             PreferencesManager.Set<int>("timesLaunched", PreferencesManager.Get<int>("timesLaunched", 0) + 1);
         }
 
-        private async void ShowLogoutPopup()
+        private void ShowLogoutInfo()
         {
-            await Task.Delay(500);
-
-            var popup = new ContentDialog();
-            popup.Title = "Ta aktualizacja wymagała zresetowania zapisanych danych.";
-            popup.Content = "Ze względów technicznych, wylogowaliśmy Cię ze wszystkich kont. Zaloguj się ponownie";
-            popup.PrimaryButtonText = "Okej";
-            popup.XamlRoot = root.XamlRoot;
-            await popup.ShowAsync();
+            var info = new InfoBar();
+            info.Title = "Ta aktualizacja wymagała zresetowania zapisanych danych.";
+            info.Content = "Ze względów technicznych, wylogowaliśmy Cię ze wszystkich kont. Zaloguj się ponownie";
+            info.Severity = InfoBarSeverity.Informational;
+            info.IsOpen = true;
         }
 
         bool isLoggedIn = false;
