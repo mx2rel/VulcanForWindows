@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -122,6 +122,6 @@ namespace VulcanForWindows
         }
 
         void CheckedOrUnchecked(SubjectGradesAnalyzed s)
-            => Preferences.Set<bool>($"Analyzer_{s.subject.Id}_Include", s.includeInCalculations);
+            => Preferences.PreferencesManager.Set<bool>($"Analyzer_{s.subject.Id}_Include", s.includeInCalculations);
     }
 }
