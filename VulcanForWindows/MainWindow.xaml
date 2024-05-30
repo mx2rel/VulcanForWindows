@@ -10,7 +10,7 @@
         <MicaBackdrop/>
     </Window.SystemBackdrop>
 
-    <Grid x:Name="root">
+    <Grid>
 
         <Grid>
             <Grid.RowDefinitions>

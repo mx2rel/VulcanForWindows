@@ -10,18 +10,20 @@
     <Grid>
         <ProgressBar  IsIndeterminate="True" ShowPaused="False" ShowError="False" VerticalAlignment="Top" x:Name="LoadingBar" Visibility="Collapsed"/>
 
-        <InfoBar
-            Severity="Informational"
-            IsOpen="True"
-            Title="Vulcanoid jest w trakcie rozwoju"
-            Message="Vulcanoid jest w wczesnej fazie rozwoju - pamiętaj, że mogą występować błędy." />
+
 
         <Grid VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Padding="0,100,0,0" >
+            <!--<InfoBar
+    Severity="Informational"
+    IsOpen="True"
+    Title="Vulcanoid jest w trakcie rozwoju"
+    Message="Vulcanoid jest w wczesnej fazie rozwoju - pamiętaj, że mogą występować błędy." />-->
+            <StackPanel Padding="0,100,0,0" Grid.Row="1" >
                 <Grid HorizontalAlignment="Center" RowSpacing="-3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -35,10 +37,10 @@
                 </Grid>
             </StackPanel>
 
-            <Grid VerticalAlignment="Stretch" Grid.Row="1">
+            <Grid VerticalAlignment="Stretch" Grid.Row="2" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <!--<ColumnDefinition Width="*"/>-->
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="20" HorizontalAlignment="Center" Width="300" >
