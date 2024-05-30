@@ -46,7 +46,7 @@
                 <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="20" HorizontalAlignment="Center" Width="300" >
                     <TextBox Header="Token:" PlaceholderText="XXXXXX" x:Name="token"/>
                     <TextBox Header="Symbol:" PlaceholderText="wroclaw" x:Name="symbol"/>
-                    <NumberBox Header="Pin:" PlaceholderText="123456" x:Name="pin"/>
+                    <TextBox Header="Pin:" PlaceholderText="123456" x:Name="pin"/>
                     <StackPanel Spacing="10">
                         <InfoBar x:Name="errorBar"
     IsOpen="False"
