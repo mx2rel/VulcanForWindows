@@ -414,7 +414,7 @@ namespace VulcanForWindows
 
         private void RemoveHipotheticGrade(object sender, RoutedEventArgs e)
         {
-            var grade = ((sender as MenuFlyoutItem).DataContext as Grade);
+            var grade = ((sender as MenuFlyoutItem).DataContext as SubjectGradesGrade);
             var match = grades.ToArray().Where(r => r.subject.Id == grade.Column.Subject.Id).ToArray() ;
             if (match.Length == 0) return;
             match[0].removeAddedGrade(grade);

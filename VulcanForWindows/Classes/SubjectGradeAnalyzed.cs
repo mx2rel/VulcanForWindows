@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Classes.Grades;
 using VulcanForWindows.Preferences;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Features.Grades;
@@ -16,7 +17,7 @@ namespace VulcanForWindows.Classes
         public SubjectGradesAnalyzed(Subject subject, Grade[] g, bool FetchAverages = true)
         {
             this.subject = subject;
-            grades = new ObservableCollection<Grade>(g.Where(r => r.Column.Subject.Id == subject.Id));
+            grades = new ObservableCollection<SubjectGradesGrade>(SubjectGradesGrade.Get(g.Where(r => r.Column.Subject.Id == subject.Id)));
 
             if (FetchAverages)
                 FetchYearlyAverage();

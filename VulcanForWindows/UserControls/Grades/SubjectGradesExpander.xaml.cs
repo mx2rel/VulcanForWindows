@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using VulcanForWindows.Classes;
+using VulcanForWindows.Classes.Grades;
 using Vulcanova.Features.Grades;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -57,15 +58,25 @@ namespace VulcanForWindows.UserControls.Grades
 
         private void RemoveHipotheticGrade(object sender, RoutedEventArgs e)
         {
-            var grade = ((sender as MenuFlyoutItem).DataContext as Grade);
+            var grade = ((sender as MenuFlyoutItem).DataContext as SubjectGradesGrade);
             SubjectGrades.removeAddedGrade(grade);
+        }
+        private void ExcludeGrade(object sender, RoutedEventArgs e)
+        {
+            var grade = ((sender as MenuFlyoutItem).DataContext as SubjectGradesGrade);
+            SubjectGrades.excludeGrade(grade);
+        }
+        private void IncludeGrade(object sender, RoutedEventArgs e)
+        {
+            var grade = ((sender as MenuFlyoutItem).DataContext as SubjectGradesGrade);
+            SubjectGrades.includeGradeBack(grade);
         }
 
         private void ViewGradeDetails(object sender, TappedRoutedEventArgs e)
         {
             if (sender is FrameworkElement fe)
             {
-                var grade = (fe.Parent as FrameworkElement).DataContext as Grade;
+                var grade = (fe.Parent as FrameworkElement).DataContext as SubjectGradesGrade;
                 if (!grade.IsHipothetic)
                     GradeFullInfo.OpenGradeFullInfo(grade, SubjectGrades);
             }
@@ -135,6 +146,11 @@ namespace VulcanForWindows.UserControls.Grades
             //TopLevel.UpdateLayout();
             var lv = ((MainExpander.Content as Grid).Children[1] as ListView);
             lv.ScrollIntoView(lv.Items.Last());
+        }
+
+        private void BringBackToReal(object sender, RoutedEventArgs e)
+        {
+            SubjectGrades.BringBackToReal();
         }
     }
 }

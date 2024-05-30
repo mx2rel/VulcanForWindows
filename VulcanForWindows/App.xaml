@@ -18,6 +18,7 @@
             <!-- Other app resources here -->
 
             <converters:UintToColor x:Key="UintToColor"/>
+            <converters:BoolFlipper x:Key="BoolFlipper"/>
             
             <x:Double x:Key="ContentDialogMinWidth">300</x:Double>
             <x:Double x:Key="ContentDialogMaxWidth">1200</x:Double>

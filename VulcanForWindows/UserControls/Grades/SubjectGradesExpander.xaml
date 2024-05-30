@@ -9,6 +9,7 @@
     xmlns:controls="using:VulcanForWindows.UserControls"
     xmlns:converters="using:Converters"
     xmlns:grades="using:Vulcanova.Features.Grades"
+    xmlns:cgrades="using:VulcanForWindows.Classes.Grades"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -88,7 +89,7 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <StackPanel HorizontalAlignment="Left">
+                <StackPanel HorizontalAlignment="Left" Spacing="5">
                     <controls:TitleValueDisplayer Title="Średnia z semestru" 
                               Value="{x:Bind SubjectGrades.termDisplayedAverage, Mode=OneWay, Converter={StaticResource NumberToTwoDecimals}}" DisplayStyle="Vertical"
                               Width="150" 
@@ -111,8 +112,9 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                             </TextBlock>
                         </controls:TitleValueDisplayer.Content>
                     </controls:TitleValueDisplayer>
-                    <Button Content="Dodaj hip. ocenę" HorizontalAlignment="Stretch" Click="AddHipotheticGrade">
-                    </Button>
+                    <Button Content="Dodaj hip. ocenę" HorizontalAlignment="Stretch" Click="AddHipotheticGrade"/>
+                    <Button Content="Przyw. prawdz. stan" HorizontalAlignment="Stretch" Click="BringBackToReal" IsEnabled="{x:Bind SubjectGrades.isDisplayingActualAverages, Converter={StaticResource BoolFlipper}, ConverterParameter=True, Mode=OneWay}"/>
+
                 </StackPanel>
                 
                 <ListView x:Name="GradesList" Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{x:Bind SubjectGrades.grades}" 
@@ -124,7 +126,7 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="grades:Grade">
+                        <DataTemplate x:DataType="cgrades:SubjectGradesGrade">
                             <Grid DataContext="{x:Bind}" HorizontalAlignment="Stretch" Height="42" ColumnSpacing="10" Padding="0,0,10,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
@@ -152,7 +154,7 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                                     </Grid.RowDefinitions>
 
 
-                                    <TextBlock Text="{x:Bind Column.Name}" FontWeight="Medium"/>
+                                    <TextBlock Text="{x:Bind Column.Name}" TextDecorations="{x:Bind isBeingExcluded, Converter={StaticResource BoolToStrings}, ConverterParameter=Strikethrough!None, Mode=OneWay}" FontWeight="Medium"/>
                                     <StackPanel Orientation="Horizontal" Spacing="3" Grid.Row="1">
                                         <TextBlock  FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
                                                 <Run Text="{x:Bind Column.Weight}"/>
@@ -170,22 +172,24 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                                     </StackPanel>
 
                                 </Grid>
-                                <Button Grid.Column="3" DataContext="{x:Bind}" Background="Transparent" BorderThickness="0"
-                                             Visibility="{x:Bind IsHipothetic, Converter={StaticResource VisibilityConverter}}" HorizontalAlignment="Right">
+                                <Border Grid.Column="3" Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
+        ConverterParameter=Orange!Red}" HorizontalAlignment="Right" CornerRadius="4" Padding="3" VerticalAlignment="Center"
+            Visibility="{x:Bind IsHipotheticOrRecent, Converter={StaticResource VisibilityConverter}}" Tapped="ViewGradeDetails">
+                                    <TextBlock Text="{x:Bind IsHipothetic, Converter={StaticResource BoolToStrings}, ConverterParameter=Hipotetyczna!Nowa}" FontWeight="Bold" FontSize="12"/>
+                                </Border>
+                                <Button Grid.Column="4" DataContext="{x:Bind}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Right">
                                     <Button.Content>
                                         <SymbolIcon Symbol="More"/>
                                     </Button.Content>
                                     <Button.Flyout>
                                         <MenuFlyout Placement="Bottom">
-                                            <MenuFlyoutItem Text="Usuń ocenę" Click="RemoveHipotheticGrade"/>
+                                            <MenuFlyoutItem Text="Usuń ocenę" Click="RemoveHipotheticGrade" Visibility="{x:Bind IsHipothetic, Converter={StaticResource VisibilityConverter}}"/>
+                                            <MenuFlyoutItem Text="Wyklucz ocenę" Click="ExcludeGrade" Visibility="{x:Bind displayExclude, Mode=OneWay}"/>
+                                            <MenuFlyoutItem Text="Uwzględnij ocenę" Click="IncludeGrade" Visibility="{x:Bind displayInclude, Mode=OneWay}"/>
                                         </MenuFlyout>
                                     </Button.Flyout>
                                 </Button>
-                                <Border Grid.Column="4" Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
-                                        ConverterParameter=Orange!Red}" HorizontalAlignment="Right" CornerRadius="4" Padding="3" VerticalAlignment="Center"
-                                            Visibility="{x:Bind IsHipotheticOrRecent, Converter={StaticResource VisibilityConverter}}" Tapped="ViewGradeDetails">
-                                    <TextBlock Text="{x:Bind IsHipothetic, Converter={StaticResource BoolToStrings}, ConverterParameter=Hipotetyczna!Nowa}" FontWeight="Bold" FontSize="12"/>
-                                </Border>
+                                
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
