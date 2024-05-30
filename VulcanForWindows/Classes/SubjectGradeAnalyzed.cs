@@ -42,6 +42,10 @@ namespace VulcanForWindows.Classes
 
         }
 
+        public string additionalInfo => (!string.IsNullOrEmpty(finalGrade)) ? 
+            ($"{(isFinalGradePredicted ? ("Przewidywana") : ("Końcowa"))}: {finalGrade}")
+            : "";
+
         public string displayGrade => (finalGrade == null) ? ((finalGradeOverride == null) ? finalGradePredicted : finalGradeOverride) : finalGrade;
         public string defaultGrade => (finalGrade == null) ? finalGradePredicted : finalGrade;
         public string finalGradeOverride
@@ -58,7 +62,7 @@ namespace VulcanForWindows.Classes
 
         string finalGradePredicted;
 
-        public bool allowEdits => finalGrade == null && includeInCalculations;
+        public bool allowEdits => (finalGrade == null || isFinalGradePredicted) && includeInCalculations;
         public bool includeInCalculations
         {
             get

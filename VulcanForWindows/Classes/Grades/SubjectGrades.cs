@@ -93,10 +93,22 @@ namespace VulcanForWindows.Classes
             var g = finalGrades.Grades.Where(r => r.Subject.Id == subject.Id);
             if (g.Count() > 0)
             {
-                finalGrade = g.First().FinalGrade;
+                var f = g.First();
+                if (string.IsNullOrEmpty(f.FinalGrade))
+                {
+                    if (FinalGradeParser.TryGetValueFromDescriptiveForm(f.PredictedGrade, out var v))
+                        finalGrade = v.ToString("0");
+                }
+                else
+                    if (FinalGradeParser.TryGetValueFromDescriptiveForm(f.FinalGrade, out var v))
+                    finalGrade = v.ToString("0");
+
+                isFinalGradePredicted = string.IsNullOrEmpty(f.FinalGrade);
+
                 //if (string.IsNullOrEmpty(finalGrade)) finalGrade = g.First().PredictedGrade;
                 OnPropertyChanged(nameof(finalGrade));
                 OnPropertyChanged(nameof(hasFinalGrade));
+                OnPropertyChanged(nameof(isFinalGradePredicted));
             }
             return finalGrade;
         }
@@ -147,6 +159,7 @@ namespace VulcanForWindows.Classes
         public Grade[] recentGrades => grades.OrderBy(r => r.DateCreated).ToList().Take(10).ToArray();
         public string finalGrade { get; set; }
         public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
+        public bool isFinalGradePredicted { get; set; }
 
         [JsonIgnore]
         public GradesCountChartData gradesCountChart => GradesCountChartData.Generate(grades.ToArray());
