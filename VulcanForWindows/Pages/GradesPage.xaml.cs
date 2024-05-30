@@ -79,18 +79,18 @@ namespace VulcanForWindows.Pages
         {
             await Task.Delay(100);
             ProgressBar.Visibility = Visibility.Visible;
-            //if (PeriodEnvelopes.TryGetValue(SelectedPeriod.Id, out var v))
-            //{
-            //    await v.Sync();
-            //    GradesLoaded(v.Entries.ToArray());
+            if (PeriodEnvelopes.TryGetValue(SelectedPeriod.Id, out var v))
+            {
+                await v.Sync();
+                GradesLoaded(v.Entries.ToArray());
 
-            //}
-            //else
-            //{
-                PeriodEnvelopes[SelectedPeriod.Id] = await new GradesService().GetPeriodGradesV3(new AccountRepository().GetActiveAccount(), SelectedPeriod.Id, waitForSync: true, forceSync: true);
+            }
+            else
+            {
+                PeriodEnvelopes[SelectedPeriod.Id] = await new GradesService().GetPeriodGradesV3(new AccountRepository().GetActiveAccount(), SelectedPeriod.Id, waitForSync: true, forceSync: false);
                 IEnumerable<Grade> d = PeriodEnvelopes[SelectedPeriod.Id].Entries.ToArray();
                 GradesLoaded(d);
-            //}
+            }
             ProgressBar.Visibility = Visibility.Collapsed;
         }
 

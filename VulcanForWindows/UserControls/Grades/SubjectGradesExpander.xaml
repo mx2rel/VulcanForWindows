@@ -59,7 +59,7 @@
                     <controls:AverageDisplayerSmall Grid.Column="1"
                         Title="Średnia roczna" Value="{x:Bind SubjectGrades.yearActualAverage, Mode=OneWay, Converter={StaticResource NumberToTwoDecimals}}" />
                 </StackPanel>
-                <controls:AverageDisplayerSmall Title="Ocena końcowa" Value="{x:Bind SubjectGrades.finalGrade, Mode=OneWay}" Grid.Column="3" Visibility="{x:Bind SubjectGrades.hasFinalGrade, Mode=OneWay}" Width="92"/>
+                <controls:AverageDisplayerSmall Title="{x:Bind SubjectGrades.isFinalGradePredicted, Converter={StaticResource BoolToStrings}, ConverterParameter=Przewidywana!Końcowa, Mode=OneWay}" Value="{x:Bind SubjectGrades.finalGrade, Mode=OneWay}" Grid.Column="3" Visibility="{x:Bind SubjectGrades.hasFinalGrade, Mode=OneWay}" Width="92"/>
 
             </Grid>
         </Expander.Header>
