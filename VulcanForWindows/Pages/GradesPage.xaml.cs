@@ -45,7 +45,7 @@ namespace VulcanForWindows.Pages
         }
 
         public List<Period> AllPeriods { get; set; }
-        public string[] DisplayPeriods { get => AllPeriods.Select(r => $"Klasa {r.Level}, Semestr {r.Number} ({r.Id})").ToArray(); }
+        public string[] DisplayPeriods { get => AllPeriods.Select(r => $"Klasa {r.Level}, Semestr {r.Number}").ToArray(); }
 
         public static IDictionary<int, NewResponseEnvelope<Grade>> PeriodEnvelopes = new Dictionary<int, NewResponseEnvelope<Grade>>();
 

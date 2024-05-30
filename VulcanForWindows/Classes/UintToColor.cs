@@ -15,12 +15,22 @@ namespace Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (targetType == typeof(Brush)) return new SolidColorBrush(GetColor(value, parameter));
-            if (targetType == typeof(Color)) return GetColor(value, parameter);
+            if (targetType == typeof(Brush))
+            {
+                if (language == "acrylic")
+                    return new AcrylicBrush()
+                    {
+                        TintColor = GetColor(value, parameter, false).Value,
+                        TintOpacity = 0.9,
+                        TintLuminosityOpacity = 0.6,
+                    };
+                return new SolidColorBrush(GetColor(value, parameter, false).Value);
+            }
+            if (targetType == typeof(Color)) return GetColor(value, parameter, false).Value;
             return null;
         }
 
-        Color GetColor(object value, object parameter)
+        Color? GetColor(object value, object parameter, bool returnNull = false)
         {
             if (value is uint uintColor)
             {
@@ -42,14 +52,16 @@ namespace Converters
                     }
                     else
                     {
-                        return Colors.White;
+                        if (returnNull) return null;
+                        return Colors.Transparent;
                     }
                 }
 
 
                 return ColorHelper.FromArgb(a, r, g, b);
             }
-            return Colors.Blue;
+            if (returnNull) return null;
+            return Colors.Transparent;
         }
 
 

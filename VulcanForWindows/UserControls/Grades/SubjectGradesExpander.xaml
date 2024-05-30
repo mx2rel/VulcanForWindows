@@ -62,7 +62,7 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate x:DataType="grades:Grade">
                             <!--<Grid Width="35" Height="35" >-->
-                            <TextBlock Text="{x:Bind Content}" Foreground="{x:Bind Column.Color, Converter={StaticResource UintToColor}}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Content}" Foreground="{x:Bind Column.Color, Converter={StaticResource UintToColor}, ConverterParameter=White}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
                             <!--</Grid>-->
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>

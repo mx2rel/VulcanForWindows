@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
+        <converters:UintToColor x:Key="UintToColor"/>
         <controls:InfoDisplayControl x:Key="InfoDisplayControl"/>
     </UserControl.Resources>
 
@@ -30,7 +31,7 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Border Background="{StaticResource LayerOnAcrylicFillColorDefaultBrush}" VerticalAlignment="Top" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
+                <Border Background="{x:Bind Grade.Column.Color, Converter={StaticResource UintToColor}, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
                     <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="50" FontWeight="Bold" Padding="0,0,0,5"/>
                 </Border>
                 <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Spacing="0">
