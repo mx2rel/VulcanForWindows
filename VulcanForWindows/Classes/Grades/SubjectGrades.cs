@@ -24,7 +24,7 @@ namespace VulcanForWindows.Classes
     {
         public Subject subject { get; set; }
 
-        public int periodId => (grades.Count == 0) ? 0 : ( grades.FirstOrDefault().Column.PeriodId);
+        public int periodId => (grades.Count == 0) ? 0 : (grades.FirstOrDefault().Column.PeriodId);
 
         public ObservableCollection<Grade> grades
         {
@@ -185,52 +185,66 @@ namespace VulcanForWindows.Classes
 
         public async Task<(double average, int count, int weightSum)> CalculateYearlyAverage(Grade[] excludeGrades = null, bool forceSlowMethod = false, bool includeAddedGrades = false)
         {
-            if (excludeGrades == null) excludeGrades = new Grade[0];
-            var YearlyAveragesEntryKey = GetYearlyAverageId(includeAddedGrades ? addedGrades : null) +
-                string.Join(',', excludeGrades.Select(r => r.Id).ToArray());
+            //if (excludeGrades == null) excludeGrades = new Grade[0];
+            //var YearlyAveragesEntryKey = GetYearlyAverageId(includeAddedGrades ? addedGrades : null) +
+            //    string.Join(',', excludeGrades.Select(r => r.Id).ToArray());
 
 
-            if (YearlyAverages.TryGetValue(YearlyAveragesEntryKey, out var o))
-            {
-                if (DateTime.Now - o.generatedAt < new TimeSpan(0, 15, 0))
-                    return o.data;
-                else
-                    YearlyAverages.Remove(YearlyAveragesEntryKey);
-            }
+            //if (YearlyAverages.TryGetValue(YearlyAveragesEntryKey, out var o))
+            //{
+            //    if (DateTime.Now - o.generatedAt < new TimeSpan(0, 15, 0))
+            //        return o.data;
+            //    else
+            //        YearlyAverages.Remove(YearlyAveragesEntryKey);
+            //}
 
-            if (!forceSlowMethod && (YearlyAverages.TryGetValue(GetYearlyAverageId(includeAddedGrades ? addedGrades : null), out var YearlyAveragesData)))
-            {
-                var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
-                excludeGrades = excludeGrades.Where(r => r.ActualValue.HasValue && r.Column.Weight != 0).ToArray();
-                foreach (var excludedGrade in excludeGrades)
-                    sum -= (double)excludedGrade.ActualValue.Value * (double)excludedGrade.Column.Weight;
-                var weightSum = YearlyAveragesData.data.weightSum - excludeGrades.Select(r => r.Column.Weight).Sum();
+            //if (!forceSlowMethod && (YearlyAverages.TryGetValue(GetYearlyAverageId(includeAddedGrades ? addedGrades : null), out var YearlyAveragesData)))
+            //{
+            //    var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
+            //    excludeGrades = excludeGrades.Where(r => r.ActualValue.HasValue && r.Column.Weight != 0).ToArray();
+            //    foreach (var excludedGrade in excludeGrades)
+            //        sum -= (double)excludedGrade.ActualValue.Value * (double)excludedGrade.Column.Weight;
+            //    var weightSum = YearlyAveragesData.data.weightSum - excludeGrades.Select(r => r.Column.Weight).Sum();
 
-                var output = (sum / weightSum, YearlyAveragesData.data.count - excludeGrades.Length, weightSum);
+            //    var output = (sum / weightSum, YearlyAveragesData.data.count - excludeGrades.Length, weightSum);
 
-                YearlyAverages.Add(YearlyAveragesEntryKey, (output, DateTime.Now));
+            //    YearlyAverages.Add(YearlyAveragesEntryKey, (output, DateTime.Now));
 
-                return output;
-            }
-            else
-            {
-                var excludeIds = excludeGrades.Select(r => r.Id).ToList();
-                if (_yearGrades == null) _yearGrades =
+            //    return output;
+            //}
+            //else
+            //{
+            //    var excludeIds = excludeGrades.Select(r => r.Id).ToList();
+            //    if (_yearGrades == null) _yearGrades =
+            //        (await (new GradesService()).FetchGradesFromLevelAsync(new AccountRepository().GetActiveAccount(), periodId));
+
+            //    var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r => r.Column.Subject.Id == subject.Id);
+            //    var yearlyGrades = gradesOnly;
+            //    if (includeAddedGrades) yearlyGrades = yearlyGrades.Concat(addedGrades).ToArray();
+
+            //    var yearlyAverage = yearlyGrades.Where(r => ((excludeGrades == null) ? true : (!excludeIds.Contains(r.Id)))).ToArray().CalculateAverage();
+
+            //    var output = (yearlyAverage, yearlyGrades.Count(), yearlyGrades.Select(r => r.Column.Weight).Sum());
+
+            //    YearlyAverages[YearlyAveragesEntryKey] = (output, DateTime.Now);
+
+            //    return output;
+            //}
+
+            _yearGrades =
                     (await (new GradesService()).FetchGradesFromLevelAsync(new AccountRepository().GetActiveAccount(), periodId));
+            var calculateFrom = _yearGrades.SelectMany(r => r.Value).Concat(addedGrades).ToList();
+            calculateFrom = calculateFrom.Where(r => r.Column.Subject.Id == subject.Id).Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).ToList();
+            if (!includeAddedGrades) calculateFrom = calculateFrom.Where(r => !r.IsHipothetic).ToList();
 
-                var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r => r.Column.Subject.Id == subject.Id);
-                var yearlyGrades = gradesOnly;
-                if (includeAddedGrades) yearlyGrades = yearlyGrades.Concat(addedGrades).ToArray();
-
-                var yearlyAverage = yearlyGrades.Where(r => ((excludeGrades == null) ? true : (!excludeIds.Contains(r.Id)))).ToArray().CalculateAverage();
-
-                var output = (yearlyAverage, yearlyGrades.Count(), yearlyGrades.Select(r => r.Column.Weight).Sum());
-
-                YearlyAverages[YearlyAveragesEntryKey] = (output, DateTime.Now);
-
-                return output;
+            if (calculateFrom.Count() > 0)
+            {
+                var average = (double)calculateFrom.Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).Select(r => Enumerable.Repeat(r.ActualValue.Value, r.Column.Weight)
+                .ToList()).ToList().SelectMany(list => list).ToList().Average();
+                return (average, calculateFrom.Count(), calculateFrom.Select(r => r.Column.Weight).Sum());
             }
 
+            return (0, 0, 0);
         }
 
         public double termActualAverage { get; set; }
