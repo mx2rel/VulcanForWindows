@@ -76,7 +76,7 @@ namespace VulcanForWindows.UserControls.Settings
         {
             if (Uri.TryCreate(url, UriKind.Absolute, out Uri result))
             {
-                return result.Scheme == Uri.UriSchemeHttps;
+                return result.Scheme == Uri.UriSchemeHttps || result.Scheme == Uri.UriSchemeHttp;
             }
 
             return false;

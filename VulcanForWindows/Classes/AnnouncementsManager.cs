@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using VulcanoidServerClient;
 using MarkdownToWinUi3.MdToWinUi;
 using VulcanForWindows.Preferences;
+using VulcanoidServerClient.Api;
 
 namespace VulcanForWindows.Classes
 {
@@ -22,7 +23,10 @@ namespace VulcanForWindows.Classes
 
         public static async Task Update(FrameworkElement root, StackPanel infosPanel)
         {
+            EndpointsHandler.overrideServer = PreferencesManager.Get("Settings", "AnnouncementsServerUrl", "");
+            Debug.WriteLine("OVERRIDE:" + EndpointsHandler.server);
             var relevantAnnouncement = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
+
             DisplayInfos(relevantAnnouncement, infosPanel);
             DisplayNewPopups(relevantAnnouncement, root);
         }
@@ -86,11 +90,10 @@ namespace VulcanForWindows.Classes
                 if (prev != null)
                     dialog.Closed += async delegate
                     {
-
-                        await lPrev.ShowAsync();
-
                         if (lAnn.PopupOnlyOnce)
                             PreferencesManager.Set<bool>("announcements", $"{lAnn.ID}_popup_viewed", true);
+
+                        await lPrev.ShowAsync();
                     };
                 last = lAnn;
                 prev = dialog;
@@ -113,8 +116,10 @@ namespace VulcanForWindows.Classes
             dialog.XamlRoot = fe.XamlRoot;
             dialog.Title = announcement.Title;
             dialog.CloseButtonText = "Zamknij";
+            var sv = new ScrollView();
             var sp = new StackPanel();
-            dialog.Content = sp;
+            sv.Content = sp;
+            dialog.Content = sv;
 
             if (announcement.HasHeaderImg)
             {
@@ -125,11 +130,31 @@ namespace VulcanForWindows.Classes
 
             sp.Children.Add(MdConverter.ConvertMarkdownToStackPanel(announcement.MdContent));
 
+            var bsp = new GridView();
+            bsp.SelectionMode = ListViewSelectionMode.None;
+            sp.Children.Add(bsp);
+
+            foreach (var b in announcement.Buttons)
+            {
+                var btn = new Button();
+                btn.Margin = new Thickness(0,0,3,3);
+                btn.Content = b.Display;
+                btn.Click += (object sender, RoutedEventArgs e) =>
+                {
+                    MainWindow.NavigateTo(b.Path);
+
+                    if (announcement.PopupOnlyOnce)
+                        PreferencesManager.Set<bool>("announcements", $"{announcement.ID}_popup_viewed", false);
+
+                    dialog.Hide();
+                };
+                bsp.Items.Add(btn);
+            }
+
             if (showInstantly)
                 await dialog.ShowAsync();
 
             return dialog;
         }
-
     }
 }
