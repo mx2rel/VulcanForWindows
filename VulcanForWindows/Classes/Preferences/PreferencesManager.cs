@@ -10,11 +10,51 @@ namespace VulcanForWindows.Preferences
     public static class PreferencesManager
     {
         //C:\Users\Marcel\AppData\Local\Packages\mx2rel.VulcanDlaWindows_rnfa7nf5b04yc
-        public static string folder =
-            Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "Vulcanoid");
-        private static string prefFolder = Path.Combine(folder, "Preferences");
+        static bool createdFolderPath = false;
+        static bool createdPrefFolderPath = false;
+        static List<string> createdCategories = new List<string>();
+        public static string folder
+        {
+            get
+            {
+                var path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, "Vulcanoid");
+                if (!createdFolderPath)
+                {
+                    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                    createdFolderPath = true;
+                }
+                return path;
+            }
+        }
+        private static string prefFolder
+        {
+            get
+            {
+                var path = Path.Combine(folder, "Preferences");
+                if (!createdPrefFolderPath)
+                {
+                    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                    createdPrefFolderPath = true;
+                }
+                return path;
+            }
+        }
+
         private static string GetCategoryPath(string category)
-            => Path.Combine(prefFolder, $"{(string.IsNullOrEmpty(category) ? ("main") : category)}.dat");
+        {
+            category = (string.IsNullOrEmpty(category) ? ("main") : category);
+            var path = Path.Combine(prefFolder, $"{category}.txt");
+            if (!createdCategories.Contains(category))
+            {
+                if (!File.Exists(path))
+                {
+                    var sw = File.CreateText(path);
+                    sw.Close();
+                }
+                createdCategories.Add(category);
+            }
+            return path;
+        }
 
 
         public static void Set<T>(string key, T value)
