@@ -96,6 +96,7 @@ namespace VulcanForWindows.Pages
 
         public void GradesLoaded(IEnumerable<Grade> grades)
         {
+            Debug.WriteLine(String.Join(",", grades.Select(r => r.Column.Color)));
             var generated = GradesHelper.GenerateSubjectGrades(grades);
             SubjectGrades = new ObservableCollection<SubjectGrades>(generated);
             SubjectGradesList.ItemsSource = SubjectGrades;

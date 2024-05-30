@@ -15,6 +15,7 @@
         <converters:NumberToTwoDecimals x:Key="NumberToTwoDecimals"/>
         <converters:BoolToColor x:Key="BoolToColor"/>
         <converters:BoolToStrings x:Key="BoolToStrings"/>
+        <converters:UintToColor x:Key="UintToColor"/>
 
 
         <DataTemplate x:Key="HipotheticGradeAddContent">
@@ -60,7 +61,7 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                     <ItemsRepeater.ItemTemplate>
                         <DataTemplate x:DataType="grades:Grade">
                             <!--<Grid Width="35" Height="35" >-->
-                            <TextBlock Text="{x:Bind Content}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{x:Bind Content}" Foreground="{x:Bind Column.Color, Converter={StaticResource UintToColor}}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
                             <!--</Grid>-->
                         </DataTemplate>
                     </ItemsRepeater.ItemTemplate>
@@ -132,8 +133,7 @@ ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlig
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Background="{x:Bind IsHipothetic, Converter={StaticResource BoolToColor},
-                                        ConverterParameter=Orange!Green}" VerticalAlignment="Stretch" 
+                                <Border Background="{x:Bind Column.Color, Converter={StaticResource UintToColor}, ConverterParameter=Transparent}" VerticalAlignment="Stretch" 
                                             HorizontalAlignment="Left" Height="35" CornerRadius="3"
                                             Grid.Column="0" Tapped="ViewGradeDetails">
                                     <TextBlock TextAlignment="Center" Width="35" FontWeight="Medium" FontSize="14" VerticalAlignment="Center" Text="{x:Bind ContentRaw}"/>
