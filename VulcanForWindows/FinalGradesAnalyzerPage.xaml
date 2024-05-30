@@ -7,19 +7,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:classes="using:VulcanForWindows.Classes"
     xmlns:converters="using:Converters"
+    xmlns:controls="using:VulcanForWindows.UserControls"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:BoolToColor x:Key="BoolToColor"/>
+        <converters:NumberToTwoDecimals x:Key="NumberToTwoDecimals"/>
     </Page.Resources>
 
-    <StackPanel Orientation="Horizontal">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <ListView ItemsSource="{x:Bind grades, Mode=OneWay}" SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="classes:SubjectGradesAnalyzed">
                     <Grid ColumnSpacing="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="130"/>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
@@ -31,25 +38,25 @@
                                            Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
                             </CheckBox.Content>
                         </CheckBox>
-                        <TextBlock Text="{x:Bind yearActualAverage}" Grid.Column="1" VerticalAlignment="Center"
+                        <TextBlock Text="{x:Bind yearActualAverage, Converter={StaticResource NumberToTwoDecimals},Mode=OneWay}" Grid.Column="1" VerticalAlignment="Center"
+                                   Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
+                        <TextBlock Text="{x:Bind additionalInfo}" Grid.Column="2" VerticalAlignment="Center"
                                    Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
                         <TextBox Text="{x:Bind displayGrade, Mode=OneWay}" 
                              PlaceholderText="{x:Bind defaultGrade, Mode=OneWay}" 
                              IsEnabled="{x:Bind allowEdits, Mode=OneWay}" 
-                             Grid.Column="2" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"
+                             Grid.Column="3" TextChanged="TextBox_TextChanged" LostFocus="TextBox_LostFocus"
                                  VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind displayGrade, Mode=OneWay}" Grid.Column="3" VerticalAlignment="Center"
+                        <TextBlock Text="{x:Bind displayGrade, Mode=OneWay}" Grid.Column="4" VerticalAlignment="Center"
                                    Foreground="{x:Bind includeInCalculations, Converter={StaticResource BoolToColor}, ConverterParameter=White!Gray, Mode=OneWay}"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
 
         </ListView>
-        <StackPanel>
-            <TextBlock>
-                <Run Text="Avg:"/>
-                <Run Text="" x:Name="averageDisplay"/>
-            </TextBlock>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Padding="0,0,0,80">
+            <TextBlock x:Name="averageDisplay" FontWeight="SemiBold" FontSize="64" HorizontalAlignment="Center"/>
+
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </Page>
