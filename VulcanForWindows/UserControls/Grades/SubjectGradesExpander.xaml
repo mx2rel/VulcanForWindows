@@ -144,6 +144,8 @@
                                                 <Run Text="{x:Bind DateCreated}"/>
                                                 <Run Text=" | "/>
                                                 <Run Text="{x:Bind CreatorName}"/>
+                                                <!--<Run Text=" | "/>
+                                                <Run Text="{x:Bind ActualValue}"/>-->
                                         </TextBlock>
                                         <TextBlock  Visibility="{x:Bind ClassAverageVibility, Mode=OneWay}" FontWeight="SemiLight" FontSize="10" Foreground="LightGray">
                                                 <Run Text="|"/>

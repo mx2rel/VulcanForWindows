@@ -10,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using VulcanForWindows.Classes;
 using VulcanForWindows.Classes.Grades;
 using VulcanForWindows.Extensions;
@@ -75,25 +77,28 @@ namespace VulcanForWindows.Pages
 
         async void LoadSubjectGrades()
         {
+            await Task.Delay(100);
             ProgressBar.Visibility = Visibility.Visible;
-            if (PeriodEnvelopes.TryGetValue(SelectedPeriod.Id, out var v))
-            {
-                await v.Sync();
-                GradesLoaded(v.Entries.ToArray());
+            //if (PeriodEnvelopes.TryGetValue(SelectedPeriod.Id, out var v))
+            //{
+            //    await v.Sync();
+            //    GradesLoaded(v.Entries.ToArray());
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 PeriodEnvelopes[SelectedPeriod.Id] = await new GradesService().GetPeriodGradesV3(new AccountRepository().GetActiveAccount(), SelectedPeriod.Id, waitForSync: true, forceSync: true);
                 IEnumerable<Grade> d = PeriodEnvelopes[SelectedPeriod.Id].Entries.ToArray();
                 GradesLoaded(d);
-            }
+            //}
             ProgressBar.Visibility = Visibility.Collapsed;
         }
 
         public void GradesLoaded(IEnumerable<Grade> grades)
         {
-            SubjectGrades.ReplaceAll(GradesHelper.GenerateSubjectGrades(grades));
+            var generated = GradesHelper.GenerateSubjectGrades(grades);
+            SubjectGrades = new ObservableCollection<SubjectGrades>(generated);
+            SubjectGradesList.ItemsSource = SubjectGrades;
             RecentGrades.ReplaceAll(grades.Where(r => (r.HasBeenModifiedByTeacher ? r.DateModify : r.DateCreated) > DateTime.Now.AddDays(-14))
                 .OrderByDescending(r => (r.HasBeenModifiedByTeacher ? r.DateModify : r.DateCreated)));
         }

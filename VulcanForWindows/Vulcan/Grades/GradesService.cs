@@ -104,7 +104,7 @@ public class GradesService : UonetResourceProvider
         var behaviourGradesResourceKey = GetBehaviourGradesResourceKey(account, yearId, "year");
 
         var rEnvelope = new NewResponseEnvelope<Grade>(await GradesRepository.GetYearGradesForPupilAsync(account.Pupil.Id,
-            yearId), FetchGradesFromLevelOneIEnumerableAsync(account,yearId), async delegate (object sender, IEnumerable<Grade> g)
+            yearId), FetchGradesFromLevelOneIEnumerableAsync(account, yearId), async delegate (object sender, IEnumerable<Grade> g)
         {
             SetJustSynced(normalGradesResourceKey);
             SetJustSynced(behaviourGradesResourceKey);
@@ -148,7 +148,7 @@ public class GradesService : UonetResourceProvider
 
         return d;
     }
-    public async Task<IEnumerable< Grade>> FetchGradesFromLevelOneIEnumerableAsync(Account account, int periodId)
+    public async Task<IEnumerable<Grade>> FetchGradesFromLevelOneIEnumerableAsync(Account account, int periodId)
     {
         return (await FetchGradesFromLevelAsync(account, periodId)).Select(r => r.Value).SelectMany(r => r);
     }
