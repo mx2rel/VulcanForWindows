@@ -126,6 +126,7 @@ namespace VulcanForWindows.Classes
                 var headerImg = new Image();
                 headerImg.Source = new BitmapImage(new Uri(announcement.HeaderImg));
                 sp.Children.Add(headerImg);
+                sp.Children.Add(new Grid() { Height = 20});
             }
 
             sp.Children.Add(MdConverter.ConvertMarkdownToStackPanel(announcement.MdContent));
