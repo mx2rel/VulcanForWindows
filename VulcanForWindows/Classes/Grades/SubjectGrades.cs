@@ -247,6 +247,8 @@ namespace VulcanForWindows.Classes
             _yearGrades =
                     (await (new GradesService()).FetchGradesFromLevelAsync(new AccountRepository().GetActiveAccount(), periodId));
             var calculateFrom = _yearGrades.SelectMany(r => r.Value).Concat(addedGrades).ToList();
+            if (excludeGrades != null)
+                calculateFrom = calculateFrom.Where(r => !excludeGrades.Where(r=>!r.IsHipothetic).Select(p=>p.Id).ToList().Contains(r.Id)).ToList();
             calculateFrom = calculateFrom.Where(r => r.Column.Subject.Id == subject.Id).Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).ToList();
             if (!includeAddedGrades) calculateFrom = calculateFrom.Where(r => !r.IsHipothetic).ToList();
 

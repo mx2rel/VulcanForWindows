@@ -66,7 +66,8 @@ namespace VulcanForWindows.UserControls.Grades
             if (sender is FrameworkElement fe)
             {
                 var grade = (fe.Parent as FrameworkElement).DataContext as Grade;
-                GradeFullInfo.OpenGradeFullInfo(grade, SubjectGrades);
+                if (!grade.IsHipothetic)
+                    GradeFullInfo.OpenGradeFullInfo(grade, SubjectGrades);
             }
         }
 
@@ -115,10 +116,12 @@ namespace VulcanForWindows.UserControls.Grades
                     Subject = new Vulcanova.Features.Shared.Subject()
                     {
                         Id = SubjectGrades.grades[0].Column.Subject.Id
-                    }
+                    },
+                    Color = 16747520
                 },
                 VulcanValue = grade,
-                IsHipothetic = true
+                IsHipothetic = true,
+                Id = (int)DateTime.Now.Ticks,
             });
             MainExpander.DataContext = SubjectGrades;
             MainExpander.UpdateLayout();
