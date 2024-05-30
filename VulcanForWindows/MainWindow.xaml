@@ -45,7 +45,7 @@
                                 <NavigationViewItem Content="Old" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
                                 <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
                                 <!--<NavigationViewItem Content="Wykresy" ToolTipService.ToolTip="Zobacz twoje oceny jako wykres" Tag="GradesChartsPage"/>-->
-                                <!--<NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>-->
+                                <NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>
                             </NavigationViewItem.MenuItems>
 
                         </NavigationViewItem>
