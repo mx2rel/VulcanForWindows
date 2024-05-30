@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="VulcanForWindows.Pages.GradesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controlsGradesCharts="using:VulcanForWindows.UserControls.GradesCharts"
+    xmlns:controls="using:VulcanForWindows.UserControls"
+    xmlns:controlsGrades="using:VulcanForWindows.UserControls.Grades"
+    xmlns:classes="using:VulcanForWindows.Classes"
+    xmlns:grade="using:Vulcanova.Features.Grades"
+    mc:Ignorable="d">
+    <Page.Resources>
+    </Page.Resources>
+
+    <Grid Padding="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Stretch" IsIndeterminate="True" Visibility="Visible"/>
+
+        <StackPanel Spacing="3">
+            <TextBlock Text="Ostatnie oceny" FontWeight="SemiBold" FontSize="18"/>
+            <ScrollView x:Name="RecentGradesDisplayer">
+            <ItemsRepeater Margin="0,0,0,15" ItemsSource="{x:Bind RecentGrades}">
+                <ItemsRepeater.Layout>
+                    <StackLayout Spacing="5" Orientation="Horizontal"/>
+                </ItemsRepeater.Layout>
+                <!--<StackPanel CornerRadius="5" Background="{ThemeResource CardBackgroundFillColorDefault}" Width="300" Height="130"/>-->
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="grade:Grade">
+                        <Grid Background="{ThemeResource CardBackgroundFillColorDefault}" CornerRadius="5"> 
+                            <controls:RecentGrade Grade="{x:Bind}" Width="350" DisplayClassmatesGrades="False"/>
+                        </Grid>
+
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollView>
+        </StackPanel>
+
+        <FlipView x:Name="yearSelector" Grid.Row="1" HorizontalAlignment="Stretch" 
+                  Background="Transparent" VerticalAlignment="Stretch" 
+                  SelectionChanged="SelectedYearChanged" ItemsSource="{x:Bind DisplayPeriods, Mode=OneWay}">
+            <FlipView.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <FlipViewItem>
+                        <TextBlock Text="{x:Bind}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </FlipViewItem>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
+
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListView x:Name="SubjectGradesList" Padding="0" ItemsSource="{x:Bind SubjectGrades}" SelectionMode="None" Margin="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="classes:SubjectGrades">
+                        <ListViewItem>
+                            <controlsGrades:SubjectGradesExpander SubjectGrades="{x:Bind}"/>
+                        </ListViewItem>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+    </Grid>
+</Page>

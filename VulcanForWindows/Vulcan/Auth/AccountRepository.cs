@@ -13,7 +13,7 @@ namespace Vulcanova.Features.Auth
 {
     public class AccountRepository : IAccountRepository
     {
-
+        //TODO: TO STATIC
 
         public delegate void ChangedActiveAccountEvent(Account newActiveAccount);
         public delegate void AccountsChangedEvent();

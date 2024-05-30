@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <converters:VisibilityConverter x:Key="VisibilityConverter"/>
         <converters:DateTimeConverter x:Key="DateTimeConverter"/>
+        <converters:UintToColor x:Key="UintToColor"/>
         <controls:InfoDisplayControl x:Key="InfoDisplayControl"/>
     </UserControl.Resources>
 
@@ -22,41 +23,50 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5" Spacing="8" Orientation="Horizontal">
-                <Border Background="{StaticResource LayerOnAcrylicFillColorDefaultBrush}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
-                    <TextBlock TextAlignment="Center" Width="55"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="55" FontWeight="Bold" Padding="0,0,0,5"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Background="{x:Bind Grade.Column.Color, Converter={StaticResource UintToColor}, Mode=OneWay}" VerticalAlignment="Top" HorizontalAlignment="Center" Height="85" Width="85" CornerRadius="3">
+                    <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="50" FontWeight="Bold" Padding="0,0,0,5"/>
                 </Border>
-                <StackPanel HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Stretch">
-                        <TextBlock FontWeight="Bold" FontSize="22" TextWrapping="WrapWholeWords">
-                    <Run Text="{x:Bind Grade.Column.Name}"/>
-                    <Run Text="("/>
-                    <Run Text="{x:Bind Grade.Column.Code}"/>
-                    <Run Text=")"/>
+                <StackPanel HorizontalAlignment="Stretch" Grid.Column="1" Spacing="0">
+                    <Grid ColumnSpacing="5" HorizontalAlignment="Stretch">
+                        <TextBlock FontWeight="Bold" FontSize="20" TextTrimming="CharacterEllipsis">
+                            <Run Text="{x:Bind Grade.Column.Name}"/>
+                            <Run Text="{x:Bind Grade.Column.Code}" FontSize="12" FontWeight="SemiBold"/>
                         </TextBlock>
                         <Border Grid.Column="2" Background="Red" HorizontalAlignment="Right" CornerRadius="4" Padding="3" VerticalAlignment="Center"
                                             Visibility="{x:Bind Grade.IsHipotheticOrRecent, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="Nowa" FontWeight="Bold" FontSize="14"/>
                         </Border>
-                    </StackPanel>
-                    <TextBlock Foreground="LightGray">
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Spacing="7">
+
+                        <StackPanel>
+                            <TextBlock Foreground="LightGray">
                     <Run Text="{x:Bind Grade.Column.Subject.Name}"/>
                     <Run Text="|"/>
                     <Run Text="Waga:"/>
                     <Run Text="{x:Bind Grade.Column.Weight}"/>
-                    </TextBlock>
-                    <TextBlock Visibility="{x:Bind Grade.HasBeenModifiedByTeacher}" Foreground="LightGray">
-                    <Run Text="Edytowano:"/>
-                    <Run Text="{x:Bind Grade.DateModify}"/>
-                    </TextBlock>
-                    <TextBlock Foreground="LightGray" Text="{x:Bind Grade.CreatorName}"/>
-                    <TextBlock Foreground="LightGray" Text="{x:Bind Grade.DateCreated, Converter={StaticResource DateTimeConverter}}"/>
-
+                            </TextBlock>
+                            <TextBlock Foreground="LightGray" Text="{x:Bind Grade.CreatorName}"/>
+                            <TextBlock Foreground="LightGray" Text="{x:Bind Grade.DateCreated, Converter={StaticResource DateTimeConverter}}" 
+                                       Visibility="{x:Bind Grade.HasBeenModifiedByTeacher, Converter={StaticResource VisibilityConverter}, ConverterParameter=True}"/>
+                            <TextBlock Visibility="{x:Bind Grade.HasBeenModifiedByTeacher}" Foreground="LightGray">
+                    <Run Text="E:" />
+                    <Run Text="{x:Bind Grade.DateModify, Converter={StaticResource DateTimeConverter}}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
-
-            </StackPanel>
-            <Grid Grid.Row="1">
-                <ClassmatesGrades:SingleClassmateGrades ColumnId="{x:Bind Grade.Column.Id}" UserGrade="{x:Bind Grade}" IsCompact="True" ErrorMessageOrientation="Horizontal"/>
+            </Grid>
+            <Grid Grid.Row="1" x:Name="ClassmateGradesContainer">
+                <!--<ClassmatesGrades:SingleClassmateGrades ColumnId="{x:Bind Grade.Column.Id}" UserGrade="{x:Bind Grade}" IsCompact="True" ErrorMessageOrientation="Horizontal"/>-->
             </Grid>
         </Grid>
         <Grid VerticalAlignment="Stretch" Visibility="{x:Bind isGradeNull, Converter={StaticResource VisibilityConverter}}">

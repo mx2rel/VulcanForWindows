@@ -36,15 +36,16 @@
                     <NavigationView.MenuItems>
                         <NavigationViewItem Icon="Home" Tag="MainPanelPage" />
 
-                        <NavigationViewItem Content="Oceny" Tag="GradesPage" >
+                        <NavigationViewItem Content="Oceny" Tag="Pages.GradesPage" >
                             <NavigationViewItem.Icon>
                                 <ImageIcon Source="/Assets/GradesIcon.png"/>
                             </NavigationViewItem.Icon>
                             <NavigationViewItem.MenuItems>
-                                <NavigationViewItem Content="Szczegóły" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
+                                <NavigationViewItem Content="V2" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="Pages.GradesPage"/>
+                                <NavigationViewItem Content="Old" ToolTipService.ToolTip="Wyświetl szczegółowe oceny" Tag="GradesPage"/>
                                 <NavigationViewItem Content="Podsumowanie" ToolTipService.ToolTip="Wyświetl oceny półroczne i końcowe" Tag="GradesSummaryPage"/>
                                 <!--<NavigationViewItem Content="Wykresy" ToolTipService.ToolTip="Zobacz twoje oceny jako wykres" Tag="GradesChartsPage"/>-->
-                                <!--<NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>-->
+                                <NavigationViewItem Content="Analiza ocen końcowych" ToolTipService.ToolTip="Analizuj twoje oceny na koniec roku" Tag="FinalGradesAnalyzerPage"/>
                             </NavigationViewItem.MenuItems>
 
                         </NavigationViewItem>
@@ -59,7 +60,7 @@
                         <NavigationViewItem Icon="Save" Content="Sprawdziany i zadania domowe" Tag="DeadlineablePage" />
                         <NavigationViewItem Icon="Folder" Content="Uwagi i pochwały" Tag="NotesPage" />
                         <!--<NavigationViewItem Icon="Save" Content="test" Tag="BlankPage1" />-->
-                        <!--<NavigationViewItem Icon="Save" Content="Preferencje" Tag="PreferencesViewer" />-->
+                        <NavigationViewItem Icon="Save" Content="Preferencje" Tag="PreferencesViewer" />
                         <!--<NavigationViewItem Icon="Refresh" Content="Menu Item3" Tag="SamplePage3" />
                 <NavigationViewItem Icon="Download" Content="Menu Item4" Tag="SamplePage4" />-->
                     </NavigationView.MenuItems>

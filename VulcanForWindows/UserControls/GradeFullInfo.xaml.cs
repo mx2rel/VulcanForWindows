@@ -37,9 +37,9 @@ namespace VulcanForWindows.UserControls
         {
             if (d is GradeFullInfo control && e.NewValue is SubjectGrades newValue)
             {
-                control.avgChange.Visibility = (newValue == null ) ? Visibility.Collapsed : Visibility.Visible;
+                control.avgChange.Visibility = (newValue == null) ? Visibility.Collapsed : Visibility.Visible;
                 if (newValue == null) return;
-                var change = Math.Round(newValue.yearActualAverage - ((await newValue.CalculateYearlyAverage(new Grade[1] { control.Grade }, includeAddedGrades: false)).average), 2);
+                var change = Math.Round(newValue.yearActualAverage - ((await newValue.CalculateYearlyAverage(new Grade[1] { control.Grade }, calcHipothetical: false)).average), 2);
                 control.avgChange.Text = $"Średnia: {((change > 0) ? "+" : "")}{change}";
             }
         }
@@ -66,6 +66,64 @@ namespace VulcanForWindows.UserControls
         public GradeFullInfo()
         {
             this.InitializeComponent();
+        }
+
+        public static Window OpenGradeFullInfo(Grade grade, SubjectGrades context, bool IsPriorityWindow = true, TypedEventHandler<object, WindowEventArgs> OnClosed = null)
+        {
+            Window w;
+
+            if (IsPriorityWindow)
+                MainWindow.Instance.IsOtherWindowOpen = true;
+
+            w = new Window();
+            var v = new GradeFullInfo();
+            v.Grade = grade;
+            v.DataContext = grade;
+            v.SubjectGrades = context;
+            w.Content = v;
+            w.SystemBackdrop = new MicaBackdrop();
+            int newX = (MainWindow.Instance.AppWindow.Size.Width - 800) / 2 + MainWindow.Instance.AppWindow.Position.X;
+            int newY = (MainWindow.Instance.AppWindow.Size.Height - 450) / 2 + MainWindow.Instance.AppWindow.Position.Y;
+            w.AppWindow.MoveAndResize(new Windows.Graphics.RectInt32(newX, newY, 800, 450));
+            w.ExtendsContentIntoTitleBar = true;
+            if (IsPriorityWindow)
+                w.Activated += W_Activated;
+            if (IsPriorityWindow)
+                w.SizeChanged += W_SizeChanged;
+            if (IsPriorityWindow)
+                w.Closed += W_Closed;
+            if (OnClosed != null)
+                w.Closed += OnClosed;
+            w.Activate();
+
+            return w;
+        }
+
+        private static void W_Closed(object sender, WindowEventArgs args)
+        {
+            MainWindow.Instance.IsOtherWindowOpen = false;
+        }
+
+        private static void W_SizeChanged(object sender, Microsoft.UI.Xaml.WindowSizeChangedEventArgs args)
+        {
+            if (sender is Window w)
+            {
+                w.Close();
+                MainWindow.Instance.IsOtherWindowOpen = false;
+            }
+
+        }
+
+        private static void W_Activated(object sender, Microsoft.UI.Xaml.WindowActivatedEventArgs e)
+        {
+            if (sender is Window w)
+            {
+                if (e.WindowActivationState == WindowActivationState.Deactivated)
+                {
+                    w.Close();
+                    MainWindow.Instance.IsOtherWindowOpen = false;
+                }
+            }
         }
     }
 }

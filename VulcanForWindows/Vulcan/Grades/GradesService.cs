@@ -8,14 +8,17 @@ using AutoMapper;
 using LiteDB.Async;
 using Newtonsoft.Json;
 using VulcanForWindows.Classes;
+using VulcanForWindows.Extensions;
 using VulcanForWindows.Vulcan;
 using VulcanForWindows.Vulcan.Grades;
 using Vulcanova.Core.Uonet;
+using Vulcanova.Features.Attendance;
 using Vulcanova.Features.Auth;
 using Vulcanova.Features.Auth.Accounts;
 using Vulcanova.Features.Shared;
 using Vulcanova.Uonet.Api;
 using Vulcanova.Uonet.Api.Grades;
+using VulcanTest.Vulcan;
 
 namespace Vulcanova.Features.Grades;
 
@@ -30,7 +33,7 @@ public class GradesService : UonetResourceProvider
         var v = new GradesResponseEnvelope(this, account, periodId, normalGradesResourceKey, behaviourGradesResourceKey);
 
 
-        v.Grades = new ObservableCollection<Grade>(await GradesRepository.GetGradesForPupilAsync(account.Pupil.Id,
+        v.Grades = new ObservableCollection<Grade>(await GradesRepository.GetPeriodGradesForPupilAsync(account.Pupil.Id,
             periodId));
 
 
@@ -65,8 +68,61 @@ public class GradesService : UonetResourceProvider
             return onlineGrades;
         }
 
-        return await GradesRepository.GetGradesForPupilAsync(account.Pupil.Id, periodId);
+        return await GradesRepository.GetPeriodGradesForPupilAsync(account.Pupil.Id, periodId);
 
+    }
+
+    public async Task<NewResponseEnvelope<Grade>> GetPeriodGradesV3(Account account, int periodId, EventHandler<IEnumerable<Grade>> OnUpdated = null, bool forceSync = false, bool waitForSync = false)
+    {
+        var normalGradesResourceKey = GetGradesResourceKey(account, periodId);
+        var behaviourGradesResourceKey = GetBehaviourGradesResourceKey(account, periodId);
+
+        var rEnvelope = new NewResponseEnvelope<Grade>(await GradesRepository.GetPeriodGradesForPupilAsync(account.Pupil.Id,
+            periodId), FetchPeriodGradesAsync(account, periodId), async delegate (object sender, IEnumerable<Grade> g)
+        {
+            SetJustSynced(normalGradesResourceKey);
+            SetJustSynced(behaviourGradesResourceKey);
+            await GradesRepository.UpdatePupilGradesAsync(g);
+
+        }, OnUpdated, true);
+
+
+        if (ShouldSync(normalGradesResourceKey) || ShouldSync(behaviourGradesResourceKey) || forceSync)
+        {
+            if (waitForSync)
+                await rEnvelope.Sync();
+            else
+                rEnvelope.Sync();
+
+        }
+
+        return rEnvelope;
+    }
+    public async Task<NewResponseEnvelope<Grade>> GetYearGradesV3(Account account, int yearId, EventHandler<IEnumerable<Grade>> OnUpdated = null, bool forceSync = false, bool waitForSync = false)
+    {
+        var normalGradesResourceKey = GetGradesResourceKey(account, yearId, "year");
+        var behaviourGradesResourceKey = GetBehaviourGradesResourceKey(account, yearId, "year");
+
+        var rEnvelope = new NewResponseEnvelope<Grade>(await GradesRepository.GetYearGradesForPupilAsync(account.Pupil.Id,
+            yearId), FetchGradesFromLevelOneIEnumerableAsync(account, yearId), async delegate (object sender, IEnumerable<Grade> g)
+        {
+            SetJustSynced(normalGradesResourceKey);
+            SetJustSynced(behaviourGradesResourceKey);
+            await GradesRepository.UpdatePupilGradesAsync(g);
+
+        }, OnUpdated, true);
+
+
+        if (ShouldSync(normalGradesResourceKey) || ShouldSync(behaviourGradesResourceKey) || forceSync)
+        {
+            if (waitForSync)
+                await rEnvelope.Sync();
+            else
+                rEnvelope.Sync();
+
+        }
+
+        return rEnvelope;
     }
 
     public async Task<IDictionary<Period, Grade[]>> FetchGradesFromAllPeriodsAsync(Account account)
@@ -75,40 +131,37 @@ public class GradesService : UonetResourceProvider
         //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
         foreach (var period in account.Periods)
         {
-            d.Add(period, (await GetPeriodGrades(account, period.Id,false,true)).Grades.ToArray());
-        }
-
-        return d;
-    }
-
-
-    public async Task<IDictionary<Period, Grade[]>> FetchLevelGradesWithPeriodAsync(Account account, int periodId)
-    {
-        var v = account.Periods.Where(r => r.Id == periodId);
-        if (v.Count() == 0) return null;
-        return await FetchGradesFromLevelAsync(account, v.First().Level);
-    }
-    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromLevelAsync(Account account, int level)
-    {
-        IDictionary<Period, Grade[]> d = new Dictionary<Period, Grade[]>();
-        //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
-        foreach (var period in account.Periods.Where(r => r.Level == level))
-        {
             d.Add(period, (await GetPeriodGrades(account, period.Id, false, true)).Grades.ToArray());
         }
 
         return d;
     }
 
-    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromCurrentLevelAsync(Account account)
+    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromLevelAsync(Account account, int periodId)
     {
-        return await FetchGradesFromLevelAsync(account, account.CurrentPeriod.Level);
+        IDictionary<Period, Grade[]> d = new Dictionary<Period, Grade[]>();
+        //Console.WriteLine(JsonConvert.SerializeObject(account.Periods));
+        foreach (var period in account.Periods.Where(r => r.GetFirstPeriodOfLevel().Id == PeriodExtenstions.GetSchoolYearId(periodId)))
+        {
+            d.Add(period, (await GetPeriodGrades(account, period.Id, false, true)).Grades.ToArray());
+        }
+
+        return d;
+    }
+    public async Task<IEnumerable<Grade>> FetchGradesFromLevelOneIEnumerableAsync(Account account, int periodId)
+    {
+        return (await FetchGradesFromLevelAsync(account, periodId)).Select(r => r.Value).SelectMany(r => r);
     }
 
-    public async Task<Grade[]> FetchGradesFromCurrentPeriodAsync(Account account)
+    public async Task<IDictionary<Period, Grade[]>> FetchGradesFromCurrentLevelAsync(Account account)
+    {
+        return await FetchGradesFromLevelAsync(account, account.CurrentPeriod.Id);
+    }
+
+    public async Task<IEnumerable<Grade>> FetchGradesFromCurrentPeriodAsync(Account account)
         => await FetchPeriodGradesAsync(account, account.CurrentPeriod.Id);
 
-    public async Task<Grade[]> FetchPeriodGradesAsync(Account account, int periodId)
+    public async Task<IEnumerable<Grade>> FetchPeriodGradesAsync(Account account, int periodId)
     {
         var client = await new ApiClientFactory().GetAuthenticatedAsync(account);
 
@@ -149,11 +202,11 @@ public class GradesService : UonetResourceProvider
         return domainGrades;
     }
 
-    private static string GetGradesResourceKey(Account account, int periodId)
-        => $"Grades_{account.Id}_{account.Pupil.Id}_{periodId}";
+    private static string GetGradesResourceKey(Account account, int periodId, string add = "")
+        => $"Grades_{account.Id}_{account.Pupil.Id}{(string.IsNullOrEmpty(add) ? "" : $"_{add}")}_{periodId}";
 
-    private static string GetBehaviourGradesResourceKey(Account account, int periodId)
-        => $"BehaviourGrades_{account.Id}_{account.Pupil.Id}_{periodId}";
+    private static string GetBehaviourGradesResourceKey(Account account, int periodId, string add = "")
+        => $"BehaviourGrades_{account.Id}_{account.Pupil.Id}{(string.IsNullOrEmpty(add) ? "" : $"_{add}")}_{periodId}";
 
     public override TimeSpan OfflineDataLifespan => TimeSpan.FromMinutes(15);
 }
@@ -164,7 +217,7 @@ public static class GradesRepository
 
     public static IDictionary<string, IEnumerable<Grade>> buffer = new Dictionary<string, IEnumerable<Grade>>();
 
-    public static async Task<IEnumerable<Grade>> GetGradesForPupilAsync(int pupilId, int periodId)
+    public static async Task<IEnumerable<Grade>> GetPeriodGradesForPupilAsync(int pupilId, int periodId)
     {
         string code = $"{pupilId}.{periodId}";
 
@@ -175,6 +228,26 @@ public static class GradesRepository
 
         var v = (await LiteDbManager.database.GetCollection<Grade>()
                 .FindAsync(g => g.PupilId == pupilId && g.Column.PeriodId == periodId))
+            .OrderBy(g => g.Column.Subject.Name)
+            .ThenBy(g => g.DateCreated);
+
+        buffer[code] = v;
+
+        return v;
+    }
+    public static async Task<IEnumerable<Grade>> GetYearGradesForPupilAsync(int pupilId, int periodId)
+    {
+        periodId = PeriodExtenstions.GetSchoolYearId(periodId);
+        var allIds = PeriodExtenstions.GetSchoolYearAllIds(periodId);
+        string code = $"{pupilId}.{periodId}";
+
+        if (buffer.TryGetValue(code, out var d))
+        {
+            return d;
+        }
+
+        var v = (await LiteDbManager.database.GetCollection<Grade>()
+                .FindAsync(g => g.PupilId == pupilId && allIds.Contains(g.Column.PeriodId)))
             .OrderBy(g => g.Column.Subject.Name)
             .ThenBy(g => g.DateCreated);
 

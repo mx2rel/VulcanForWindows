@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <Border Background="green" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="95" Width="95" CornerRadius="3">
+            <Border Background="{x:Bind Grade.Column.Color, Converter={StaticResource UintToColor}, ConverterParameter=Transparent}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Height="95" Width="95" CornerRadius="3">
                 <TextBlock TextAlignment="Center" Width="55"  VerticalAlignment="Center" Text="{x:Bind Grade.ContentRaw}" FontSize="55" FontWeight="Bold" Padding="0,0,0,5"/>
             </Border>
             <StackPanel Grid.Column="1">
@@ -63,7 +63,7 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Padding="20,0,20,20">
-            <ClassmatesGrades:SingleClassmateGrades ColumnId="{x:Bind Grade.Column.Id}" UserGrade="{x:Bind Grade}"/>
+            <ClassmatesGrades:SingleClassmateGrades ColumnId="{x:Bind Grade.Column.Id}" UserGrade="{x:Bind Grade}" Color="{x:Bind Grade.Column.Color, Converter={StaticResource UintToColor}, ConverterParameter=Blue}"/>
         </Grid>
     </Grid>
 </UserControl>

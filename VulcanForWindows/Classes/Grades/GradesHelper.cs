@@ -15,7 +15,7 @@ namespace VulcanForWindows.Classes.Grades
         /// </summary>
         /// <param name="grades">Array to generate <see cref="SubjectGrades"/> from</param>
         /// <returns></returns>
-        public static SubjectGrades[] GenerateSubjectGrades(this Grade[] grades, bool loadFinalGrade = true)
+        public static SubjectGrades[] GenerateSubjectGrades(this IEnumerable<Grade> grades, bool loadFinalGrade = true)
         {
 
             var r = grades.GroupBy(r => r.Column.Subject.Id).Select(r => new SubjectGrades(r.First().Column.Subject, r.ToArray(), loadFinalGrade: loadFinalGrade)).ToArray();
@@ -23,7 +23,7 @@ namespace VulcanForWindows.Classes.Grades
             return r;
         }
 
-        public static async Task<SubjectGradesAnalyzed[]> GenerateSubjectGradesAnalyzed(this Grade[] g)
+        public static async Task<SubjectGradesAnalyzed[]> GenerateSubjectGradesAnalyzed(this IEnumerable<Grade> g)
         {
             var SubjectGradesAnalyzed = g.GroupBy(r => r.Column.Subject.Id).Select(r => new SubjectGradesAnalyzed(r.First().Column.Subject, r.ToArray(), true)).ToArray();
             foreach (var element in SubjectGradesAnalyzed) await element.FetchYearlyAverage();

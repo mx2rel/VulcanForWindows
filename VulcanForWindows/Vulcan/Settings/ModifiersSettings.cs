@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VulcanForWindows.Preferences;
 
 namespace VulcanTest.Vulcan.Settings
 {
@@ -19,19 +21,19 @@ namespace VulcanTest.Vulcan.Settings
 
         public ModifierSettings(string key, decimal defaultValue)
         {
-            //SelectedValue = decimal.Parse(PreferencesManager.Get(key, defaultValue.ToString(CultureInfo.InvariantCulture)),
-            //    CultureInfo.InvariantCulture);
+            SelectedValue = decimal.Parse(PreferencesManager.Get(key, defaultValue.ToString(CultureInfo.InvariantCulture)),
+                CultureInfo.InvariantCulture);
 
-            //UsesCustomValue = PreferencesManager.Get($"{key}IsCustom", false);
+            UsesCustomValue = PreferencesManager.Get($"{key}IsCustom", false);
 
             //this.WhenAnyValue(v => v.SelectedValue)
             //    .Subscribe(value
-            //        => PreferencesManager.Set(key, value.ToString(CultureInfo.InvariantCulture)));
+            //        => Preferences.Set(key, value.ToString(CultureInfo.InvariantCulture)));
 
             //this.WhenAnyValue(vm => vm.UsesCustomValue)
             //    .Subscribe(value =>
             //    {
-            //        PreferencesManager.Set($"{key}IsCustom", value);
+            //        Preferences.Set($"{key}IsCustom", value);
             //    });
 
             //TODO: SAVE

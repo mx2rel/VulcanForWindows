@@ -3,14 +3,17 @@ using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
+using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Newtonsoft.Json;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +25,7 @@ using System.Threading.Tasks;
 using Vulcanova.Features.Grades;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -30,6 +34,41 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
 {
     public sealed partial class SingleClassmateGrades : UserControl, INotifyPropertyChanged
     {
+
+
+        public static readonly DependencyProperty ColorProperty =
+            DependencyProperty.Register("Brush", typeof(Color), typeof(SingleClassmateGrades), new PropertyMetadata(null, Brush_Changed));
+
+        public Color Color
+        {
+            get => (Color)GetValue(ColorProperty);
+            set => SetValue(ColorProperty, value);
+        }
+
+        private static void Brush_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SingleClassmateGrades control && e.NewValue is Color newValue)
+            {
+            }
+        }
+
+
+        public static readonly DependencyProperty LoadOnSetProperty =
+            DependencyProperty.Register("LoadOnSet", typeof(bool), typeof(SingleClassmateGrades), new PropertyMetadata(true, LoadOnSet_Changed));
+
+        public bool LoadOnSet
+        {
+            get => (bool)GetValue(LoadOnSetProperty);
+            set => SetValue(LoadOnSetProperty, value);
+        }
+
+        private static void LoadOnSet_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is SingleClassmateGrades control && e.NewValue is bool newValue)
+            {
+                // TODO: Implement your logic here
+            }
+        }
 
 
         public static readonly DependencyProperty IsCompactProperty =
@@ -102,7 +141,8 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         {
             if (d is SingleClassmateGrades control && e.NewValue is Grade newValue)
             {
-                control.GenerateChart(newValue.Column.Id, newValue.VulcanValue);
+                if (control.LoadOnSet)
+                    control.GenerateChart(newValue.Column.Id, newValue.ActualValue);
 
             }
         }
@@ -131,7 +171,7 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
         int MinGradesAvaibleToShowChart { get; set; } = 4;
         public async void GenerateChart(int columnId, decimal? userGrade)
         {
-            GenerateChart(columnId, userGrade.HasValue? (double)userGrade.Value : -1);
+            GenerateChart(columnId, userGrade.HasValue ? (double)userGrade.Value : -1);
         }
 
         public async void GenerateChart(int columnId, double userGrade = 0)
@@ -203,6 +243,25 @@ namespace VulcanForWindows.UserControls.ClassmatesGrades
                         var tooltipContent = $"Ocena {labels[chartPoint.Index]}";
                         return tooltipContent;
                     },
+                //Stroke = new SolidColorPaint()
+                //{
+                //    Color = new SkiaSharp.SKColor(Color.R, Color.G, Color.B, Color.A),
+                //    StrokeThickness = 3,
+                //},
+                //Fill = new SolidColorPaint()
+                //{
+                //    Color = new SkiaSharp.SKColor(Color.R, Color.G, Color.B, (byte)(Color.A /3)),
+                //}, 
+                    //GeometryFill = new SolidColorPaint(new SkiaSharp.SKColor(Color.R, Color.G, Color.B, Color.A))
+
+                    Fill = new SolidColorPaint(new SkiaSharp.SKColor(Color.R, Color.G, Color.B, (byte)(Color.A /3))),
+                    //DataPadding = new LiveChartsCore.Drawing.LvcPoint(0, 1),
+                    LineSmoothness = 1,
+                    Stroke = new SolidColorPaint(new SkiaSharp.SKColor(Color.R, Color.G, Color.B, Color.A)) {
+                    StrokeThickness=5},
+                    GeometryFill = new SolidColorPaint(new SKColor(255,255,255)),
+                    GeometryStroke = new SolidColorPaint(new SkiaSharp.SKColor(Color.R, Color.G, Color.B, Color.A)){
+                    StrokeThickness=3},
                 }
                 };
 

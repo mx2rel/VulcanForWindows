@@ -17,5 +17,16 @@ namespace VulcanTest.Vulcan
             }
 
         }
+
+
+        public static void Add<T>(this ObservableCollection<T> collection, IEnumerable<T> newItems)
+        {
+
+            foreach (var item in newItems.Where(r => r != null))
+            {
+                collection.Add(item);
+            }
+
+        }
     }
 }

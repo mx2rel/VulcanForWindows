@@ -26,23 +26,24 @@ namespace VulcanForWindows.Classes
 
         public int periodId => (grades.Count == 0) ? 0 : (grades.FirstOrDefault().Column.PeriodId);
 
-        public ObservableCollection<Grade> grades
+        public ObservableCollection<SubjectGradesGrade> grades
         {
             get; set;
         }
 
-        public List<Grade> addedGrades = new List<Grade>();
+        public List<SubjectGradesGrade> addedGrades = new List<SubjectGradesGrade>();
+        public List<SubjectGradesGrade> excludedGrades = new List<SubjectGradesGrade>();
 
         public SubjectGrades() { }
         public SubjectGrades(Subject subject, Grade[] g, string fGrade = "", int trim = 0, bool loadFinalGrade = true)
         {
             this.subject = subject;
-            grades = new ObservableCollection<Grade>(g.Where(r => r.Column.Subject.Id == subject.Id));
+            grades = new ObservableCollection<SubjectGradesGrade>(SubjectGradesGrade.Get(g.Where(r => r.Column.Subject.Id == subject.Id)));
             finalGrade = fGrade;
 
             FetchYearlyAverage();
 
-            if (trim > 0) grades = new ObservableCollection<Grade>(grades.ToArray().Take(trim).ToArray());
+            if (trim > 0) grades = new ObservableCollection<SubjectGradesGrade>(grades.ToArray().Take(trim).ToArray());
 
             //class average for all grades
             foreach (var v in grades) v.CalculateClassAverage();
@@ -54,17 +55,18 @@ namespace VulcanForWindows.Classes
                 GetFinalGrade();
         }
 
-        private void CalculateTermAverage(bool includeAddedGrades = false)
+        private void CalculateTermAverage(bool calcHipothetical = false)
         {
             var calculateFrom = grades.Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0);
-            if (!includeAddedGrades) calculateFrom = calculateFrom.Where(r => !r.IsHipothetic).ToList();
+            if (!calcHipothetical) calculateFrom = calculateFrom.Where(r => !r.IsHipothetic).ToList();
+            else calculateFrom = calculateFrom.Where(r => !excludedGrades.Where(r => !r.IsHipothetic).Select(p => p.Id).ToList().Contains(r.Id)).ToList();
 
             if (calculateFrom.Count() > 0)
             {
                 var average = (double)calculateFrom.Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).Select(r => Enumerable.Repeat(r.ActualValue.Value, r.Column.Weight)
                 .ToList()).ToList().SelectMany(list => list).ToList().Average();
 
-                if (includeAddedGrades)
+                if (calcHipothetical)
                 {
                     termModifiedAverage = average;
                     termModifiedGradesCount = calculateFrom.Count();
@@ -93,26 +95,62 @@ namespace VulcanForWindows.Classes
             var g = finalGrades.Grades.Where(r => r.Subject.Id == subject.Id);
             if (g.Count() > 0)
             {
-                finalGrade = g.First().FinalGrade;
+                var f = g.First();
+                if (string.IsNullOrEmpty(f.FinalGrade))
+                {
+                    if (FinalGradeParser.TryGetValueFromDescriptiveForm(f.PredictedGrade, out var v))
+                        finalGrade = v.ToString("0");
+                }
+                else
+                    if (FinalGradeParser.TryGetValueFromDescriptiveForm(f.FinalGrade, out var v))
+                    finalGrade = v.ToString("0");
+
+                isFinalGradePredicted = string.IsNullOrEmpty(f.FinalGrade);
+
                 //if (string.IsNullOrEmpty(finalGrade)) finalGrade = g.First().PredictedGrade;
                 OnPropertyChanged(nameof(finalGrade));
                 OnPropertyChanged(nameof(hasFinalGrade));
+                OnPropertyChanged(nameof(isFinalGradePredicted));
             }
             return finalGrade;
         }
 
 
-        public void AddGrade(Grade grade)
-        {
-            grades.Add(grade);
-            addedGrades.Add(grade);
 
-            AddedOrRemovedGrades();
-        }
 
         public Visibility removeButtonVisibility => (addedGrades.Count == 0) ? Visibility.Collapsed : Visibility.Visible;
 
+        public void BringBackToReal()
+        {
+            removeAddedGrades();
+            includeExcludedGrades();
+        }
 
+        public void excludeGrade(SubjectGradesGrade g)
+        {
+            g.isBeingExcluded = true;
+            excludedGrades.Add(g);
+
+            AddedOrRemovedGrades();
+        }
+        public void includeGradeBack(SubjectGradesGrade g)
+        {
+            g.isBeingExcluded = false;
+            excludedGrades.Remove(g);
+
+            AddedOrRemovedGrades();
+        }
+        public void includeExcludedGrades()
+        {
+            foreach (var v in excludedGrades)
+            {
+                v.isBeingExcluded = false;
+            }
+
+            excludedGrades.Clear();
+
+            AddedOrRemovedGrades();
+        }
         public void removeAddedGrades()
         {
             foreach (var v in addedGrades)
@@ -122,7 +160,15 @@ namespace VulcanForWindows.Classes
 
             AddedOrRemovedGrades();
         }
-        public void removeAddedGrade(Grade g)
+        public void AddGrade(Grade grade)
+        {
+            var c = SubjectGradesGrade.Get(grade);
+            grades.Add(c);
+            addedGrades.Add(c);
+
+            AddedOrRemovedGrades();
+        }
+        public void removeAddedGrade(SubjectGradesGrade g)
         {
             grades.Remove(g);
 
@@ -147,6 +193,7 @@ namespace VulcanForWindows.Classes
         public Grade[] recentGrades => grades.OrderBy(r => r.DateCreated).ToList().Take(10).ToArray();
         public string finalGrade { get; set; }
         public bool hasFinalGrade { get => !string.IsNullOrEmpty(finalGrade); }
+        public bool isFinalGradePredicted { get; set; }
 
         [JsonIgnore]
         public GradesCountChartData gradesCountChart => GradesCountChartData.Generate(grades.ToArray());
@@ -183,54 +230,75 @@ namespace VulcanForWindows.Classes
             => $"{$"{((periodId % 2 == 0) ? periodId : (periodId - 1))}_{subject.Id}"}{(addedGrades == null ? "" : ("__withAddedGrades_" + string.Join(',', addedGrades.Select(r => r.Id))))}";
 
 
-        public async Task<(double average, int count, int weightSum)> CalculateYearlyAverage(Grade[] excludeGrades = null, bool forceSlowMethod = false, bool includeAddedGrades = false)
+        public async Task<(double average, int count, int weightSum)> CalculateYearlyAverage(Grade[] excludeGrades = null, bool forceSlowMethod = false, bool calcHipothetical = false)
         {
-            if (excludeGrades == null) excludeGrades = new Grade[0];
-            var YearlyAveragesEntryKey = GetYearlyAverageId(includeAddedGrades ? addedGrades : null) +
-                string.Join(',', excludeGrades.Select(r => r.Id).ToArray());
+            //if (excludeGrades == null) excludeGrades = new Grade[0];
+            //var YearlyAveragesEntryKey = GetYearlyAverageId(includeAddedGrades ? addedGrades : null) +
+            //    string.Join(',', excludeGrades.Select(r => r.Id).ToArray());
 
 
-            if (YearlyAverages.TryGetValue(YearlyAveragesEntryKey, out var o))
+            //if (YearlyAverages.TryGetValue(YearlyAveragesEntryKey, out var o))
+            //{
+            //    if (DateTime.Now - o.generatedAt < new TimeSpan(0, 15, 0))
+            //        return o.data;
+            //    else
+            //        YearlyAverages.Remove(YearlyAveragesEntryKey);
+            //}
+
+            //if (!forceSlowMethod && (YearlyAverages.TryGetValue(GetYearlyAverageId(includeAddedGrades ? addedGrades : null), out var YearlyAveragesData)))
+            //{
+            //    var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
+            //    excludeGrades = excludeGrades.Where(r => r.ActualValue.HasValue && r.Column.Weight != 0).ToArray();
+            //    foreach (var excludedGrade in excludeGrades)
+            //        sum -= (double)excludedGrade.ActualValue.Value * (double)excludedGrade.Column.Weight;
+            //    var weightSum = YearlyAveragesData.data.weightSum - excludeGrades.Select(r => r.Column.Weight).Sum();
+
+            //    var output = (sum / weightSum, YearlyAveragesData.data.count - excludeGrades.Length, weightSum);
+
+            //    YearlyAverages.Add(YearlyAveragesEntryKey, (output, DateTime.Now));
+
+            //    return output;
+            //}
+            //else
+            //{
+            //    var excludeIds = excludeGrades.Select(r => r.Id).ToList();
+            //    if (_yearGrades == null) _yearGrades =
+            //        (await (new GradesService()).FetchGradesFromLevelAsync(new AccountRepository().GetActiveAccount(), periodId));
+
+            //    var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r => r.Column.Subject.Id == subject.Id);
+            //    var yearlyGrades = gradesOnly;
+            //    if (includeAddedGrades) yearlyGrades = yearlyGrades.Concat(addedGrades).ToArray();
+
+            //    var yearlyAverage = yearlyGrades.Where(r => ((excludeGrades == null) ? true : (!excludeIds.Contains(r.Id)))).ToArray().CalculateAverage();
+
+            //    var output = (yearlyAverage, yearlyGrades.Count(), yearlyGrades.Select(r => r.Column.Weight).Sum());
+
+            //    YearlyAverages[YearlyAveragesEntryKey] = (output, DateTime.Now);
+
+            //    return output;
+            //}
+            if (excludeGrades == null)
+                excludeGrades = new Grade[0];
+
+            if (calcHipothetical)
+                excludeGrades = excludeGrades.Concat(excludedGrades).ToArray();
+
+            _yearGrades =
+                    (await (new GradesService()).FetchGradesFromLevelAsync(new AccountRepository().GetActiveAccount(), periodId));
+            var calculateFrom = _yearGrades.SelectMany(r => r.Value).Concat(addedGrades).ToList();
+            if (excludeGrades.Length > 0)
+                calculateFrom = calculateFrom.Where(r => !excludeGrades.Where(r => !r.IsHipothetic).Select(p => p.Id).ToList().Contains(r.Id)).ToList();
+            calculateFrom = calculateFrom.Where(r => r.Column.Subject.Id == subject.Id).Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).ToList();
+            if (!calcHipothetical) calculateFrom = calculateFrom.Where(r => !r.IsHipothetic).ToList();
+
+            if (calculateFrom.Count() > 0)
             {
-                if (DateTime.Now - o.generatedAt < new TimeSpan(0, 15, 0))
-                    return o.data;
-                else
-                    YearlyAverages.Remove(YearlyAveragesEntryKey);
+                var average = (double)calculateFrom.Where(r => r.ActualValue.HasValue).Where(r => r.Column.Weight != 0).Select(r => Enumerable.Repeat(r.ActualValue.Value, r.Column.Weight)
+                .ToList()).ToList().SelectMany(list => list).ToList().Average();
+                return (average, calculateFrom.Count(), calculateFrom.Select(r => r.Column.Weight).Sum());
             }
 
-            if (!forceSlowMethod && (YearlyAverages.TryGetValue(GetYearlyAverageId(includeAddedGrades ? addedGrades : null), out var YearlyAveragesData)))
-            {
-                var sum = YearlyAveragesData.data.average * (double)YearlyAveragesData.data.weightSum;
-                excludeGrades = excludeGrades.Where(r => r.ActualValue.HasValue && r.Column.Weight != 0).ToArray();
-                foreach (var excludedGrade in excludeGrades)
-                    sum -= (double)excludedGrade.ActualValue.Value * (double)excludedGrade.Column.Weight;
-                var weightSum = YearlyAveragesData.data.weightSum - excludeGrades.Select(r => r.Column.Weight).Sum();
-
-                var output = (sum / weightSum, YearlyAveragesData.data.count - excludeGrades.Length, weightSum);
-
-                YearlyAverages.Add(YearlyAveragesEntryKey, (output, DateTime.Now));
-
-                return output;
-            }
-            else
-            {
-                var excludeIds = excludeGrades.Select(r => r.Id).ToList();
-                if (_yearGrades == null) _yearGrades =
-                    (await (new GradesService()).FetchLevelGradesWithPeriodAsync(new AccountRepository().GetActiveAccount(), periodId));
-
-                var gradesOnly = _yearGrades.SelectMany(r => r.Value).Where(r => r.Column.Subject.Id == subject.Id);
-                var yearlyGrades = gradesOnly;
-                if (includeAddedGrades) yearlyGrades = yearlyGrades.Concat(addedGrades).ToArray();
-
-                var yearlyAverage = yearlyGrades.Where(r => ((excludeGrades == null) ? true : (!excludeIds.Contains(r.Id)))).ToArray().CalculateAverage();
-
-                var output = (yearlyAverage, yearlyGrades.Count(), yearlyGrades.Select(r => r.Column.Weight).Sum());
-
-                YearlyAverages[YearlyAveragesEntryKey] = (output, DateTime.Now);
-
-                return output;
-            }
-
+            return (0, 0, 0);
         }
 
         public double termActualAverage { get; set; }
@@ -244,7 +312,7 @@ namespace VulcanForWindows.Classes
         public double yearModifiedAverage { get; set; }
         public int yearModifiedGradesCount { get; set; }
 
-        public bool isDisplayingActualAverages { get => addedGrades.Count == 0; }
+        public bool isDisplayingActualAverages { get => addedGrades.Count == 0 && excludedGrades.Count == 0; }
         public double termDisplayedAverage { get => isDisplayingActualAverages ? termActualAverage : termModifiedAverage; }
         public int termDisplayedGradesCount { get => isDisplayingActualAverages ? termActualGradesCount : termModifiedGradesCount; }
         public double yearDisplayedAverage { get => isDisplayingActualAverages ? yearActualAverage : yearModifiedAverage; }

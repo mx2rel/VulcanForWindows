@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="BlankPage1.xaml.cs" />
-    <Compile Remove="FinalGradesAnalyzerPage.xaml.cs" />
     <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml.cs" />
     <Compile Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml.cs" />
     <Compile Remove="VulcanoidServerClient\VulcanoidServerClient\Program.cs" />
@@ -347,9 +346,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Remove="BlankPage1.xaml" />
-    <Page Remove="FinalGradesAnalyzerPage.xaml" />
     <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\App.xaml" />
     <Page Remove="MarkdownToWinUi3\MarkdownToWinUi3\MainWindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\Grades\SubjectGradesExpander.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\AverageDisplayerSmall.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="GradesPage.xaml">
@@ -381,5 +389,10 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="FinalGradesAnalyzerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

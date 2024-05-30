@@ -370,19 +370,6 @@ namespace VulcanForWindows
 
             if (((sender as ListView).DataContext as Grade).IsHipothetic) return;
 
-            //    ContentDialog dialog = new ContentDialog();
-            //dialog.XamlRoot = this.XamlRoot;
-            //var v = (Resources["GradeFullInfo"] as DataTemplate).LoadContent() as GradeFullInfo;
-            //v.DataContext = (sender as ListView).DataContext;
-            //dialog.Content = v;
-            //dialog.MinWidth = 800;
-            //dialog.MaxHeight = 800;
-            //dialog.Width = 800;
-            //dialog.FullSizeDesired = true;
-            //dialog.Padding= new Thickness(-100);
-            //dialog.CloseButtonText = "Ok";
-            //var result = await dialog.ShowAsync();
-
             MainWindow.Instance.IsOtherWindowOpen = true;
 
             w = new Window();
@@ -427,7 +414,7 @@ namespace VulcanForWindows
 
         private void RemoveHipotheticGrade(object sender, RoutedEventArgs e)
         {
-            var grade = ((sender as MenuFlyoutItem).DataContext as Grade);
+            var grade = ((sender as MenuFlyoutItem).DataContext as SubjectGradesGrade);
             var match = grades.ToArray().Where(r => r.subject.Id == grade.Column.Subject.Id).ToArray() ;
             if (match.Length == 0) return;
             match[0].removeAddedGrade(grade);
