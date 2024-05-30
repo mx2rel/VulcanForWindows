@@ -44,12 +44,28 @@
         <Expander.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{x:Bind SubjectGrades.subject.Name}" FontSize="14" TextWrapping="WrapWholeWords" VerticalAlignment="Center"/>
+                <ItemsRepeater ItemsSource="{x:Bind SubjectGrades.recentGrades}" 
+ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.Column="1" VerticalAlignment="Center">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Spacing="25" Orientation="Horizontal"/>
+                    </ItemsRepeater.Layout>
+
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate x:DataType="grades:Grade">
+                            <!--<Grid Width="35" Height="35" >-->
+                            <TextBlock Text="{x:Bind Content}" Grid.Column="0" Grid.Row="0" TextAlignment="Center" VerticalAlignment="Center"/>
+                            <!--</Grid>-->
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+
+                </ItemsRepeater>
                 <StackPanel x:Name="RightInfo" HorizontalAlignment="Right" Grid.Column="2" Orientation="Horizontal" Spacing="5">
                     <StackPanel.OpacityTransition>
                         <ScalarTransition />
