@@ -93,6 +93,7 @@
     <None Remove="UserControls\Settings\BackgroundTaskSetting.xaml" />
     <None Remove="UserControls\Settings\BackgroundTaskSettings.xaml" />
     <None Remove="UserControls\Settings\ReminderSettings.xaml" />
+    <None Remove="UserControls\Settings\UrlSetting.xaml" />
     <None Remove="UserControls\SingleDeadlineable.xaml" />
     <None Remove="UserControls\SingleMessageBig.xaml" />
     <None Remove="UserControls\SingleMessageSmall.xaml" />
@@ -389,6 +390,11 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Remove="MarkdownToWinUi3\MarkdownToWinUi3\Properties\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="UserControls\Settings\UrlSetting.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="FinalGradesAnalyzerPage.xaml">

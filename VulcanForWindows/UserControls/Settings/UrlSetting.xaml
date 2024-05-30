@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="VulcanForWindows.UserControls.Settings.UrlSetting"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:VulcanForWindows.UserControls.Settings"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource LayerOnMicaBaseAltFillColorDefaultBrush}" Padding="10" CornerRadius="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition>*</ColumnDefinition>
+            <ColumnDefinition>*</ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{x:Bind Display, Mode=OneWay}" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" x:Name="UrlInput" PlaceholderText="https://example.com/api/" TextChanged="UrlUpdated"/>
+    </Grid>
+</UserControl>
