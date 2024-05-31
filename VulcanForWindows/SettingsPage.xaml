@@ -23,7 +23,7 @@
             </ListView.ItemContainerStyle>
             <!--<scontrols:ReminderSettings/>
             <scontrols:BackgroundTaskSettings/>-->
-            <scontrols:UrlSetting Display="URL własnego serwera ogłoszeń" SaveId="AnnouncementsServerUrl"/>
+            <scontrols:UrlSetting Display="URL własnego serwera ogłoszeń" SaveId="AnnouncementsServerUrl" DisplayWarning="True"/>
         </ListView>
         <Grid ColumnSpacing="10" Grid.Row="1" Background="{StaticResource AcrylicInAppFillColorDefaultBrush}"
               Padding="15" CornerRadius="4,4,0,0">

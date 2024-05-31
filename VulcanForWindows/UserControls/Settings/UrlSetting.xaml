@@ -8,12 +8,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource LayerOnMicaBaseAltFillColorDefaultBrush}" Padding="10" CornerRadius="5">
+    <Grid Background="{StaticResource LayerOnMicaBaseAltFillColorDefaultBrush}" Padding="10" CornerRadius="5" ColumnSpacing="5">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition>auto</ColumnDefinition>
             <ColumnDefinition>*</ColumnDefinition>
             <ColumnDefinition>*</ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Text="{x:Bind Display, Mode=OneWay}" VerticalAlignment="Center"/>
-        <TextBox Grid.Column="1" x:Name="UrlInput" PlaceholderText="https://example.com/api/" TextChanged="UrlUpdated"/>
+        <FontIcon Grid.Column="1" Glyph="&#xE946;" FontSize="16" x:Name="InfoIcon"
+                      FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0"
+                      PointerEntered="FontIcon_PointerEntered" PointerExited="FontIcon_PointerExited" />
+        <TeachingTip x:Name="TeachingTip" Target="{x:Bind InfoIcon}"
+                     Title="Zmienianie tego ustawienia nie jest zalecane" Subtitle="Zmieniaj ten URL, tylko jeśli wiesz, co robisz."/>
+        
+        <TextBox Grid.Column="2" x:Name="UrlInput" PlaceholderText="https://example.com/api/" TextChanged="UrlUpdated"/>
     </Grid>
 </UserControl>

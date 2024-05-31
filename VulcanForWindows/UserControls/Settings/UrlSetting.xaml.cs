@@ -24,6 +24,24 @@ namespace VulcanForWindows.UserControls.Settings
     {
 
 
+        public static readonly DependencyProperty DisplayWarningProperty =
+            DependencyProperty.Register("DisplayWarning", typeof(bool), typeof(UrlSetting), new PropertyMetadata(false, DisplayWarning_Changed));
+
+        public bool DisplayWarning
+        {
+            get => (bool)GetValue(DisplayWarningProperty);
+            set => SetValue(DisplayWarningProperty, value);
+        }
+
+        private static void DisplayWarning_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UrlSetting control && e.NewValue is bool newValue)
+            {
+                control.InfoIcon.Visibility = newValue.ToVisibility();
+            }
+        }
+
+
         public static readonly DependencyProperty DisplayProperty =
             DependencyProperty.Register("Display", typeof(string), typeof(UrlSetting), new PropertyMetadata(null, Display_Changed));
 
@@ -80,6 +98,17 @@ namespace VulcanForWindows.UserControls.Settings
             }
 
             return false;
+        }
+
+        private void FontIcon_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            TeachingTip.IsOpen = true;
+        }
+
+        private void FontIcon_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            TeachingTip.IsOpen = false;
+
         }
     }
 }
