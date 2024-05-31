@@ -20,6 +20,8 @@ using VulcanForWindows.Classes;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Microsoft.UI.Text;
+using VulcanForWindows.Preferences;
+using VulcanoidServerClient.Api;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -38,6 +40,8 @@ namespace VulcanForWindows.UserControls.Widgets
 
         async void Load()
         {
+            EndpointsHandler.overrideServer = PreferencesManager.Get("Settings", "AnnouncementsServerUrl", "");
+
             var all = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
             all = all.Where(r => r.Type == VulcanoidServerClient.Api.Payloads.Announcements.AnnouncementType.Announcement).ToArray();
             Announcements = new ObservableCollection<Announcement>(all);

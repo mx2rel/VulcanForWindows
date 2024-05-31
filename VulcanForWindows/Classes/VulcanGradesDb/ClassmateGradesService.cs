@@ -19,7 +19,7 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
         private static LiteDatabaseAsync _db => LiteDbManager.database;
 
         static string GetResourceKey(int ColumnId) => $"ClassmateColumn_{ColumnId}";
-        public static async Task<SingleClassmateColumn> GetSingleClassmateColumn(int ColumnId, bool forceSync = true)
+        public static async Task<SingleClassmateColumn> GetSingleClassmateColumn(int ColumnId, bool forceSync = false)
         {
             if (new ClassmateGradesService().ShouldSync(GetResourceKey(ColumnId)) || forceSync)
             {
@@ -60,7 +60,6 @@ namespace VulcanForWindows.Classes.VulcanGradesDb
 
                 // Optionally, you can read the response content if needed
                 string responseBody = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine("res:" + responseBody, "\nurl:" + url);
                 return responseBody;
             }
         }

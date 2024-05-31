@@ -24,7 +24,6 @@ namespace VulcanForWindows.Classes
         public static async Task Update(FrameworkElement root, StackPanel infosPanel)
         {
             EndpointsHandler.overrideServer = PreferencesManager.Get("Settings", "AnnouncementsServerUrl", "");
-            Debug.WriteLine("OVERRIDE:" + EndpointsHandler.server);
             var relevantAnnouncement = await AnnouncementsService.GetAllRelevant(AppWide.AppVersion);
 
             DisplayInfos(relevantAnnouncement, infosPanel);
